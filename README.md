@@ -21,7 +21,7 @@ YARN
 - Bcryptjs
 - Zod
 - Sequelize
-- SQLite3
+- MySQL
 
 ### Frontend
 
