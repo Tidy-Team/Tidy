@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "type": "module",
   "scripts": {
-    "dev": "node --watch ./app.js"
+    "dev": "node --watch ./app.js",
+    "model": "node ./src/config/sync.models.js"
   },
   "dependencies": {
     "cookie-parser": "^1.4.6",
