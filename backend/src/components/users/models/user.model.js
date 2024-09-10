@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../../../config/databases.js";
+import { Activities } from "../../activities/models/activities.model.js";
 
 export const User = sequelize.define(
   "User",
@@ -24,6 +25,7 @@ export const User = sequelize.define(
     },
     rol: {
       type: DataTypes.ENUM("estudiante", "tutor", "padre"),
+      defaultValue: "estudiante",
       allowNull: false,
     },
     fecha_registro: {
@@ -36,3 +38,6 @@ export const User = sequelize.define(
     timestamps: false, //Se desactivan createdAt y updateAt
   }
 );
+
+//Establece la relación con Actividades de uno a muchos
+User.hasMany(Activities, { foreignKey: "user_id" });
