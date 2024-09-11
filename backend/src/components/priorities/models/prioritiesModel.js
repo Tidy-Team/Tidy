@@ -1,7 +1,7 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../../../config/databases.js";
-import { Activities } from "../../activities/models/activitiesModel.js";
 
+//Modelo de Prioridades con: id, nivel
 export const Priorities = sequelize.define("Priority", {
   id: {
     type: DataTypes.INTEGER,

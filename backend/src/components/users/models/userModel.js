@@ -1,6 +1,7 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../../../config/databases.js";
 
+//Modelo de Prioridades con: id, name, email, password, rol y fecha de registro.
 export const User = sequelize.define(
   "User",
   {

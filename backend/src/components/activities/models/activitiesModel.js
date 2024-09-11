@@ -1,7 +1,5 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../../../config/databases.js";
-import { User } from "../../users/models/userModel.js";
-import { Priorities } from "../../priorities/models/prioritiesModel.js";
 
 //Modelo de Actividades con: id, titulo, descripción, fecha inicio, fecha fin y su estado
 export const Activities = sequelize.define(
@@ -31,25 +29,13 @@ export const Activities = sequelize.define(
       type: DataTypes.ENUM("pendiente", "en_progreso", "completada"),
       defaultValue: "pendiente",
     },
-    //Foránea al User ID
     user_id: {
       type: DataTypes.INTEGER,
-      references: {
-        model: "User",
-        key: "id",
-      },
-      onUpdate: "CASCADE", //Se elimina las actividades cuando el usuario es eliminado
-      onDelete: "SET NULL",
+      allowNull: true, // Permitir valores nulos para evitar problemas de referencia circular
     },
-    // Foránea a la Prioridad
     prioridad_id: {
       type: DataTypes.INTEGER,
-      references: {
-        model: "Priorities",
-        key: "id",
-      },
-      onUpdate: "CASCADE", //Se elimina las actividades cuando el usuario es eliminado
-      onDelete: "SET NULL",
+      allowNull: true, // Permitir valores nulos para evitar problemas de referencia circular
     },
   },
   {

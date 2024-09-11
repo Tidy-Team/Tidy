@@ -6,11 +6,7 @@ import "./relationships.js"; // Importar el archivo de relaciones
 
 const syncModels = async () => {
   try {
-    //Se sincronizan los modelos en un orden. Por si hay un error de creacion.
-    await User.sync({ force: true }); //Solo utilizar force:true en desarrollo
-    await Priorities.sync({ force: true });
-    await Activities.sync({ force: true });
-
+    await sequelize.sync(); //No se usa force:true para no tener perdidas de datos. Pero se puede usar en desarrollo
     console.log("Todos los modelos se sincronizaron correctamente");
   } catch (error) {
     console.error(`Ocurrió un error al sincronizar los modelos: ${error}`);
