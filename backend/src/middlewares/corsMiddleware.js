@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import { CORS_ORIGIN } from "../config/env.js";
+import { CORS_ORIGIN } from "../configs/env.js";
 
 dotenv.config();
 

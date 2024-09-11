@@ -1,7 +1,7 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../../../config/databases.js";
-import { User } from "../../users/models/user.model.js";
-import { Priorities } from "../../priorities/models/priorities.model.js";
+import { User } from "../../users/models/userModel.js";
+import { Priorities } from "../../priorities/models/prioritiesModel.js";
 
 //Modelo de Actividades con: id, titulo, descripción, fecha inicio, fecha fin y su estado
 export const Activities = sequelize.define(
