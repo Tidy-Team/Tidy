@@ -1,5 +1,5 @@
 import express from "express";
-import { initMiddleware } from "./middleware/index.js";
+import { initMiddleware } from "./middlewares/index.js";
 import { PORT } from "./config/env.js";
 
 const app = express();

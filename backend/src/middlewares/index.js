@@ -3,8 +3,8 @@ import morgan from "morgan";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
-import { corsMiddleware } from "./cors.middleware.js";
-import { sessionMiddleware } from "./session.middleware.js";
+import { corsMiddleware } from "./corsMiddleware.js";
+import { sessionMiddleware } from "./sessionMiddleware.js";
 
 export const initMiddleware = (app) => {
   app.use(cors(corsMiddleware()));
