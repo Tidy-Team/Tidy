@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "node --watch ./src/app.js",
-    "model": "node ./src/config/sync.models.js"
+    "model": "node ./src/config/syncModels.js"
   },
   "dependencies": {
     "cookie-parser": "^1.4.6",

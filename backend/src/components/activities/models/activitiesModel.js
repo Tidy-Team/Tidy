@@ -35,7 +35,7 @@ export const Activities = sequelize.define(
     user_id: {
       type: DataTypes.INTEGER,
       references: {
-        model: User,
+        model: "User",
         key: "id",
       },
       onUpdate: "CASCADE", //Se elimina las actividades cuando el usuario es eliminado
@@ -45,7 +45,7 @@ export const Activities = sequelize.define(
     prioridad_id: {
       type: DataTypes.INTEGER,
       references: {
-        model: Priorities,
+        model: "Priorities",
         key: "id",
       },
       onUpdate: "CASCADE", //Se elimina las actividades cuando el usuario es eliminado
@@ -56,7 +56,3 @@ export const Activities = sequelize.define(
     tableName: "activities",
   }
 );
-
-// Se establece la relación con User
-Activities.belongsTo(User, { foreignKey: "user_id" });
-Activities.belongsTo(Priorities, { foreignKey: "user_id" });

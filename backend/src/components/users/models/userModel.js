@@ -1,6 +1,5 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../../../config/databases.js";
-import { Activities } from "../../activities/models/activitiesModel.js";
 
 export const User = sequelize.define(
   "User",
@@ -34,10 +33,7 @@ export const User = sequelize.define(
     },
   },
   {
-    tableName: "users", //Asi se llama en la base de datos
-    timestamps: false, //Se desactivan createdAt y updateAt
+    tableName: "user",
+    timestamps: false,
   }
 );
-
-//Establece la relación con Actividades de uno a muchos
-User.hasMany(Activities, { foreignKey: "user_id" });

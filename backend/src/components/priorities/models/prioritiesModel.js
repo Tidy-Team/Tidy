@@ -1,9 +1,10 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../../../config/databases.js";
+import { Activities } from "../../activities/models/activitiesModel.js";
 
 export const Priorities = sequelize.define("Priority", {
   id: {
-    types: DataTypes.INTEGER,
+    type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true,
   },
@@ -12,6 +13,3 @@ export const Priorities = sequelize.define("Priority", {
     defaultValue: "alta",
   },
 });
-
-//Se establece la relación con Actividades de uno a muchos
-Priorities.hasMany(Activities, { foreignKey: "user_id" });
