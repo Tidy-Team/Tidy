@@ -31,11 +31,23 @@ export const Activities = sequelize.define(
     },
     user_id: {
       type: DataTypes.INTEGER,
-      allowNull: true, // Permitir valores nulos para evitar problemas de referencia circular
+      allowNull: false,
+      references: {
+        model: "User",
+        key: "id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "SET NULL",
     },
     prioridad_id: {
       type: DataTypes.INTEGER,
-      allowNull: true, // Permitir valores nulos para evitar problemas de referencia circular
+      allowNull: false,
+      references: {
+        model: "Priorities",
+        key: "id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "SET NULL",
     },
   },
   {
