@@ -2,8 +2,8 @@ import { DataTypes } from "sequelize";
 import { sequelize } from "../../../config/databases.js";
 
 //Modelo de Prioridades con: id, name, email, password, rol y fecha de registro.
-export const User = sequelize.define(
-  "User",
+export const Users = sequelize.define(
+  "users",
   {
     id: {
       type: DataTypes.INTEGER,
@@ -34,7 +34,7 @@ export const User = sequelize.define(
     },
   },
   {
-    tableName: "user",
-    timestamps: false,
+    tableName: "users",
+    timestamps: false, //Saca createAt y updateAt
   }
 );

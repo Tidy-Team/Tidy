@@ -3,7 +3,7 @@ import { sequelize } from "../../../config/databases.js";
 
 //Modelo de Actividades con: id, titulo, descripción, fecha inicio, fecha fin y su estado
 export const Activities = sequelize.define(
-  "Activities",
+  "activities",
   {
     id: {
       type: DataTypes.INTEGER,
@@ -29,28 +29,6 @@ export const Activities = sequelize.define(
       type: DataTypes.ENUM("pendiente", "en_progreso", "completada"),
       defaultValue: "pendiente",
     },
-    user_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: "User",
-        key: "id",
-      },
-      onUpdate: "CASCADE",
-      onDelete: "SET NULL",
-    },
-    prioridad_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: "Priorities",
-        key: "id",
-      },
-      onUpdate: "CASCADE",
-      onDelete: "SET NULL",
-    },
   },
-  {
-    tableName: "activities",
-  }
+  { tableName: "activities" }
 );
