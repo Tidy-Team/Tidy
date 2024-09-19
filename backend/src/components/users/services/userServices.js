@@ -1,24 +1,34 @@
-import { Users } from '../models/userModel';
+import { Users } from '../models/userModel.js';
 
-//
 /**
  * Recupera un usuario por su dirección de correo electrónico.
  *
  * @param {string} email - La dirección de correo electrónico del usuario a recuperar.
- * @returns {Promise<Object>} Una promesa que busca al usuario por su correo
- * @throws {Error} Si el email existe devuelve un error o si ocurrió un error en la consulta.
+ * @returns {Promise<Object|null>} Una promesa que resuelve con el usuario si se encuentra, o null si no se encuentra.
+ * @throws {Error} Si ocurrió un error en la consulta.
  */
-
 export const getUserByEmail = async email => {
   try {
     const existingUser = await Users.findOne({ where: { email } });
-
-    if (existingUser) {
-      throw new Error(`El email del usuario ya existe. Por favor, pruebe otro`);
-    }
-    return { message: 'El usuario no se encontró' };
+    return existingUser;
   } catch (error) {
     console.error(`Se encontró un error al buscar el usuario: ${error}`);
+    throw error;
+  }
+};
+
+/**
+ * Crea un nuevo usuario.
+ *
+ * @param {Object} userData - Los datos del usuario.
+ * @returns {Promise<Object>} Una promesa que resuelve con el usuario creado.
+ */
+export const createUser = async userData => {
+  try {
+    const newUser = await Users.create(userData);
+    return newUser;
+  } catch (error) {
+    console.error(`Se encontró un error al crear el usuario: ${error}`);
     throw error;
   }
 };
