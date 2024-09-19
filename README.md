@@ -21,7 +21,7 @@ YARN
 - Bcryptjs
 - Zod
 - Sequelize
-- SQLite3
+- MySQL
 
 ### Frontend
 
@@ -29,4 +29,7 @@ YARN
 - Daisy
 - AXIOS (mateo mira)
 - Formik (mirar)
+<<<<<<< HEAD
 - Dayzjs(fechas)
+=======
+>>>>>>> main
