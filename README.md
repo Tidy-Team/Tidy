@@ -29,7 +29,6 @@ YARN
 - Daisy
 - AXIOS (mateo mira)
 - Formik (mirar)
-<<<<<<< HEAD
-- Dayzjs(fechas)
-=======
->>>>>>> main
+  <<<<<<< HEAD
+  <<<<<<< HEAD
+- # Dayzjs(fechas)
