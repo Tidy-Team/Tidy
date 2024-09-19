@@ -1,5 +1,6 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../../../config/databases.js';
+import { Users } from '../../users/models/userModel.js';
 
 export const Subjects = sequelize.define(
   'subjects',
@@ -26,3 +27,6 @@ export const Subjects = sequelize.define(
     tableName: 'subjects',
   }
 );
+
+//Relacion de Materias le pertenece a un Usuario
+Subjects.belongsTo(Users, { foreignKey: 'userId', as: 'user' });

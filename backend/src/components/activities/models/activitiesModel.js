@@ -1,5 +1,6 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../../../config/databases.js';
+import { Subjects } from '../../subjects/models/subjectModel.js';
 
 //Modelo de Actividades con: id, titulo, descripción, fecha inicio, fecha fin y su estado
 export const Activities = sequelize.define(
@@ -15,6 +16,7 @@ export const Activities = sequelize.define(
       allowNull: false,
     },
     description: {
+      //No deberia estar en español¿?
       type: DataTypes.TEXT,
     },
     fecha_inicio: {
@@ -32,3 +34,6 @@ export const Activities = sequelize.define(
   },
   { tableName: 'activities' }
 );
+
+//Relacion de
+Activities.belongsTo(Subjects, { foreignKey: 'subjectsId' }, { as: 'subject' });
