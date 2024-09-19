@@ -37,3 +37,23 @@ export const signUp = async req => {
 
   return { token };
 };
+
+export const signIn = async req => {
+  const { email, password } = req.body;
+
+  const user = await getUserByEmail(email);
+
+  if (!user) {
+    throw new Error('Usuario o contraseña incorrectos');
+  }
+
+  const comparePassword = await bcrypt.compare(password, user.password);
+
+  if (!comparePassword) {
+    throw new Error('La contraseña es incorrecta');
+  }
+
+  const token = await generarJwt(user.id);
+
+  return { token };
+};
