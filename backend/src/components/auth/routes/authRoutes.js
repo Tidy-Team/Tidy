@@ -1,7 +1,6 @@
 import { Router } from 'express';
+import { signUpUser } from '../controllers/authController.js';
 
 export const authRouter = Router();
 
-authRouter.post('/signup', (req, res) => {
-  res.json('hola');
-});
+authRouter.post('/signup', signUpUser);

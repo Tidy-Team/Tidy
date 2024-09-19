@@ -1,12 +1,22 @@
 import bcrypt from 'bcryptjs';
 
 import generarJwt from '../../../helpers/generarJwt.js';
-import validateJwt from '../middleware/validateJwt.js';
 import {
   getUserByEmail,
   createUser,
 } from '../../users/services/userServices.js';
 
+/**
+ * Registra un nuevo usuario creando una cuenta y generando un token JWT.
+ *
+ * @param {Object} req - El objeto de la solicitud.
+ * @param {Object} req.body - El cuerpo de la solicitud.
+ * @param {string} req.body.name - El nombre del usuario.
+ * @param {string} req.body.email - El correo electrónico del usuario.
+ * @param {string} req.body.password - La contraseña del usuario.
+ * @returns {Promise<Object>} Una promesa que se resuelve en un objeto que contiene el token JWT.
+ * @throws {Error} Si el usuario ya existe.
+ */
 export const signUp = async req => {
   const { name, email, password } = req.body;
   const userExisting = await getUserByEmail(email);
