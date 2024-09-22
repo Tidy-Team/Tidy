@@ -45,6 +45,16 @@ export const signUp = async req => {
   return { token };
 };
 
+/**
+ * Inicia sesión de un usuario existente y genera un token JWT.
+ *
+ * @param {Object} req - El objeto de la solicitud.
+ * @param {Object} req.body - El cuerpo de la solicitud.
+ * @param {string} req.body.email - El correo electrónico del usuario.
+ * @param {string} req.body.password - La contraseña del usuario.
+ * @returns {Promise<Object>} Una promesa que se resuelve en un objeto que contiene el token JWT.
+ * @throws {Error} Si el usuario no existe o la contraseña es incorrecta.
+ */
 export const signIn = async req => {
   const { email, password } = req.body;
 
