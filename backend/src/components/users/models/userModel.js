@@ -26,7 +26,7 @@ export const Users = sequelize.define(
     rol: {
       type: DataTypes.ENUM('estudiante', 'tutor', 'padre'),
       defaultValue: 'estudiante',
-      allowNull: false,
+      allowNull: true,
     },
     fecha_registro: {
       type: DataTypes.DATE,

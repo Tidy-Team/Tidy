@@ -18,7 +18,7 @@ import {
  * @throws {Error} Si el usuario ya existe.
  */
 export const signUp = async req => {
-  const { name, email, password } = req.body;
+  const { name, email, password, rol } = req.body;
   const userExisting = await getUserByEmail(email);
 
   if (userExisting) {
