@@ -19,6 +19,12 @@ import {
  */
 export const signUp = async req => {
   const { name, email, password, rol } = req.body;
+
+  //Validar si los campos estan completos
+  if (!name || !email || !password) {
+    throw new Error('Todos los campos son obligatorios');
+  }
+
   const userExisting = await getUserByEmail(email);
 
   if (userExisting) {
@@ -31,6 +37,7 @@ export const signUp = async req => {
     name,
     email,
     password: hashedPassword,
+    rol,
   });
 
   const token = await generarJwt(newUser.id);
@@ -41,10 +48,16 @@ export const signUp = async req => {
 export const signIn = async req => {
   const { email, password } = req.body;
 
+  //Validar si los campos estan completos
+  if (!email || !password) {
+    throw new Error('Todos los campos son obligatorios');
+  }
+
+  //Verificar si existe el email del usuario
   const user = await getUserByEmail(email);
 
   if (!user) {
-    throw new Error('Usuario o contraseña incorrectos');
+    throw new Error('Email o contraseña incorrectos');
   }
 
   const comparePassword = await bcrypt.compare(password, user.password);

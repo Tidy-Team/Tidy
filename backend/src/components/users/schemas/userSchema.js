@@ -12,3 +12,8 @@ export const userSchema = z.object({
   rol: z.enum(['estudiante', 'tutor', 'padre']).optional(),
   fecha_registro: z.date().optional(),
 });
+
+export const signInSchema = z.object({
+  email: z.string().email('Email inválido'),
+  password: z.string().min(6, 'Contraseña inválida'),
+});

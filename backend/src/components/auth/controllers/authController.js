@@ -1,5 +1,5 @@
-import { signUp } from '../services/authService.js';
-import { userSchema } from '../../users/schemas/userSchema.js';
+import { signUp, signIn } from '../services/authService.js';
+import { userSchema, signInSchema } from '../../users/schemas/userSchema.js';
 import { ZodError } from 'zod';
 
 export const signUpUser = async (req, res) => {
@@ -37,4 +37,35 @@ export const signUpUser = async (req, res) => {
   }
 };
 
-export const signInUser = async (req, res) => {};
+export const signInUser = async (req, res) => {
+  try {
+    signInSchema.parse(req.body);
+
+    const result = await signIn(req);
+
+    res.status(200).json({
+      message: 'Inicio de sesión existoso',
+      token: result.token,
+    });
+  } catch (error) {
+    console.error(`Error en el controlador al iniciar sesión: ${error}`);
+    // Manejo de errores de validación de Zod
+    if (error instanceof ZodError) {
+      const validationErrors = error.errors.map(err => ({
+        path: err.path.join('.'),
+        message: err.message,
+      }));
+
+      return res.status(400).json({
+        message: 'Error de validación al iniciar sesión',
+        errors: validationErrors,
+      });
+    }
+
+    // Responde con error del servidor
+    res.status(500).json({
+      message: 'Error en el servidor al iniciar sesión',
+      error: error.message,
+    });
+  }
+};
