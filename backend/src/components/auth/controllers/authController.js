@@ -2,6 +2,18 @@ import { signUp, signIn } from '../services/authService.js';
 import { userSchema, signInSchema } from '../../users/schemas/userSchema.js';
 import { ZodError } from 'zod';
 
+/**
+ * Función del controlador para manejar el registro de usuarios.
+ *
+ * @param {Object} req - Objeto de solicitud de Express.
+ * @param {Object} req.body - El cuerpo de la solicitud que contiene los datos del usuario.
+ * @param {Object} res - Objeto de respuesta de Express.
+ *
+ * @returns {Promise<void>} - Devuelve una promesa que se resuelve en void.
+ *
+ * @throws {ZodError} - Lanza errores de validación si el cuerpo de la solicitud no coincide con el esquema del usuario.
+ * @throws {Error} - Lanza un error del servidor si hay un problema durante el proceso de registro.
+ */
 export const signUpUser = async (req, res) => {
   try {
     userSchema.parse(req.body);
@@ -37,6 +49,17 @@ export const signUpUser = async (req, res) => {
   }
 };
 
+/**
+ * Función del controlador para manejar el inicio de sesión de usuarios.
+ *
+ * @param {Object} req - Objeto de solicitud de Express.
+ * @param {Object} req.body - El cuerpo de la solicitud que contiene las credenciales del usuario.
+ * @param {Object} res - Objeto de respuesta de Express.
+ * @returns {Promise<void>} - Devuelve una promesa que se resuelve cuando el proceso de inicio de sesión se completa.
+ *
+ * @throws {ZodError} - Lanza errores de validación si el cuerpo de la solicitud no coincide con el esquema de inicio de sesión.
+ * @throws {Error} - Lanza un error del servidor si hay un problema durante el proceso de inicio de sesión.
+ */
 export const signInUser = async (req, res) => {
   try {
     signInSchema.parse(req.body);
