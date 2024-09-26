@@ -1,4 +1,4 @@
-import { Subjects } from '../models/subjectModel';
+import { Subjects } from '../models/subjectModel.js';
 
 /**
  * Busca una materia por su ID y el ID del usuario.

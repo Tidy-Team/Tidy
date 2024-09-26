@@ -1,7 +1,10 @@
+import validateJwt from '../middleware/validateJwt.js';
+
 import { Router } from 'express';
 import { signUpUser, signInUser } from '../controllers/authController.js';
+import { validateSession } from '../controllers/sessionController.js';
 
-export const authRouter = Router();
+const authRouter = Router();
 
 // Endpoint de inicio de sesión
 authRouter.post('/signup', signUpUser);
@@ -10,4 +13,6 @@ authRouter.post('/signup', signUpUser);
 authRouter.post('/signin', signInUser);
 
 // Endpoint para validar la sesión
-authRouter.get('/session', validarJwt, validateSessionCtrl);
+authRouter.get('/session', validateJwt, validateSession);
+
+export default authRouter;

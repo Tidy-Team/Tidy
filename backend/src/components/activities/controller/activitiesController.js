@@ -4,8 +4,8 @@ import {
   updateActivity,
   deleteActivity,
   findActivitiesBySubjectId,
-} from '../services/activitiesService';
-import { findSubjectByIdAndUserId } from '../../subjects/services/subjectsService';
+} from '../services/activitiesService.js';
+import { findSubjectByIdAndUserId } from '../../subjects/services/subjectsService.js';
 
 export const getActivities = async (req, res) => {
   const { id } = req.params; //Obtenemos el id de la materia
