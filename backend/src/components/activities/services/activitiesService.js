@@ -22,8 +22,7 @@ export const findActivityById = async activityId => {
       `Error al buscar la actividad con id ${activityId}. Su error es: ${error.message}`
     );
 
-    //Lanza el error
-    throw error;
+    throw new Error('Error al encontrar la actividad');
   }
 };
 
@@ -44,8 +43,7 @@ export const findActivitiesBySubjectId = async subjectId => {
       `Error al buscar actividades para la materia con id: ${subjectId}. Su error es: ${error.message}`
     );
 
-    //Lanza el error
-    throw error;
+    throw new Error('Error al encontrar la actividad');
   }
 };
 
@@ -61,8 +59,7 @@ export const createActivity = async activityData => {
   } catch (error) {
     console.error(`Ocurrió un error al crear la actividad: ${error}`);
 
-    //Lanza el error
-    throw error;
+    throw new Error('Error al crear la actividad');
   }
 };
 
@@ -86,10 +83,15 @@ export const updateActivity = async (activityId, updateData) => {
       `Error al actualizar actividad con id: ${activityId}.Su error es: ${error.message} `
     );
 
-    throw error;
+    throw new Error('Error al actualizar la actividad');
   }
 };
 
+/**
+ * Servicio para eliminar una actividad
+ * @param {string} activityId - ID de la actividad
+ * @returns {Promise<void>}
+ */
 export const deleteActivity = async activityId => {
   try {
     const activity = await findActivityById(activityId);
@@ -100,6 +102,6 @@ export const deleteActivity = async activityId => {
       `Error al eliminar actividad con id: ${activityId}. Su error es: ${error.message}`
     );
 
-    throw error;
+    throw new Error('Error al eliminar la actividad');
   }
 };
