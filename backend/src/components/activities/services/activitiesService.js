@@ -35,7 +35,7 @@ export const findActivityById = async activityId => {
  */
 export const findActivitiesBySubjectId = async subjectId => {
   try {
-    //Listar las actividades
+    //Busca todas las actividades de una materia
     return await Activities.findAll({
       where: { subjectsId: subjectId },
     });
