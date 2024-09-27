@@ -6,10 +6,12 @@ import {
   findActivitiesBySubjectId,
 } from '../services/activitiesService.js';
 import { findSubjectByIdAndUserId } from '../../subjects/services/subjectsService.js';
+import { activitiesSchema } from '../schemas/activitiesSchema.js';
+import { ZodError } from 'zod';
 
 export const getActivities = async (req, res) => {
   const { id } = req.params; //Obtenemos el id de la materia
-  const userId = req.userId;
+  const userId = req.user.id;
 
   try {
     const subject = await findSubjectByIdAndUserId(id, userId);
@@ -24,11 +26,13 @@ export const getActivities = async (req, res) => {
 };
 
 export const createActivities = async (req, res) => {
-  const { titulo, description, fecha_inicio, fecha_fin, estado } = req.body;
-  const { id } = req.params;
-  const { userId } = req.userId;
-
   try {
+    // Validar los datos de la solicitud usando el esquema
+    const validatedData = activitiesSchema.parse(req.body);
+    const { titulo, description, fecha_inicio, fecha_fin, estado } = validatedData;
+    const { id } = req.params;
+    const userId = req.user.id;
+
     const subject = await findSubjectByIdAndUserId(id, userId);
     const newActivity = await createActivity({
       titulo,
@@ -41,20 +45,28 @@ export const createActivities = async (req, res) => {
 
     res.status(201).json(newActivity);
   } catch (error) {
+    if (error instanceof ZodError) {
+      // Capturar y devolver errores de validación
+      return res.status(400).json({
+        message: 'Error de validación',
+        errors: error.errors,
+      });
+    }
     console.error(`Error al crear la actividad: ${error}`);
-
     res.status(500).json({ message: error.message });
   }
 };
 
 export const updateActivityCtrl = async (req, res) => {
-  const { titulo, description, fecha_inicio, fecha_fin, estado } = req.body;
-  const { id } = req.params;
-  const { userId } = req.userId;
-
   try {
+    // Validar los datos de la solicitud usando el esquema
+    const validatedData = activitiesSchema.parse(req.body);
+    const { titulo, description, fecha_inicio, fecha_fin, estado } = validatedData;
+    const { id } = req.params;
+    const userId = req.user.id;
+
     const activity = await findActivityById(id);
-    const subject = await findSubjectByIdAndUserId(activity.subjectsId, userId);
+    const subject = await findSubjectByIdAndUserId(activity.subjectId, userId);
     const updatedActivity = await updateActivity(id, {
       titulo,
       description,
@@ -65,8 +77,14 @@ export const updateActivityCtrl = async (req, res) => {
 
     res.status(200).json(updatedActivity);
   } catch (error) {
-    console.error(`Error al editar la actividad: ${error}`);
-
+    if (error instanceof ZodError) {
+      // Capturar y devolver errores de validación
+      return res.status(400).json({
+        message: 'Error de validación',
+        errors: error.errors,
+      });
+    }
+    console.error(`Error al actualizar la actividad: ${error}`);
     res.status(500).json({ message: error.message });
   }
 };
@@ -78,10 +96,7 @@ export const deleteActivityCtrl = async (req, res) => {
 
     try {
       const activity = await findActivityById(id);
-      const subject = await findSubjectByIdAndUserId(
-        activity.subjectId,
-        userId
-      );
+      const subject = await findSubjectByIdAndUserId(activity.subjectId, userId);
       await deleteActivity(id);
 
       res.status(200).json({ message: 'Actividad eliminada' });
