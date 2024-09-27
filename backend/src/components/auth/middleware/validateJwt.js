@@ -3,7 +3,7 @@ import { Users } from '../../users/models/userModel.js';
 import { SECRET_KEY } from '../../../config/env.js';
 
 const validateJwt = async (req, res, next) => {
-  const token = req.cookies.authToken || req.session.token;
+  const token = req.cookies.authToken || (req.session && req.session.token);
 
   if (!token) {
     return res.status(403).json({ message: 'Token no proporcionado' });
