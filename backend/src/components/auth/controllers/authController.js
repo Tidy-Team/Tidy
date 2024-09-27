@@ -65,11 +65,18 @@ export const signInUser = async (req, res) => {
     signInSchema.parse(req.body);
 
     const result = await signIn(req);
+    const token = result.token;
+    // Almacenar el token en la sesión del servidor
+    req.session.token = token;
 
-    res.status(200).json({
-      message: 'Inicio de sesión existoso',
-      token: result.token,
+    // Almacenar el token en una cookie segura
+    res.cookie('authToken', token, {
+      httpOnly: true, // La cookie no es accesible desde JavaScript
+      secure: false, // Cambiar a true en producción con HTTPS
+      maxAge: 3600000, // Expiración en milisegundos (1 hora)
     });
+
+    return res.json({ message: 'Inicio de sesión exitoso' });
   } catch (error) {
     console.error(`Error en el controlador al iniciar sesión: ${error}`);
     // Manejo de errores de validación de Zod

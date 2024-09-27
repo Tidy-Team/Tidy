@@ -1,10 +1,7 @@
 import bcrypt from 'bcryptjs';
 
 import generarJwt from '../../../helpers/generarJwt.js';
-import {
-  getUserByEmail,
-  createUser,
-} from '../../users/services/userServices.js';
+import { getUserByEmail, createUser } from '../../users/services/userServices.js';
 
 /**
  * Registra un nuevo usuario creando una cuenta y generando un token JWT.
