@@ -1,12 +1,19 @@
-import dotenv from "dotenv";
-import { CORS_ORIGIN } from "../config/env.js";
+import dotenv from 'dotenv';
 
 dotenv.config();
 
-export const corsMiddleware = () => {
-  const corsOptions = {
-    origin: CORS_ORIGIN,
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE"],
-  };
+const allowedOrigins = process.env.CORS_ORIGIN.split(',').map(origin =>
+  origin.trim()
+);
+
+export const corsMiddleware = {
+  origin: function (origin, callback) {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
 };

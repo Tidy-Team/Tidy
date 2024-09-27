@@ -7,7 +7,7 @@ import { corsMiddleware } from './corsMiddleware.js';
 import { sessionMiddleware } from './sessionMiddleware.js';
 
 export const initMiddleware = app => {
-  app.use(cors(corsMiddleware()));
+  app.use(cors(corsMiddleware));
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(cookieParser());
