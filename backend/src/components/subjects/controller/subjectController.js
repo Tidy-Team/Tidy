@@ -1,3 +1,5 @@
+import subjectSchema from '../schemas/subjectSchema.js';
+import { ZodError } from 'zod';
 import { createSubject, deleteSubject, updateSubject, getUserSubjects } from '../services/subjectsService.js';
 
 /**
@@ -24,7 +26,10 @@ export const getUserSubjectsCtrl = async (req, res) => {
  */
 export const createSubjectCtrl = async (req, res) => {
   try {
-    const { subjectName, description, name_teacher } = req.body;
+    // Validar los datos de la solicitud usando el esquema
+    const validatedData = subjectSchema.parse(req.body);
+
+    const { subjectName, description, name_teacher } = validatedData;
     const userId = req.user.id;
 
     const newSubject = await createSubject(userId, { subjectName, description, name_teacher });
@@ -34,6 +39,13 @@ export const createSubjectCtrl = async (req, res) => {
       subject: newSubject,
     });
   } catch (error) {
+    //Zod Errors
+    if (error instanceof ZodError) {
+      return res.status(400).json({
+        message: 'Error de validación',
+        errors: error.errors,
+      });
+    }
     console.error(`Error al crear la materia para el usuario con id: ${req.user.id}. Su error es: ${error.message}`);
     res.status(500).json({
       message: 'Error al crear la materia',
@@ -48,15 +60,25 @@ export const createSubjectCtrl = async (req, res) => {
  * @param {Object} res - Objeto de respuesta
  */
 export const updateSubjectCtrl = async (req, res) => {
-  const { subjectName, description, name_teacher } = req.body;
-  const { id } = req.params; // Obtenemos el id de la materia a editar
-  const userId = req.user.id;
-
   try {
+    // Validar los datos de la solicitud usando el esquema
+    const validatedData = subjectSchema.parse(req.body);
+
+    const { subjectName, description, name_teacher } = validatedData;
+    const { id } = req.params; // Obtenemos el id de la materia a editar
+    const userId = req.user.id;
+
     const updatedSubject = await updateSubject(userId, id, { subjectName, description, name_teacher });
 
     res.status(200).json(updatedSubject);
   } catch (error) {
+    //Zod Error
+    if (error instanceof ZodError) {
+      return res.status(400).json({
+        message: 'Error de validación',
+        errors: error.errors,
+      });
+    }
     res.status(500).json({ message: error.message });
   }
 };
