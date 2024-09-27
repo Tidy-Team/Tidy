@@ -35,6 +35,18 @@ export const Activities = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    prioridad_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    user_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    subject_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
   },
   { tableName: 'activities' }
 );

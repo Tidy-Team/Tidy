@@ -1,6 +1,5 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../../../config/databases.js';
-import { Users } from '../../users/models/userModel.js';
 
 export const Subjects = sequelize.define(
   'subjects',
@@ -22,11 +21,12 @@ export const Subjects = sequelize.define(
       type: DataTypes.STRING,
       allowNull: true,
     },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
   },
   {
     tableName: 'subjects',
   }
 );
-
-//Relacion de Materias le pertenece a un Usuario
-Subjects.belongsTo(Users, { foreignKey: 'userId', as: 'user' });

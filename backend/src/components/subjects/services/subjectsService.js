@@ -7,8 +7,11 @@ import { Subjects } from '../models/subjectModel.js';
  * @returns {Promise<Object>} - Materia encontrada.
  * @throws {Error} - Si la materia no es encontrada.
  */
+
 export const findSubjectByIdAndUserId = async (subjectId, userId) => {
   try {
+    console.log(`Buscando materia con id: ${subjectId} y userId: ${userId}`);
+
     const subject = await Subjects.findOne({
       where: { id: subjectId, userId },
     });
@@ -20,7 +23,6 @@ export const findSubjectByIdAndUserId = async (subjectId, userId) => {
     return subject;
   } catch (error) {
     console.error(`Error al buscar materia con id: ${subjectId}. Su error es: ${error.message}`);
-
     throw new Error('Error al encontrar la materia');
   }
 };

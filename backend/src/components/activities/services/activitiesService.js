@@ -18,9 +18,7 @@ export const findActivityById = async activityId => {
 
     return activity;
   } catch (error) {
-    console.error(
-      `Error al buscar la actividad con id ${activityId}. Su error es: ${error.message}`
-    );
+    console.error(`Error al buscar la actividad con id ${activityId}. Su error es: ${error.message}`);
 
     throw new Error('Error al encontrar la actividad');
   }
@@ -34,15 +32,18 @@ export const findActivityById = async activityId => {
  */
 export const findActivitiesBySubjectId = async subjectId => {
   try {
-    //Busca todas las actividades de una materia
-    return await Activities.findAll({
-      where: { subjectsId: subjectId },
-    });
-  } catch (error) {
-    console.error(
-      `Error al buscar actividades para la materia con id: ${subjectId}. Su error es: ${error.message}`
-    );
+    console.log(`Buscando actividades para la materia con id: ${subjectId}`);
 
+    // Busca todas las actividades de una materia
+    const activities = await Activities.findAll({
+      where: { subject_id: subjectId },
+    });
+
+    console.log(`Actividades encontradas: ${JSON.stringify(activities)}`);
+
+    return activities;
+  } catch (error) {
+    console.error(`Error al buscar actividades para la materia con id: ${subjectId}. Su error es: ${error.message}`);
     throw new Error('Error al encontrar la actividad');
   }
 };
@@ -79,9 +80,7 @@ export const updateActivity = async (activityId, updateData) => {
 
     return activity;
   } catch (error) {
-    console.error(
-      `Error al actualizar actividad con id: ${activityId}.Su error es: ${error.message} `
-    );
+    console.error(`Error al actualizar actividad con id: ${activityId}.Su error es: ${error.message} `);
 
     throw new Error('Error al actualizar la actividad');
   }
@@ -98,9 +97,7 @@ export const deleteActivity = async activityId => {
 
     await activity.destroy();
   } catch (error) {
-    console.error(
-      `Error al eliminar actividad con id: ${activityId}. Su error es: ${error.message}`
-    );
+    console.error(`Error al eliminar actividad con id: ${activityId}. Su error es: ${error.message}`);
 
     throw new Error('Error al eliminar la actividad');
   }

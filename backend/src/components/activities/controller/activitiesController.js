@@ -17,19 +17,20 @@ const handleValidationError = (res, error) => {
   });
 };
 
-// Función auxiliar para obtener el usuario y la materia
-const getUserAndSubject = async req => {
-  const { id } = req.params;
-  const userId = req.user.id;
-  const subject = await findSubjectByIdAndUserId(id, userId);
-  return { userId, subject };
-};
-
 export const getActivities = async (req, res) => {
   try {
-    const { subject } = await getUserAndSubject(req);
-    const activities = await findActivitiesBySubjectId(subject.id);
+    const { id } = req.params;
+    const userId = req.user.id;
+    console.log(`Buscando materia con id: ${id} para el usuario con id: ${userId}`);
 
+    const subject = await findSubjectByIdAndUserId(id, userId);
+    if (!subject) {
+      return res.status(404).json({ message: 'Materia no encontrada' });
+    }
+
+    console.log(`Materia encontrada: ${JSON.stringify(subject)}`);
+
+    const activities = await findActivitiesBySubjectId(subject.id);
     res.status(200).json(activities);
   } catch (error) {
     console.error(`Error al obtener las actividades: ${error}`);
@@ -40,8 +41,15 @@ export const getActivities = async (req, res) => {
 export const createActivities = async (req, res) => {
   try {
     const validatedData = activitiesSchema.parse(req.body);
-    const { titulo, description, fecha_inicio, fecha_fin, estado, num_preguntas } = validatedData;
-    const { subject } = await getUserAndSubject(req);
+    const { titulo, description, fecha_inicio, fecha_fin, estado, num_preguntas, prioridad_id } = validatedData;
+    const { id } = req.params;
+    const userId = req.user.id;
+    const subject = await findSubjectByIdAndUserId(id, userId);
+
+    console.log('Datos validados:', validatedData);
+    console.log('ID de la materia:', id);
+    console.log('ID del usuario:', userId);
+    console.log('ID de la materia encontrada:', subject.id);
 
     const newActivity = await createActivity({
       titulo,
@@ -50,7 +58,9 @@ export const createActivities = async (req, res) => {
       fecha_fin,
       estado,
       num_preguntas,
-      subjectId: subject.id,
+      prioridad_id,
+      user_id: userId,
+      subject_id: subject.id,
     });
 
     res.status(201).json(newActivity);
@@ -66,12 +76,13 @@ export const createActivities = async (req, res) => {
 export const updateActivityCtrl = async (req, res) => {
   try {
     const validatedData = activitiesSchema.parse(req.body);
-    const { titulo, description, fecha_inicio, fecha_fin, estado, num_preguntas } = validatedData;
+    const { titulo, description, fecha_inicio, fecha_fin, estado, num_preguntas, prioridad_id } = validatedData;
     const { id } = req.params;
     const userId = req.user.id;
 
     const activity = await findActivityById(id);
-    const subject = await findSubjectByIdAndUserId(activity.subjectId, userId);
+    const subject = await findSubjectByIdAndUserId(activity.subject_id, userId);
+
     const updatedActivity = await updateActivity(id, {
       titulo,
       description,
@@ -79,6 +90,9 @@ export const updateActivityCtrl = async (req, res) => {
       fecha_fin,
       estado,
       num_preguntas,
+      prioridad_id,
+      user_id: userId,
+      subject_id: subject.id,
     });
 
     res.status(200).json(updatedActivity);
