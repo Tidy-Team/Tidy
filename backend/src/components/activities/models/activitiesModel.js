@@ -31,9 +31,10 @@ export const Activities = sequelize.define(
       type: DataTypes.ENUM('pendiente', 'en_progreso', 'completada'),
       defaultValue: 'pendiente',
     },
+    num_preguntas: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
   },
   { tableName: 'activities' }
 );
-
-//Relacion de
-Activities.belongsTo(Subjects, { foreignKey: 'subjectsId' }, { as: 'subject' });

@@ -25,4 +25,5 @@ export const activitiesSchema = z.object({
   estado: z.enum(['pendiente', 'en progreso', 'completada']).default('pendiente'),
   user_id: z.number().int().positive(),
   prioridad_id: z.number().int().positive(),
+  num_preguntas: z.number().int().positive().min(1, 'Debe haber al menos una pregunta'),
 });
