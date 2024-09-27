@@ -111,10 +111,10 @@ export const deleteActivityCtrl = async (req, res) => {
     const userId = req.user.id;
 
     const activity = await findActivityById(id);
-    const subject = await findSubjectByIdAndUserId(activity.subjectId, userId);
+    const subject = await findSubjectByIdAndUserId(activity.subject_id, userId);
     await deleteActivity(id);
 
-    res.status(200).json({ message: 'Actividad eliminada' });
+    res.status(200).json({ message: 'Actividad eliminada', activity: activity });
   } catch (error) {
     console.error(`Error al eliminar la actividad: ${error}`);
     res.status(500).json({ message: error.message });
