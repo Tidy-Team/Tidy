@@ -1,4 +1,4 @@
-import { signUp, signIn } from '../services/authService.js';
+import { signUp, signIn, requestPasswordReset, resetPassword, verifyResetToken } from '../services/authService.js';
 import { userSchema, signInSchema } from '../../users/schemas/userSchema.js';
 import { ZodError } from 'zod';
 
@@ -97,5 +97,45 @@ export const signInUser = async (req, res) => {
       message: 'Error en el servidor al iniciar sesión',
       error: error.message,
     });
+  }
+};
+
+export const requestPasswordResetCtrl = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    await requestPasswordReset(email);
+    res.status(200).json({ message: 'Correo de restablecimiento de contraseña enviado' });
+  } catch (error) {
+    console.error(`Error al solicitar el restablecimiento de contraseña: ${error}`);
+
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const verifyResetTokenCtrl = async (req, res) => {
+  const { token } = req.params; // Acceso al parámetro :token
+
+  try {
+    await verifyResetToken(token);
+    res.status(200).json({ message: 'Token válido' });
+  } catch (error) {
+    console.error(`Error al verificar el token de restablecimiento: ${error}`);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const resetPasswordCtrl = async (req, res) => {
+  const { token } = req.params;
+  const { newPassword } = req.body;
+
+  try {
+    await resetPassword(token, newPassword);
+
+    res.status(200).json({ message: 'Contraseña restablecida correctamente' });
+  } catch (error) {
+    console.error(`Error al restablecer la contraseña: ${error}`);
+
+    res.status(500).json({ message: error.message });
   }
 };

@@ -1,7 +1,13 @@
 import validateJwt from '../middleware/validateJwt.js';
 
 import { Router } from 'express';
-import { signUpUser, signInUser } from '../controllers/authController.js';
+import {
+  signUpUser,
+  signInUser,
+  requestPasswordResetCtrl,
+  verifyResetTokenCtrl,
+  resetPasswordCtrl,
+} from '../controllers/authController.js';
 import { validateSession } from '../controllers/sessionController.js';
 
 const authRouter = Router();
@@ -15,4 +21,8 @@ authRouter.post('/signin', signInUser);
 // Endpoint para validar la sesión
 authRouter.get('/session', validateJwt, validateSession);
 
+// Enpoints de reset password
+authRouter.post('/request-password-reset', requestPasswordResetCtrl);
+authRouter.get('/reset-password/:token', verifyResetTokenCtrl);
+authRouter.post('/reset-password/:token', resetPasswordCtrl);
 export default authRouter;

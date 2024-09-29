@@ -89,16 +89,16 @@ export const requestPasswordReset = async email => {
     throw new Error('Usuario no encontrado');
   }
 
-  // Genera un token de restablecimiento y establece su expiracion
+  // Genera un token de restablecimiento y establece su expiración
   const token = crypto.randomBytes(32).toString('hex');
-  const tokenExpiration = Date.now() + 3600000; //1 hora
+  const tokenExpiration = Date.now() + 3600000; // 1 hora
 
-  // Guarda el token y su expiracion en el usuario;
+  // Guarda el token y su expiración en el usuario
   user.resetPasswordToken = token;
-  user.resetPasswordExpires = tokenExpiration;
+  user.resetPasswordExpires = new Date(tokenExpiration); // Asegúrate de que sea una instancia de Date
   await user.save();
 
-  // Envia el correo de restablecer contraseña
+  // Envía el correo de restablecimiento de contraseña
   await sendPasswordResetEmail(user.email, token);
 };
 
@@ -106,12 +106,12 @@ export const verifyResetToken = async token => {
   const user = await Users.findOne({
     where: {
       resetPasswordToken: token,
-      resetPasswordExpires: { [Op.gt]: Date.now() }, //Verifica si el token no expiró
+      resetPasswordExpires: { [Op.gt]: new Date() }, // Asegúrate de que sea una instancia de Date
     },
   });
 
   if (!user) {
-    throw new Error('Token inválido o expiró');
+    throw new Error('Token inválido o expirado');
   }
 
   return user;
