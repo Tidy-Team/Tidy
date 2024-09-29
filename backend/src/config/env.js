@@ -1,4 +1,4 @@
-import dotenv from "dotenv";
+import dotenv from 'dotenv';
 
 dotenv.config();
 //CORS
@@ -16,3 +16,6 @@ export const SECRET_KEY = process.env.SECRET_KEY;
 
 //PORT
 export const PORT = process.env.PORT;
+
+//RESEND
+export const API_KEY_RESEND = process.env.API_KEY_RESEND;
