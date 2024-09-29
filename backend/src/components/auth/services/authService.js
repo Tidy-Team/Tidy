@@ -1,7 +1,11 @@
 import bcrypt from 'bcryptjs';
-
+import crypto from 'crypto';
 import generarJwt from '../../../helpers/generarJwt.js';
+
+import { Op } from 'sequelize';
 import { getUserByEmail, createUser } from '../../users/services/userServices.js';
+import { sendPasswordResetEmail } from '../../email/services/emailService.js';
+import { Users } from '../../users/models/userModel.js';
 
 /**
  * Registra un nuevo usuario creando una cuenta y generando un token JWT.
@@ -76,4 +80,52 @@ export const signIn = async req => {
   const token = await generarJwt(user.id);
 
   return { token };
+};
+
+export const requestPasswordReset = async email => {
+  const user = await getUserByEmail(email);
+
+  if (!user) {
+    throw new Error('Usuario no encontrado');
+  }
+
+  // Genera un token de restablecimiento y establece su expiracion
+  const token = crypto.randomBytes(32).toString('hex');
+  const tokenExpiration = Date.now() + 3600000; //1 hora
+
+  // Guarda el token y su expiracion en el usuario;
+  user.resetPasswordToken = token;
+  user.resetPasswordExpires = tokenExpiration;
+  await user.save();
+
+  // Envia el correo de restablecer contraseña
+  await sendPasswordResetEmail(user.email, token);
+};
+
+export const verifyResetToken = async token => {
+  const user = await Users.findOne({
+    where: {
+      resetPasswordToken: token,
+      resetPasswordExpires: { [Op.gt]: Date.now() }, //Verifica si el token no expiró
+    },
+  });
+
+  if (!user) {
+    throw new Error('Token inválido o expiró');
+  }
+
+  return user;
+};
+
+export const resetPassword = async (token, newPassword) => {
+  // Verifica la validez del token
+  const user = await verifyResetToken(token);
+
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+  // Actualiza la contraseña del usuario y elimina el token de restablecimiento
+  user.password = hashedPassword;
+  user.resetPasswordToken = null;
+  user.resetPasswordExpires = null;
+  await user.save();
 };
