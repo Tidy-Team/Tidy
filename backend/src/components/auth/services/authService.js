@@ -33,23 +33,23 @@ export const signUp = async userData => {
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
+  const emailVerificationToken = crypto.randomBytes(32).toString('hex');
+
   const newUser = await createUser({
     name,
     email,
     password: hashedPassword,
     rol,
+    fecha_registro: new Date(),
+    emailVerificationToken,
+    emailVerified: false,
   });
-
-  const emailVerificationToken = crypto.randomBytes(32).toString('hex');
-  newUser.emailVerificationToken = emailVerificationToken;
-  newUser.emailVerified = false;
-  await newUser.save();
 
   await sendEmailVerification(newUser.email, emailVerificationToken);
 
   const token = await generarJwt(newUser.id);
 
-  return { token };
+  return { token, message: 'Usuario registrado. Por favor, verifica tu email.' };
 };
 
 /**
@@ -72,6 +72,10 @@ export const signIn = async ({ email, password }) => {
 
   if (!comparePassword) {
     throw new Error('La contraseña es incorrecta');
+  }
+
+  if (!user.emailVerified) {
+    throw new Error('Por favor, verifica tu email antes de iniciar sesión');
   }
 
   const token = await generarJwt(user.id);

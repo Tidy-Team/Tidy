@@ -1,16 +1,20 @@
-import { signUp, signIn, requestPasswordReset, resetPassword, verifyResetToken, verifyEmailToken } from '../services/authService.js';
+import {
+  signUp,
+  signIn,
+  requestPasswordReset,
+  resetPassword,
+  verifyResetToken,
+  verifyEmailToken,
+} from '../services/authService.js';
 import { userSchema, signInSchema } from '../../users/schemas/userSchema.js';
 import { ZodError } from 'zod';
 
 export const signUpUser = async (req, res) => {
   try {
     userSchema.parse(req.body);
-    const result = await signUp(req.body);
+    const { token, message } = await signUp(req.body);
 
-    res.status(201).json({
-      message: 'El usuario se registró correctamente',
-      user: result.token,
-    });
+    res.status(201).json({ token, message });
   } catch (error) {
     console.error(`Error en el controlador al registrar un usuario: ${error}`);
 
@@ -128,6 +132,6 @@ export const verifyEmail = async (req, res) => {
   } catch (error) {
     console.error(`Error al verificar el email: ${error}`);
 
-    res.status(400).json({ message: error.message })
+    res.status(400).json({ message: error.message });
   }
 };
