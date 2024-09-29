@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { parseISO, formatISO } from 'date-fns';
 import moment from 'moment-timezone';
 
 const timeZone = 'America/Argentina/Buenos_Aires';
@@ -10,14 +9,10 @@ export const activitiesSchema = z.object({
   fecha_inicio: z
     .string()
     .optional()
-    .default(() => formatISO(new Date()))
+    .default(() => moment().tz(timeZone).format()) // Establece la fecha actual en la zona horaria de Buenos Aires
     .refine(date => {
-      if (!date) {
-        console.error('fecha_inicio es undefined o null');
-        return false;
-      }
-      const parsedDate = parseISO(date);
-      if (isNaN(parsedDate)) {
+      const parsedDate = moment(date);
+      if (!parsedDate.isValid()) {
         console.error(`fecha_inicio no es una fecha válida: ${date}`);
         return false;
       }
@@ -28,12 +23,8 @@ export const activitiesSchema = z.object({
     .string()
     .optional()
     .refine(date => {
-      if (!date) {
-        console.error('fecha_fin es undefined o null');
-        return false;
-      }
-      const parsedDate = parseISO(date);
-      if (isNaN(parsedDate)) {
+      const parsedDate = moment(date);
+      if (!parsedDate.isValid()) {
         console.error(`fecha_fin no es una fecha válida: ${date}`);
         return false;
       }

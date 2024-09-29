@@ -40,6 +40,14 @@ export const Users = sequelize.define(
       type: DataTypes.DATE,
       allowNull: true,
     },
+    emailVerificationToken: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    emailVerified: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
   },
   {
     tableName: 'users',

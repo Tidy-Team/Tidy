@@ -1,27 +1,15 @@
-import { signUp, signIn, requestPasswordReset, resetPassword, verifyResetToken } from '../services/authService.js';
+import { signUp, signIn, requestPasswordReset, resetPassword, verifyResetToken, verifyEmailToken } from '../services/authService.js';
 import { userSchema, signInSchema } from '../../users/schemas/userSchema.js';
 import { ZodError } from 'zod';
 
-/**
- * Función del controlador para manejar el registro de usuarios.
- *
- * @param {Object} req - Objeto de solicitud de Express.
- * @param {Object} req.body - El cuerpo de la solicitud que contiene los datos del usuario.
- * @param {Object} res - Objeto de respuesta de Express.
- *
- * @returns {Promise<void>} - Devuelve una promesa que se resuelve en void.
- *
- * @throws {ZodError} - Lanza errores de validación si el cuerpo de la solicitud no coincide con el esquema del usuario.
- * @throws {Error} - Lanza un error del servidor si hay un problema durante el proceso de registro.
- */
 export const signUpUser = async (req, res) => {
   try {
     userSchema.parse(req.body);
-    const result = await signUp(req);
+    const result = await signUp(req.body);
 
     res.status(201).json({
       message: 'El usuario se registró correctamente',
-      user: result.user,
+      user: result.token,
     });
   } catch (error) {
     console.error(`Error en el controlador al registrar un usuario: ${error}`);
@@ -49,23 +37,13 @@ export const signUpUser = async (req, res) => {
   }
 };
 
-/**
- * Función del controlador para manejar el inicio de sesión de usuarios.
- *
- * @param {Object} req - Objeto de solicitud de Express.
- * @param {Object} req.body - El cuerpo de la solicitud que contiene las credenciales del usuario.
- * @param {Object} res - Objeto de respuesta de Express.
- * @returns {Promise<void>} - Devuelve una promesa que se resuelve cuando el proceso de inicio de sesión se completa.
- *
- * @throws {ZodError} - Lanza errores de validación si el cuerpo de la solicitud no coincide con el esquema de inicio de sesión.
- * @throws {Error} - Lanza un error del servidor si hay un problema durante el proceso de inicio de sesión.
- */
 export const signInUser = async (req, res) => {
   try {
     signInSchema.parse(req.body);
 
-    const result = await signIn(req);
+    const result = await signIn(req.body);
     const token = result.token;
+
     // Almacenar el token en la sesión del servidor
     req.session.token = token;
 
@@ -137,5 +115,19 @@ export const resetPasswordCtrl = async (req, res) => {
     console.error(`Error al restablecer la contraseña: ${error}`);
 
     res.status(500).json({ message: error.message });
+  }
+};
+
+export const verifyEmail = async (req, res) => {
+  const { token } = req.params;
+
+  try {
+    await verifyEmailToken(token);
+
+    res.status(200).json({ message: 'Email verificado correctamente' });
+  } catch (error) {
+    console.error(`Error al verificar el email: ${error}`);
+
+    res.status(400).json({ message: error.message })
   }
 };

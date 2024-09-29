@@ -6,26 +6,38 @@ const resend = new Resend(API_KEY_RESEND);
 export const sendPasswordResetEmail = async (email, token) => {
   const resetUrl = `http://localhost:3000/reset-password/${token}`;
   const message = `
-  <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
-    <h2 style="color: #333;">Restablecimiento de Contraseña</h2>
-    <p style="color: #555;">Hola,</p>
-    <p style="color: #555;">
-      Has solicitado restablecer tu contraseña. Haz clic en el botón de abajo para restablecerla:
-    </p>
-    <div style="text-align: center; margin: 20px 0;">
-      <a href="${resetUrl}" style="background-color: #007bff; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Restablecer Contraseña</a>
+<div style="text-align: center; margin-bottom: 20px">
+        <h1 style="color: #b565e2">Tidy</h1>
+      </div>
+      <h3 style="color: #b565e2">Restablecimiento de Contraseña</h3>
+      <p>Hola, Has solicitado restablecer tu contraseña. Haz clic en el botón de abajo
+        para restablecerla:</p>
+      <div style="text-align: center; margin: 20px 0">
+        <a
+          href="${resetUrl}"
+          style="
+            background-color: #7e3fbf;
+            color: #fff;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+          "
+          >Restablecer Contraseña</a
+        >
+      </div>
+      <p>
+        Si no solicitaste este cambio, simplemente ignora este correo
+        electrónico.
+      </p>
+      <p>Gracias,</p>
+      <p>El equipo de Tidy</p>
     </div>
-    <p style="color: #555;">
-      Si no solicitaste este cambio, puedes ignorar este correo electrónico.
-    </p>
-    <p style="color: #555;">Gracias,</p>
-    <p style="color: #555;">El equipo de Tidy</p>
-  </div>
 `;
 
   try {
     await resend.emails.send({
-      from: 'Acme <onboarding@resend.dev>',
+      from: 'Tidy <onboarding@resend.dev>',
       to: email,
       subject: 'Restablecimiento de contraseña',
       html: message,
@@ -33,5 +45,50 @@ export const sendPasswordResetEmail = async (email, token) => {
   } catch (error) {
     console.error(`Error al enviar el correo para restablecer la contraseña: ${error.message}`);
     throw new Error('Error al enviar el correo de restablecimiento de contraseña');
+  }
+};
+
+export const sendEmailVerification = async (email, token) => {
+  const verifyUrl = `http://localhost:3000/verify-email/${token}`;
+  const message = `
+<div style="text-align: center; margin-bottom: 20px">
+        <h1 style="color: #b565e2">Tidy</h1>
+      </div>
+      <h3 style="color: #b565e2">Verificación de Email</h3>
+      <p>Hola, Gracias por registrarte en Tidy. Haz clic en el botón de abajo
+        para verificar tu email:</p>
+      <div style="text-align: center; margin: 20px 0">
+        <a
+          href="${verifyUrl}"
+          style="
+            background-color: #7e3fbf;
+            color: #fff;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+          "
+          >Verificar Email</a
+        >
+      </div>
+      <p>
+        Si no solicitaste esta verificación, simplemente ignora este correo
+        electrónico.
+      </p>
+      <p>Gracias,</p>
+      <p>El equipo de Tidy</p>
+    </div>
+`;
+
+  try {
+    await resend.emails.send({
+      from: 'Tidy <onboarding@resend.dev>',
+      to: email,
+      subject: 'Verificación de Email',
+      html: message,
+    });
+  } catch (error) {
+    console.error(`Error al enviar el correo de verificación de email: ${error}`);
+    throw new Error('No se pudo enviar el correo de verificación de email');
   }
 };

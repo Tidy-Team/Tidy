@@ -4,24 +4,23 @@ import generarJwt from '../../../helpers/generarJwt.js';
 
 import { Op } from 'sequelize';
 import { getUserByEmail, createUser } from '../../users/services/userServices.js';
-import { sendPasswordResetEmail } from '../../email/services/emailService.js';
+import { sendEmailVerification, sendPasswordResetEmail } from '../../email/services/emailService.js';
 import { Users } from '../../users/models/userModel.js';
 
 /**
  * Registra un nuevo usuario creando una cuenta y generando un token JWT.
  *
- * @param {Object} req - El objeto de la solicitud.
- * @param {Object} req.body - El cuerpo de la solicitud.
- * @param {string} req.body.name - El nombre del usuario.
- * @param {string} req.body.email - El correo electrónico del usuario.
- * @param {string} req.body.password - La contraseña del usuario.
+ * @param {Object} userData - Los datos del usuario.
+ * @param {string} userData.name - El nombre del usuario.
+ * @param {string} userData.email - El correo electrónico del usuario.
+ * @param {string} userData.password - La contraseña del usuario.
  * @returns {Promise<Object>} Una promesa que se resuelve en un objeto que contiene el token JWT.
  * @throws {Error} Si el usuario ya existe.
  */
-export const signUp = async req => {
-  const { name, email, password, rol } = req.body;
+export const signUp = async userData => {
+  const { name, email, password, rol } = userData;
 
-  //Validar si los campos estan completos
+  // Validar si los campos están completos
   if (!name || !email || !password) {
     throw new Error('Todos los campos son obligatorios');
   }
@@ -41,6 +40,13 @@ export const signUp = async req => {
     rol,
   });
 
+  const emailVerificationToken = crypto.randomBytes(32).toString('hex');
+  newUser.emailVerificationToken = emailVerificationToken;
+  newUser.emailVerified = false;
+  await newUser.save();
+
+  await sendEmailVerification(newUser.email, emailVerificationToken);
+
   const token = await generarJwt(newUser.id);
 
   return { token };
@@ -49,26 +55,17 @@ export const signUp = async req => {
 /**
  * Inicia sesión de un usuario existente y genera un token JWT.
  *
- * @param {Object} req - El objeto de la solicitud.
- * @param {Object} req.body - El cuerpo de la solicitud.
- * @param {string} req.body.email - El correo electrónico del usuario.
- * @param {string} req.body.password - La contraseña del usuario.
+ * @param {Object} userData - Los datos del usuario.
+ * @param {string} userData.email - El correo electrónico del usuario.
+ * @param {string} userData.password - La contraseña del usuario.
  * @returns {Promise<Object>} Una promesa que se resuelve en un objeto que contiene el token JWT.
  * @throws {Error} Si el usuario no existe o la contraseña es incorrecta.
  */
-export const signIn = async req => {
-  const { email, password } = req.body;
-
-  //Validar si los campos estan completos
-  if (!email || !password) {
-    throw new Error('Todos los campos son obligatorios');
-  }
-
-  //Verificar si existe el email del usuario
+export const signIn = async ({ email, password }) => {
   const user = await getUserByEmail(email);
 
   if (!user) {
-    throw new Error('Email o contraseña incorrectos');
+    throw new Error('Usuario no encontrado');
   }
 
   const comparePassword = await bcrypt.compare(password, user.password);
@@ -127,5 +124,28 @@ export const resetPassword = async (token, newPassword) => {
   user.password = hashedPassword;
   user.resetPasswordToken = null;
   user.resetPasswordExpires = null;
+  await user.save();
+};
+
+/**
+ * Verifica el token de verificación de email y actualiza el estado del usuario.
+ *
+ * @param {string} token - El token de verificación de email.
+ * @returns {Promise<void>} Una promesa que se resuelve cuando el email ha sido verificado.
+ * @throws {Error} Si el token es inválido o ha expirado.
+ */
+export const verifyEmailToken = async token => {
+  const user = await Users.findOne({
+    where: {
+      emailVerificationToken: token,
+    },
+  });
+
+  if (!user) {
+    throw new Error('Token inválido o expirado');
+  }
+
+  user.emailVerified = true;
+  user.emailVerificationToken = null;
   await user.save();
 };

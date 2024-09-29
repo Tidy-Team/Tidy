@@ -7,6 +7,7 @@ import {
   requestPasswordResetCtrl,
   verifyResetTokenCtrl,
   resetPasswordCtrl,
+  verifyEmail,
 } from '../controllers/authController.js';
 import { validateSession } from '../controllers/sessionController.js';
 
@@ -25,4 +26,8 @@ authRouter.get('/session', validateJwt, validateSession);
 authRouter.post('/request-password-reset', requestPasswordResetCtrl);
 authRouter.get('/reset-password/:token', verifyResetTokenCtrl);
 authRouter.post('/reset-password/:token', resetPasswordCtrl);
+
+// Enpoint de verificar email
+authRouter.get('/verify-email/:token', verifyEmail);
+
 export default authRouter;
