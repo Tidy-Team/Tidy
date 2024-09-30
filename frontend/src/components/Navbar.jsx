@@ -4,16 +4,22 @@ export const Navbar = () => {
   const location = useLocation();
 
   return (
-    <div class="navbar border-b-2">
+    <div className="navbar sticky top-0 border-b-2 z-10 bg-base-100">
       <div className="w-full md:w-3/5 mx-auto justify-between">
         <Link to="/">
-          <button class="btn btn-ghost text-3xl font-bold text-purple-500">
+          <button className="btn btn-ghost text-3xl font-bold text-purple-500">
             Tidy
           </button>
         </Link>
-        <Link to="/login">
-          <button class="btn btn-primary ">Iniciar Sesión</button>
-        </Link>
+        <div className="flex">
+          <Link to="/login">
+            <button className="btn btn-ghost ">Iniciar Sesión</button>
+          </Link>
+          <div className="divider divider-horizontal m-0"></div>
+          <Link to="/register">
+            <button className="btn btn-primary ">Prueba Tidy Ya</button>
+          </Link>
+        </div>
       </div>
     </div>
   );
