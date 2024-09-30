@@ -3,16 +3,6 @@ import { MdAssignmentAdd } from 'react-icons/md';
 import { FaRegClock } from 'react-icons/fa';
 import { FaArrowTrendUp } from 'react-icons/fa6';
 
-function BlueLargeIcon() {
-  return (
-    <IconContext.Provider value={{ color: 'blue', size: '50px' }}>
-      <div>
-        <FaBeer />
-      </div>
-    </IconContext.Provider>
-  );
-}
-
 export function LandingPage() {
   return (
     <div>
@@ -54,5 +44,3 @@ export function LandingPage() {
     </div>
   );
 }
-
-export default LandingPage;
