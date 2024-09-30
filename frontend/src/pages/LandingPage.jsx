@@ -1,5 +1,17 @@
-import { Navbar } from '../components/Navbar';
-import ejemplo from '../assets/ejemplo.png';
+import { Footer, Hero, Navbar, FeatureCard } from '../components';
+import { MdAssignmentAdd } from 'react-icons/md';
+import { FaRegClock } from 'react-icons/fa';
+import { FaArrowTrendUp } from 'react-icons/fa6';
+
+function BlueLargeIcon() {
+  return (
+    <IconContext.Provider value={{ color: 'blue', size: '50px' }}>
+      <div>
+        <FaBeer />
+      </div>
+    </IconContext.Provider>
+  );
+}
 
 export function LandingPage() {
   return (
@@ -8,40 +20,37 @@ export function LandingPage() {
       <Navbar />
 
       {/* Hero */}
-      <div className=" lg:w-3/4  mx-auto mt-10 ">
-        <div
-          className="hero rounded-xl bg-base-200   border-gray-700"
-          style={{
-            backgroundImage: `url()`,
-            boxShadow: '0 2px 5px 2px black, -12px 12px 0px 0 purple',
-          }}
-        >
-          <div className="hero-content p-10 flex  w-full !items-start">
-            {/* Col1 */}
-            <div className="w-1/2">
-              <div>
-                <h3 className="text-5xl py-6 font-semibold ">
-                  Organiza, Aprende, y Crece: Todo a tu Ritmo
-                </h3>
-                <p className="pb-6 font-semibold text-lg">
-                  Con <span className="text-purple-500">Tidy</span>, los padres
-                  de niños con TDAH pueden organizar materiales escolares, crear
-                  rutinas personalizadas y mejorar el aprendizaje con
-                  herramientas simples y efectivas, diseñadas para adaptarse a
-                  sus necesidades.
-                </p>
-                <button className="btn text-lg bg-purple-800 hover:bg-purple-950 ">
-                  Prueba Ahora
-                </button>
-              </div>
-            </div>
-            {/* Col 2 */}
-            <div className="self-center">
-              <img src={ejemplo} alt="ejemplo" className="" />
-            </div>
-          </div>
-        </div>
+      <Hero />
+
+      {/* Features */}
+      <div className="flex w-3/5 mx-auto">
+        <FeatureCard
+          icon={<MdAssignmentAdd className="fill-purple-600" />}
+          title={'Creación de Materias Personalizadas'}
+          description={
+            'Organiza tu aprendizaje creando materias a medida. Adapta cada asignatura a tus necesidades y visualiza el progreso de tus tareas de forma clara y sencilla.'
+          }
+        />
+        <div className="divider divider-horizontal my-10"></div>
+        <FeatureCard
+          icon={<FaRegClock className="fill-purple-600" />}
+          title={'Tareas Estructuradas con Pomodoro'}
+          description={
+            'Divide tus tareas en puntos manejables con nuestro sistema Pomodoro. Alterna entre períodos de trabajo y descansos cortos para mantener tu concentración y reducir la ansiedad.'
+          }
+        />
+        <div className="divider divider-horizontal my-10"></div>
+        <FeatureCard
+          icon={<FaArrowTrendUp className="fill-purple-600" />}
+          title={'Mejora Tu Rendimiento Escolar'}
+          description={
+            'Optimiza tu estudio con recordatorios y seguimiento del progreso. Diseñada especialmente para estudiantes con TDAH, nuestra app te ayuda a maximizar tu eficiencia y lograr tus objetivos académicos.'
+          }
+        />
       </div>
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }
