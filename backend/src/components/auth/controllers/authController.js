@@ -82,11 +82,38 @@ export const signInUser = async (req, res) => {
   }
 };
 
+export const signOutUser = async (req, res) => {
+  try {
+    const token = req.cookies.authToken;
+
+    if (!token) {
+      return res.status(400).json({ message: 'No hay token para cerrar sesión' });
+    }
+
+    //Elimina el token de la sesión del servidor
+    req.session.token = null;
+
+    // Elimina la cookie del cliente
+    res.clearCookie('authToken');
+
+    return res.json({ message: 'Cierre de sesión exitoso' });
+  } catch (error) {
+    console.error(`Error en el controlador al cerrar sesión: ${error}`);
+
+    res.status(500).json({
+      message: `Error en el servidor al cerrar sesión: ${error.message}`,
+    });
+  }
+};
+
+// Controlador para enviar el correo de restablecer la contraseñ
 export const requestPasswordResetCtrl = async (req, res) => {
   const { email } = req.body;
 
   try {
+    // Envía el correo de restablecimiento de contraseña
     await requestPasswordReset(email);
+
     res.status(200).json({ message: 'Correo de restablecimiento de contraseña enviado' });
   } catch (error) {
     console.error(`Error al solicitar el restablecimiento de contraseña: ${error}`);
@@ -95,23 +122,29 @@ export const requestPasswordResetCtrl = async (req, res) => {
   }
 };
 
+// Controlador para verificar que el token sea válido
 export const verifyResetTokenCtrl = async (req, res) => {
-  const { token } = req.params; // Acceso al parámetro :token
+  const { token } = req.params;
 
   try {
+    // Verifica que el token recibido es válido
     await verifyResetToken(token);
+
     res.status(200).json({ message: 'Token válido' });
   } catch (error) {
     console.error(`Error al verificar el token de restablecimiento: ${error}`);
+
     res.status(500).json({ message: error.message });
   }
 };
 
+// Controlador para recibir la nueva contraseña y resetearla
 export const resetPasswordCtrl = async (req, res) => {
   const { token } = req.params;
   const { newPassword } = req.body;
 
   try {
+    // Espera la nueva contraseña
     await resetPassword(token, newPassword);
 
     res.status(200).json({ message: 'Contraseña restablecida correctamente' });
@@ -122,6 +155,7 @@ export const resetPasswordCtrl = async (req, res) => {
   }
 };
 
+// Controlador para verificar el email del usuario
 export const verifyEmail = async (req, res) => {
   const { token } = req.params;
 

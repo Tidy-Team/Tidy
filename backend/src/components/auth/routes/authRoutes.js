@@ -8,16 +8,20 @@ import {
   verifyResetTokenCtrl,
   resetPasswordCtrl,
   verifyEmail,
+  signOutUser,
 } from '../controllers/authController.js';
 import { validateSession } from '../controllers/sessionController.js';
 
 const authRouter = Router();
 
-// Endpoint de inicio de sesión
-authRouter.post('/signup', signUpUser);
+// Endpoint de registrarse
+authRouter.post('/sign-up', signUpUser);
 
-// Endpoint de cierre de sesión
-authRouter.post('/signin', signInUser);
+// Endpoint de iniciar sesion
+authRouter.post('/sign-in', signInUser);
+
+// Endpoint de cerrar sesion
+authRouter.post('/sign-out', validateJwt, signOutUser);
 
 // Endpoint para validar la sesión
 authRouter.get('/session', validateJwt, validateSession);

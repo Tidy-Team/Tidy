@@ -49,7 +49,7 @@ export const signUp = async userData => {
 
   const token = await generarJwt(newUser.id);
 
-  return { token, message: 'Usuario registrado. Por favor, verifica tu email.' };
+  return { message: 'Usuario registrado. Por favor, verifica tu email.', token };
 };
 
 /**
@@ -92,11 +92,11 @@ export const requestPasswordReset = async email => {
 
   // Genera un token de restablecimiento y establece su expiración
   const token = crypto.randomBytes(32).toString('hex');
-  const tokenExpiration = Date.now() + 3600000; // 1 hora
+  const tokenExpiration = Date.now() + 108000000; // 30 minutos
 
   // Guarda el token y su expiración en el usuario
   user.resetPasswordToken = token;
-  user.resetPasswordExpires = new Date(tokenExpiration); // Asegúrate de que sea una instancia de Date
+  user.resetPasswordExpires = new Date(tokenExpiration);
   await user.save();
 
   // Envía el correo de restablecimiento de contraseña

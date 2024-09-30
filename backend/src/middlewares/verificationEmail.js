@@ -1,7 +1,7 @@
 import { Users } from '../components/users/models/userModel';
 
 export const requireEmailVerification = async (req, res, next) => {
-  const userId = req.user.id; // Asumiendo que el ID del usuario está disponible en req.user
+  const userId = req.user.id;
 
   try {
     const user = await Users.findByPk(userId);
