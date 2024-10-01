@@ -8,7 +8,7 @@ import bcrypt from 'bcryptjs';
 
 const syncModels = async () => {
   try {
-    await sequelize.sync({ alter: true }); //No se usa force:true para no tener perdidas de datos. Pero se puede usar en desarrollo
+    await sequelize.sync({ force: true }); //No se usa force:true para no tener perdidas de datos. Pero se puede usar en desarrollo
 
     // Insertar datos iniciales
     await Priorities.bulkCreate([{ nivel: 'baja' }, { nivel: 'media' }, { nivel: 'alta' }]);
