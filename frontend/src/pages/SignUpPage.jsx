@@ -5,9 +5,6 @@ import { FaLock, FaUser } from 'react-icons/fa';
 export function SignUpPage() {
   return (
     <>
-      {/* Navbar */}
-      <Navbar />
-
       {/* Title */}
       <div className="justify-center align-middle flex flex-col md:w-3/5 lg:max-w-lg mx-auto mt-10 ">
         <div className="w-3/5 mx-auto text-center">
@@ -28,11 +25,7 @@ export function SignUpPage() {
           {/* Name */}
           <label className="input input-bordered border-0 border-b-2 rounded-none focus:outline-offset-0  focus-within:outline-offset-0 flex items-center gap-2">
             <FaUser />
-            <input
-              type="text"
-              className="grow"
-              placeholder="Nombre y Apellido"
-            />
+            <input type="text" className="grow" placeholder="Nombre y Apellido" />
           </label>
 
           {/* Password */}

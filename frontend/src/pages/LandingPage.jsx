@@ -6,9 +6,6 @@ import { FaArrowTrendUp } from 'react-icons/fa6';
 export function LandingPage() {
   return (
     <>
-      {/* Navbar */}
-      <Navbar />
-
       {/* Hero */}
       <Hero />
 
