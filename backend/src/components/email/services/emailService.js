@@ -36,12 +36,20 @@ export const sendPasswordResetEmail = async (email, token) => {
 `;
 
   try {
-    await resend.emails.send({
-      from: 'Tidy <onboarding@resend.dev>',
+    console.log(`Enviando correo a: ${email}`);
+    const { data, error } = await resend.emails.send({
+      from: 'Tidy <no-reply@tidy-app.me',
       to: email,
       subject: 'Restablecimiento de contraseña',
       html: message,
     });
+
+    if (error) {
+      console.error(`Error al enviar el correo para restablecer la contraseña a ${email}: ${error.message}`);
+      throw new Error('Error al enviar el correo de establecimiento de contraseña');
+    }
+
+    console.log(`Correo enviado a: ${email}`, data);
   } catch (error) {
     console.error(`Error al enviar el correo para restablecer la contraseña: ${error.message}`);
     throw new Error('Error al enviar el correo de restablecimiento de contraseña');
@@ -81,12 +89,19 @@ export const sendEmailVerification = async (email, token) => {
 `;
 
   try {
-    await resend.emails.send({
-      from: 'Tidy <onboarding@resend.dev>',
+    const { data, error } = await resend.emails.send({
+      from: 'Tidy <no-reply@tidy-app.me>',
       to: email,
       subject: 'Verificación de Email',
       html: message,
     });
+
+    if (error) {
+      console.error(`Error al enviar la verificación del correo a ${email}: ${error.message}`);
+      throw new Error('Error al enviar el correo de verificación');
+    }
+
+    console.log(`Correo enviado a: ${email}`, data);
   } catch (error) {
     console.error(`Error al enviar el correo de verificación de email: ${error}`);
     throw new Error('No se pudo enviar el correo de verificación de email');
