@@ -7,6 +7,10 @@ info:
 servers:
   - url: http://localhost:3000
     description: Servidor de desarrollo
+  - url: http://localhost:5173
+    description: Servidor del frontend
+  - url: http://tidy-app.me
+    description: Ruta de dominio para enviar correos electrónicos
 
 components:
   securitySchemes:
