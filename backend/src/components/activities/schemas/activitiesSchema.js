@@ -8,7 +8,6 @@ export const activitiesSchema = z.object({
   description: z.string().optional(),
   fecha_inicio: z
     .string()
-    .optional()
     .default(() => moment().tz(timeZone).format()) // Establece la fecha actual en la zona horaria de Buenos Aires
     .refine(date => {
       const parsedDate = moment(date);
@@ -18,10 +17,10 @@ export const activitiesSchema = z.object({
       }
       const zonedDate = moment.tz(parsedDate, timeZone).toDate();
       return zonedDate <= new Date();
-    }, 'No te pueden dar una tarea futura'),
+    }, 'La fecha de inicio no puede ser en el futuro'),
   fecha_fin: z
     .string()
-    .optional()
+    .default(() => moment().tz(timeZone).format()) // Establece la fecha actual en la zona horaria de Buenos Aires
     .refine(date => {
       const parsedDate = moment(date);
       if (!parsedDate.isValid()) {
@@ -29,9 +28,9 @@ export const activitiesSchema = z.object({
         return false;
       }
       const zonedDate = moment.tz(parsedDate, timeZone).toDate();
-      return zonedDate >= new Date();
+      return zonedDate >= moment().startOf('day').toDate(); // Permite la fecha actual o futura
     }, 'La fecha de fin no puede ser en el pasado'),
-  estado: z.enum(['pendiente', 'en progreso', 'completada']).default('pendiente'),
+  estado: z.enum(['pendiente', 'en_progreso', 'completada']).default('pendiente'),
   prioridad_id: z.number().int().positive(),
   num_preguntas: z.number().int().positive().min(1, 'Debe haber al menos una pregunta'),
 });
