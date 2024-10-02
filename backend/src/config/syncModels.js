@@ -4,7 +4,7 @@ import { Activities } from '../components/activities/models/activitiesModel.js';
 import { Priorities } from '../components/priorities/models/prioritiesModel.js';
 import { Subjects } from '../components/subjects/models/subjectModel.js';
 import './relationships.js'; // Importar el archivo de relaciones
-import bcrypt from 'bcryptjs';
+import bcrypt from 'bcrypt';
 
 const syncModels = async () => {
   try {
