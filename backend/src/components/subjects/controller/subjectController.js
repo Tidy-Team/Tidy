@@ -26,10 +26,7 @@ export const getUserSubjectsCtrl = async (req, res) => {
  */
 export const createSubjectCtrl = async (req, res) => {
   try {
-    // Validar los datos de la solicitud usando el esquema
-    const validatedData = subjectSchema.parse(req.body);
-
-    const { subjectName, description, name_teacher } = validatedData;
+    const { subjectName, description, name_teacher } = req.body;
     const userId = req.user.id;
 
     const newSubject = await createSubject(userId, { subjectName, description, name_teacher });
@@ -39,16 +36,10 @@ export const createSubjectCtrl = async (req, res) => {
       subject: newSubject,
     });
   } catch (error) {
-    //Zod Errors
-    if (error instanceof ZodError) {
-      return res.status(400).json({
-        message: 'Error de validación',
-        errors: error.errors,
-      });
-    }
-    console.error(`Error al crear la materia para el usuario con id: ${req.user.id}. Su error es: ${error.message}`);
+    console.error(`Error al crear la materia para el usuario con id: ${req.user.id}. Su error es: ${error}`);
+
     res.status(500).json({
-      message: 'Error al crear la materia',
+      message: 'Error en el servidor al crear la materia',
       error: error.message,
     });
   }
@@ -61,10 +52,7 @@ export const createSubjectCtrl = async (req, res) => {
  */
 export const updateSubjectCtrl = async (req, res) => {
   try {
-    // Validar los datos de la solicitud usando el esquema
-    const validatedData = subjectSchema.parse(req.body);
-
-    const { subjectName, description, name_teacher } = validatedData;
+    const { subjectName, description, name_teacher } = req.body;
     const { id } = req.params; // Obtenemos el id de la materia a editar
     const userId = req.user.id;
 
@@ -72,14 +60,9 @@ export const updateSubjectCtrl = async (req, res) => {
 
     res.status(200).json(updatedSubject);
   } catch (error) {
-    //Zod Error
-    if (error instanceof ZodError) {
-      return res.status(400).json({
-        message: 'Error de validación',
-        errors: error.errors,
-      });
-    }
-    res.status(500).json({ message: error.message });
+    console.error(`Error al actualizar la materia para el usuario con id: ${req.user.id}. Su error es: ${error}`);
+
+    res.status(500).json({ message: 'Error en el servidor al actualizar una materia', error: error.message });
   }
 };
 
@@ -97,6 +80,8 @@ export const deleteSubjectCtrl = async (req, res) => {
 
     res.status(200).json({ message: 'Materia eliminada' });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error(`Error al eliminar la tarea con id: ${error} `);
+
+    res.status(500).json({ message: 'Error en el servidor al eliminar una materia', error: error.message });
   }
 };
