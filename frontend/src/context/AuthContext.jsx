@@ -8,8 +8,17 @@ const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (error.length > 0) {
+      const timer = setTimeout(() => {
+        setError([]);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
 
   const signUp = async user => {
     try {
@@ -18,7 +27,7 @@ const AuthProvider = ({ children }) => {
       setUser(res.data);
     } catch (error) {
       console.log(error.response.data);
-      setError(error.response.data);
+      setError(error.response.data.errors || [error.response.data.error]);
     }
   };
 
@@ -31,7 +40,7 @@ const AuthProvider = ({ children }) => {
       console.log(res.data);
     } catch (error) {
       console.log(error.response.data);
-      setError(error.response.data);
+      setError(error.response.data.errors || [error.response.data.error]);
     }
   };
 
@@ -47,7 +56,7 @@ const AuthProvider = ({ children }) => {
   };
 
   const clearError = () => {
-    setError(null);
+    setError([]);
   };
 
   useEffect(() => {
