@@ -342,7 +342,7 @@ paths:
             schema:
               type: object
               properties:
-                name:
+                subjectName:
                   type: string
                   description: Nombre de la materia
                 description:
@@ -383,7 +383,7 @@ paths:
             schema:
               type: object
               properties:
-                name:
+                subjectName:
                   type: string
                   description: Nombre de la materia
                 description:
