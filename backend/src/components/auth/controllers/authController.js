@@ -6,32 +6,14 @@ import {
   verifyResetToken,
   verifyEmailToken,
 } from '../services/authService.js';
-import { userSchema, signInSchema } from '../../users/schemas/userSchema.js';
-import { ZodError } from 'zod';
 
 export const signUpUser = async (req, res) => {
   try {
-    userSchema.parse(req.body);
     const { token, message } = await signUp(req.body);
 
     res.status(201).json({ token, message });
   } catch (error) {
     console.error(`Error en el controlador al registrar un usuario: ${error}`);
-
-    // Manejo de errores de validación de Zod
-    if (error instanceof ZodError) {
-      // Extraer y formatear los mensajes de error de Zod
-      const validationErrors = error.errors.map(err => ({
-        path: err.path.join('.'), // Ruta de lo que causó el error
-        message: err.message,
-      }));
-
-      //Responde con error de validación
-      return res.status(400).json({
-        message: 'Error de validación al registrar el usuario',
-        errors: validationErrors,
-      });
-    }
 
     //Responde con error del servidor
     res.status(500).json({
@@ -43,8 +25,6 @@ export const signUpUser = async (req, res) => {
 
 export const signInUser = async (req, res) => {
   try {
-    signInSchema.parse(req.body);
-
     const result = await signIn(req.body);
     const token = result.token;
 
@@ -61,22 +41,20 @@ export const signInUser = async (req, res) => {
     return res.json({ message: 'Inicio de sesión exitoso' });
   } catch (error) {
     console.error(`Error en el controlador al iniciar sesión: ${error}`);
-    // Manejo de errores de validación de Zod
-    if (error instanceof ZodError) {
-      const validationErrors = error.errors.map(err => ({
-        path: err.path.join('.'),
-        message: err.message,
-      }));
-
+    if (
+      error.message === 'El email ingresado no existe' ||
+      error.message === 'La contraseña es incorrecta' ||
+      error.message === 'Por favor, verifica tu email antes de iniciar sesión'
+    ) {
       return res.status(400).json({
-        message: 'Error de validación al iniciar sesión',
-        errors: validationErrors,
+        message: 'Error al iniciar sesión',
+        error: error.message,
       });
     }
 
     // Responde con error del servidor
     res.status(500).json({
-      message: 'Error en el servidor al iniciar sesión',
+      message: 'Error en el servidor',
       error: error.message,
     });
   }

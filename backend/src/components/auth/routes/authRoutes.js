@@ -11,14 +11,16 @@ import {
   signOutUser,
 } from '../controllers/authController.js';
 import { validateSession } from '../controllers/sessionController.js';
+import { userSchema, signInSchema } from '../../users/schemas/userSchema.js';
+import { validationsZod } from '../../../middlewares/validationsZod.js';
 
 const authRouter = Router();
 
 // Endpoint de registrarse
-authRouter.post('/sign-up', signUpUser);
+authRouter.post('/sign-up', validationsZod(userSchema), signUpUser);
 
 // Endpoint de iniciar sesion
-authRouter.post('/sign-in', signInUser);
+authRouter.post('/sign-in', validationsZod(signInSchema), signInUser);
 
 // Endpoint de cerrar sesion
 authRouter.post('/sign-out', validateJwt, signOutUser);
