@@ -5,11 +5,11 @@ export const Navbar = () => {
   const { isAuthenticated, logOut } = useAuth();
 
   return (
-    <div className="navbar bg-base-100">
-      <div className="flex-1">
-        <a className="btn btn-ghost text-xl">Tidy</a>
-      </div>
-      <div className="flex-none">
+    <div className="navbar sticky top-0 border-b-2 z-10 bg-base-100">
+      <div className="w-full md:w-3/5 mx-auto justify-between">
+        <Link to="/">
+          <button className="btn btn-ghost text-3xl font-bold text-purple-500">Tidy</button>
+        </Link>
         {isAuthenticated ? (
           <div className="dropdown dropdown-end">
             <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
@@ -31,12 +31,22 @@ export const Navbar = () => {
                 <a>Settings</a>
               </li>
               <li>
-                <a>Logout</a>
+                <Link to="/" onClick={() => logOut()}>
+                  Logout
+                </Link>
               </li>
             </ul>
           </div>
         ) : (
-          <button>Iniciar Sesion</button>
+          <div className="flex">
+            <Link to="/login">
+              <button className="btn btn-ghost ">Iniciar Sesión</button>
+            </Link>
+            <div className="divider divider-horizontal m-0"></div>
+            <Link to="/register">
+              <button className="btn btn-primary ">Prueba Tidy Ya</button>
+            </Link>
+          </div>
         )}
       </div>
     </div>

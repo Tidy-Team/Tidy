@@ -1,4 +1,4 @@
-import { Footer, Hero, Navbar, FeatureCard } from '../components';
+import { Footer, Hero, FeatureCard } from '../components';
 import { MdAssignmentAdd } from 'react-icons/md';
 import { FaRegClock } from 'react-icons/fa';
 import { FaArrowTrendUp } from 'react-icons/fa6';
