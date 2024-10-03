@@ -1,4 +1,5 @@
 import { Activities } from '../models/activitiesModel.js';
+import { Subtasks } from '../models/subtasksModel.js';
 
 /**
  * Busca una actividad por su ID.
@@ -100,5 +101,46 @@ export const deleteActivity = async activityId => {
     console.error(`Error al eliminar actividad con id: ${activityId}. Su error es: ${error.message}`);
 
     throw new Error('Error al eliminar la actividad');
+  }
+};
+
+export const createActivityWithSubtasks = async (activityData, option) => {
+  const transaction = await sequelize.transaction();
+  try {
+    const newActivity = await Activities.create(activityData, { transaction });
+    let subtasks = [];
+
+    if (option === 'Option 1') {
+      for (let i = 0; i < activityData.num_preguntas; i += 2) {
+        subtasks.push({
+          titulo: `${activityData.titulo} - Subtarea ${i / 2 + 1}`,
+          description: activityData.description,
+          fecha_inicio: activityData.fecha_inicio,
+          fecha_fin: activityData.fecha_fin,
+          estado: activityData.estado,
+          actividad_id: newActivity.id,
+        });
+      }
+    }
+
+    if (option === 'Option 2') {
+      for (let i = 0; i < activityData.num_preguntas * 2; i++) {
+        subtasks.push({
+          titulo: `${activityData.titulo} - Subtarea ${i + 1}`,
+          description: activityData.description,
+          fecha_inicio: activityData.fecha_inicio,
+          fecha_fin: activityData.fecha_fin,
+          estado: activityData.estado,
+          actividad_id: newActivity.id,
+        });
+      }
+    }
+
+    await Subtasks.bulkCreate(subtasks, { transaction });
+    await transaction.commit();
+    return newActivity;
+  } catch (error) {
+    await transaction.rollback();
+    throw error;
   }
 };
