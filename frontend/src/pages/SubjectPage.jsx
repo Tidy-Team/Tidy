@@ -1,13 +1,10 @@
 import { useParams } from 'react-router-dom';
 import { useSubjects } from '../context/useSubject.js';
-import { useEffect, useState } from 'react';
-import { Modal } from '../components/Modal.jsx';
-import { ActivityForm } from '../components/ActivitiesForm.jsx';
+import { useEffect } from 'react';
 
 export function SubjectPage() {
   const { subject, getSubject } = useSubjects();
   const { id } = useParams();
-  const [activities, setActivities] = useState([]);
 
   useEffect(() => {
     getSubject(id);
@@ -16,15 +13,6 @@ export function SubjectPage() {
   if (!subject) {
     return <div>Loading...</div>;
   }
-  const addActivity = newActivity => {
-    console.log('New activity response:', newActivity); // Debugging statement
-    const activityData = newActivity.data.activity;
-    if (activityData.id === undefined) {
-      console.error('New activity has undefined id:', activityData);
-      return;
-    }
-    setActivities([...activities, activityData]);
-  };
 
   return (
     <div className="text-center">
@@ -33,7 +21,7 @@ export function SubjectPage() {
       <p className="text-2xl"> {subject.description}</p>
       <div className="divider"></div>
       <h1 className="text-4xl">Tareas</h1>
-      <Modal children={<ActivityForm addActivity={addActivity} />} />
+      {/* Activities */}
     </div>
   );
 }
