@@ -31,6 +31,10 @@ export const Activities = sequelize.define(
       type: DataTypes.ENUM('pendiente', 'en_progreso', 'completada'),
       defaultValue: 'pendiente',
     },
+    option: {
+      type: DataTypes.ENUM('Option 1', 'Option 2'),
+      defaultValue: 'Option 1',
+    },
     num_preguntas: {
       type: DataTypes.INTEGER,
       allowNull: false,
