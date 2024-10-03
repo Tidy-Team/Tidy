@@ -22,7 +22,7 @@ export function LoginPage() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/');
+      navigate('/subjects');
     }
   }, [isAuthenticated, navigate]);
 
