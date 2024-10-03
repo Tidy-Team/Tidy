@@ -1,6 +1,6 @@
-import bcrypt from 'bcryptjs';
+import bcrypt, { genSalt } from 'bcrypt';
 import crypto from 'crypto';
-import generarJwt from '../../../helpers/generarJwt.js';
+import generateJwt from '../../../helpers/generateJwt.js';
 
 import { Op } from 'sequelize';
 import { getUserByEmail, createUser } from '../../users/services/userServices.js';
@@ -31,7 +31,8 @@ export const signUp = async userData => {
     throw new Error('El usuario ya existe');
   }
 
-  const hashedPassword = await bcrypt.hash(password, 10);
+  const salt = await genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
 
   const emailVerificationToken = crypto.randomBytes(32).toString('hex');
 
@@ -47,7 +48,7 @@ export const signUp = async userData => {
 
   await sendEmailVerification(newUser.email, emailVerificationToken);
 
-  const token = await generarJwt(newUser.id);
+  const token = await generateJwt(newUser.id);
 
   return { message: 'Usuario registrado. Por favor, verifica tu email.', token };
 };
@@ -65,7 +66,7 @@ export const signIn = async ({ email, password }) => {
   const user = await getUserByEmail(email);
 
   if (!user) {
-    throw new Error('Usuario no encontrado');
+    throw new Error('El email ingresado no existe');
   }
 
   const comparePassword = await bcrypt.compare(password, user.password);
@@ -78,7 +79,7 @@ export const signIn = async ({ email, password }) => {
     throw new Error('Por favor, verifica tu email antes de iniciar sesión');
   }
 
-  const token = await generarJwt(user.id);
+  const token = await generateJwt(user.id);
 
   return { token };
 };

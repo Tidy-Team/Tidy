@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { SECRET_KEY } from '../config/env.js';
 
-const generarJwt = async userId => {
+const generateJwt = async userId => {
   try {
     const payload = { userId };
     const token = await new Promise((resolve, reject) => {
@@ -20,4 +20,4 @@ const generarJwt = async userId => {
   }
 };
 
-export default generarJwt;
+export default generateJwt;

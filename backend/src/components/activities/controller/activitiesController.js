@@ -6,16 +6,6 @@ import {
   findActivitiesBySubjectId,
 } from '../services/activitiesService.js';
 import { findSubjectByIdAndUserId } from '../../subjects/services/subjectsService.js';
-import { activitiesSchema } from '../schemas/activitiesSchema.js';
-import { ZodError } from 'zod';
-
-// Función auxiliar para manejar errores de validación
-const handleValidationError = (res, error) => {
-  return res.status(400).json({
-    message: 'Error de validación',
-    errors: error.errors,
-  });
-};
 
 export const getActivities = async (req, res) => {
   try {
@@ -40,16 +30,11 @@ export const getActivities = async (req, res) => {
 
 export const createActivities = async (req, res) => {
   try {
-    const validatedData = activitiesSchema.parse(req.body);
-    const { titulo, description, fecha_inicio, fecha_fin, estado, num_preguntas, prioridad_id } = validatedData;
+    const { titulo, description, fecha_inicio, fecha_fin, estado, num_preguntas, prioridad_id } = req.body;
     const { id } = req.params;
     const userId = req.user.id;
-    const subject = await findSubjectByIdAndUserId(id, userId);
 
-    console.log('Datos validados:', validatedData);
-    console.log('ID de la materia:', id);
-    console.log('ID del usuario:', userId);
-    console.log('ID de la materia encontrada:', subject.id);
+    const subject = await findSubjectByIdAndUserId(id, userId);
 
     const newActivity = await createActivity({
       titulo,
@@ -65,18 +50,15 @@ export const createActivities = async (req, res) => {
 
     res.status(201).json(newActivity);
   } catch (error) {
-    if (error instanceof ZodError) {
-      return handleValidationError(res, error);
-    }
     console.error(`Error al crear la actividad: ${error}`);
+
     res.status(500).json({ message: error.message });
   }
 };
 
 export const updateActivityCtrl = async (req, res) => {
   try {
-    const validatedData = activitiesSchema.parse(req.body);
-    const { titulo, description, fecha_inicio, fecha_fin, estado, num_preguntas, prioridad_id } = validatedData;
+    const { titulo, description, fecha_inicio, fecha_fin, estado, num_preguntas, prioridad_id } = req.body;
     const { id } = req.params;
     const userId = req.user.id;
 
@@ -97,10 +79,8 @@ export const updateActivityCtrl = async (req, res) => {
 
     res.status(200).json(updatedActivity);
   } catch (error) {
-    if (error instanceof ZodError) {
-      return handleValidationError(res, error);
-    }
     console.error(`Error al actualizar la actividad: ${error}`);
+
     res.status(500).json({ message: error.message });
   }
 };

@@ -1,6 +1,5 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../../../config/databases.js';
-import { Subjects } from '../../subjects/models/subjectModel.js';
 
 //Modelo de Actividades con: id, titulo, descripción, fecha inicio, fecha fin y su estado
 export const Activities = sequelize.define(
@@ -16,16 +15,17 @@ export const Activities = sequelize.define(
       allowNull: false,
     },
     description: {
-      //No deberia estar en español¿?
       type: DataTypes.TEXT,
     },
     fecha_inicio: {
       type: DataTypes.DATE,
       allowNull: false,
+      defaultValue: DataTypes.NOW,
     },
     fecha_fin: {
       type: DataTypes.DATE,
       allowNull: false,
+      defaultValue: DataTypes.NOW,
     },
     estado: {
       type: DataTypes.ENUM('pendiente', 'en_progreso', 'completada'),

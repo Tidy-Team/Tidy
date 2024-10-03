@@ -1,7 +1,9 @@
 import { Router } from 'express';
+import { getActivities, createActivities, updateActivityCtrl, deleteActivityCtrl } from '../controller/activitiesController.js';
 
 import validateJwt from '../../auth/middleware/validateJwt.js';
-import { getActivities, createActivities, updateActivityCtrl, deleteActivityCtrl } from '../controller/activitiesController.js';
+import { validationsZod } from '../../../middlewares/validationsZod.js';
+import { activitiesSchema } from '../schemas/activitiesSchema.js';
 
 const activitiesRoutes = Router();
 
@@ -9,10 +11,10 @@ const activitiesRoutes = Router();
 activitiesRoutes.get('/activities/:id', validateJwt, getActivities);
 
 // Ruta para crear una nueva actividad en una materia específica
-activitiesRoutes.post('/activities/:id', validateJwt, createActivities);
+activitiesRoutes.post('/activities/:id', validateJwt, validationsZod(activitiesSchema), createActivities);
 
 // Ruta para actualizar una actividad existente
-activitiesRoutes.put('/activities/:id', validateJwt, updateActivityCtrl);
+activitiesRoutes.put('/activities/:id', validateJwt, validationsZod(activitiesSchema), updateActivityCtrl);
 
 // Ruta para eliminar una actividad existente
 activitiesRoutes.delete('/activities/:id', validateJwt, deleteActivityCtrl);
