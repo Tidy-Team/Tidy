@@ -1,6 +1,12 @@
 import subjectSchema from '../schemas/subjectSchema.js';
 import { ZodError } from 'zod';
-import { createSubject, deleteSubject, updateSubject, getUserSubjects } from '../services/subjectsService.js';
+import {
+  createSubject,
+  deleteSubject,
+  updateSubject,
+  getUserSubjects,
+  findSubjectByIdAndUserId,
+} from '../services/subjectsService.js';
 
 /**
  * Controlador para obtener todas las materias del usuario autenticado
@@ -14,6 +20,24 @@ export const getUserSubjectsCtrl = async (req, res) => {
     const subjects = await getUserSubjects(userId);
 
     res.status(200).json(subjects);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+/**
+ * Controlador para obtener una materia por su ID y el ID del usuario autenticado
+ * @param {Object} req - Objeto de solicitud
+ * @param {Object} res - Objeto de respuesta
+ */
+export const getSubjectByIdCtrl = async (req, res) => {
+  const { id } = req.params;
+  const userId = req.user.id;
+
+  try {
+    const subject = await findSubjectByIdAndUserId(userId, id);
+
+    res.status(200).json(subject);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

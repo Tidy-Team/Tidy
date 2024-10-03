@@ -1,12 +1,21 @@
 import { Router } from 'express';
 import { validateSession } from '../../auth/controllers/sessionController.js';
 import validateJwt from '../../auth/middleware/validateJwt.js';
-import { createSubjectCtrl, updateSubjectCtrl, deleteSubjectCtrl, getUserSubjectsCtrl } from '../controller/subjectController.js';
+import {
+  createSubjectCtrl,
+  updateSubjectCtrl,
+  deleteSubjectCtrl,
+  getUserSubjectsCtrl,
+  getSubjectByIdCtrl,
+} from '../controller/subjectController.js';
 
 const subjectRoute = Router();
 
 // Ruta para obtener todas las materias del usuario autenticado
 subjectRoute.get('/subjects', validateJwt, getUserSubjectsCtrl);
+
+// Ruta para una materia por Id  del usuario autenticado
+subjectRoute.get('/subjects/:id', validateJwt, getSubjectByIdCtrl);
 
 // Ruta para crear una nueva materia para el usuario autenticado
 subjectRoute.post('/subjects', validateJwt, createSubjectCtrl);

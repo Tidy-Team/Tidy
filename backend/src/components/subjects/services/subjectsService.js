@@ -8,7 +8,7 @@ import { Subjects } from '../models/subjectModel.js';
  * @throws {Error} - Si la materia no es encontrada.
  */
 
-export const findSubjectByIdAndUserId = async (subjectId, userId) => {
+export const findSubjectByIdAndUserId = async (userId, subjectId) => {
   try {
     console.log(`Buscando materia con id: ${subjectId} y userId: ${userId}`);
 
@@ -52,12 +52,21 @@ export const getUserSubjects = async userId => {
  */
 export const createSubject = async (userId, { subjectName, description, name_teacher }) => {
   try {
-    return await Subjects.create({
+    const newSubject = await Subjects.create({
       name: subjectName,
       description,
       name_teacher,
       userId,
     });
+
+    // Ensure the response includes the id and other relevant fields
+    return {
+      id: newSubject.id,
+      name: newSubject.name,
+      description: newSubject.description,
+      name_teacher: newSubject.name_teacher,
+      userId: newSubject.userId,
+    };
   } catch (error) {
     console.error(`Error al crear la materia para el usuario con id: ${userId}. Su error es: ${error.message}`);
 
