@@ -1,13 +1,11 @@
 import {
   findActivityById,
-  createActivity,
   updateActivity,
   deleteActivity,
   findActivitiesBySubjectId,
+  createActivityWithSubtasks,
 } from '../services/activitiesService.js';
 import { findSubjectByIdAndUserId } from '../../subjects/services/subjectsService.js';
-import { Subtasks } from '../models/subtasksModel.js';
-import { createActivityWithSubtasks } from '../services/subtasksService.js';
 
 export const getActivities = async (req, res) => {
   try {

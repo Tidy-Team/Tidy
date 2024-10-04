@@ -5,30 +5,14 @@ import { sequelize } from '../../../config/databases.js';
 const OPTION_1 = 'Option 1';
 const OPTION_2 = 'Option 2';
 
-export const createActivityWithSubtasks = async (activityData, option) => {
-  const transaction = await sequelize.transaction();
-  try {
-    // Validamos los datos de entrada
-    if (!activityData || !option) {
-      throw new Error('Datos de actividad no válidos');
-    }
-
-    const newActivity = await Activities.create(activityData, { transaction });
-    const subtasks = generateSubtasks(activityData, newActivity.id, option);
-
-    if (subtasks.length > 0) {
-      await Subtasks.bulkCreate(subtasks, { transaction });
-    }
-
-    await transaction.commit();
-    return newActivity;
-  } catch (error) {
-    await transaction.rollback();
-
-    console.error(`Error al crear la actividad con subtareas: ${error}`);
-    throw error;
-  }
-};
+/**
+ * Genera subtareas basadas en la opción proporcionada.
+ * @param {Object} activityData - Datos de la actividad.
+ * @param {number} activityId - ID de la actividad.
+ * @param {string} option - Opción para generar subtareas.
+ * @returns {Array<Object>} - Lista de subtareas generadas.
+ * @throws {Error} - Si la opción no es válida.
+ */
 
 export const generateSubtasks = (activityData, activityId, option) => {
   const subtasks = [];
@@ -52,6 +36,13 @@ export const generateSubtasks = (activityData, activityId, option) => {
   return subtasks;
 };
 
+/**
+ * Crea una subtarea.
+ * @param {Object} activityData - Datos de la actividad.
+ * @param {number} activityId - ID de la actividad.
+ * @param {number} index - Índice de la subtarea.
+ * @returns {Object} - Subtarea creada.
+ */
 export const createSubtask = (activityData, activityId, index) => {
   return {
     titulo: `${activityData.titulo} - Subtarea ${index + 1}`,

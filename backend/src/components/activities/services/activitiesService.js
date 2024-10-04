@@ -54,14 +54,16 @@ export const findActivitiesBySubjectId = async subjectId => {
 };
 
 /**
- * Crea una nueva actividad.
+ * Crea una nueva actividad con subtareas.
  * @param {Object} activityData - Datos de la actividad.
+ * @param {string} option - Opción para crear subtareas.
  * @returns {Promise<Object>} - Actividad creada.
  * @throws {Error} - Si ocurre un error al crear la actividad.
  */
-export const createActivity = async (activityData, option) => {
+export const createActivityWithSubtasks = async (activityData, option) => {
   const transaction = await sequelize.transaction();
   try {
+    // Validamos los datos de entrada
     if (!activityData) {
       throw new Error('Datos de la actividad inválida');
     }
@@ -71,9 +73,9 @@ export const createActivity = async (activityData, option) => {
     }
 
     const newActivity = await Activities.create(activityData, { transaction });
+    const subtasks = generateSubtasks(activityData, newActivity.id, option);
 
-    if (option) {
-      const subtasks = generateSubtasks(activityData, newActivity.id, option);
+    if (subtasks.length > 0) {
       await Subtasks.bulkCreate(subtasks, { transaction });
     }
 
@@ -81,9 +83,9 @@ export const createActivity = async (activityData, option) => {
     return newActivity;
   } catch (error) {
     await transaction.rollback();
-    console.error(`Ocurrió un error al crear la actividad: ${error}`);
 
-    throw new Error('Error al crear la actividad');
+    console.error(`Error al crear la actividad con subtareas: ${error}`);
+    throw error;
   }
 };
 
