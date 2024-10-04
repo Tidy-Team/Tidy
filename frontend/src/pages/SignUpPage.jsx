@@ -1,30 +1,37 @@
-import { MdEmail } from 'react-icons/md';
-import { FaLock, FaUser } from 'react-icons/fa';
+import { MdEmail } from 'react-icons/md'
+import { FaLock, FaUser } from 'react-icons/fa'
 
-import { useEffect } from 'react';
-import { useAuth } from '../context/useAuth';
-import { Link, useNavigate } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { registerSchema } from '../schemas/authSchemas';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { useEffect, useRef } from 'react'
+import { useAuth } from '../context/useAuth'
+import { Link, useNavigate } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
+import { registerSchema } from '../schemas/authSchemas'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Modal } from '../components/Modal'
 
 export function SignUpPage() {
-  const { signUp, errors: registerErrors = [], isAuthenticated } = useAuth();
+  const { signUp, errors: registerErrors = [], isAuthenticated } = useAuth()
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(registerSchema),
-  });
-  const navigate = useNavigate();
-  const onSubmit = async value => {
-    await signUp(value);
-  };
+  })
+
+  const navigate = useNavigate()
+  const modalRef = useRef(null)
+
+  const onSubmit = async (value) => {
+    await signUp(value)
+    if (modalRef.current) {
+      modalRef.current.showModal()
+    }
+  }
 
   useEffect(() => {
-    if (isAuthenticated) navigate('/');
-  }, [isAuthenticated, navigate]);
+    if (isAuthenticated) navigate('/')
+  }, [isAuthenticated, navigate])
 
   return (
     <>
@@ -41,27 +48,52 @@ export function SignUpPage() {
         </div>
 
         {/* Form */}
-        <form action="" className="w-4/5 sm:w-3/5 mx-auto gap-3 flex flex-col" onSubmit={handleSubmit(onSubmit)}>
+        <form
+          action=""
+          className="w-4/5 sm:w-3/5 mx-auto gap-3 flex flex-col"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           {/* Name */}
           <label className="input input-bordered border-0 border-b-2 rounded-none focus:outline-offset-0  focus-within:outline-offset-0 flex items-center gap-2">
             <FaUser />
-            <input type="text" className="grow" placeholder="Nombre y Apellido" {...register('name')} />
+            <input
+              type="text"
+              className="grow"
+              placeholder="Nombre y Apellido"
+              {...register('name')}
+            />
           </label>
-          {errors.name?.message && <p className="text-error text-sm">{errors.name?.message}</p>}
+          {errors.name?.message && (
+            <p className="text-error text-sm">{errors.name?.message}</p>
+          )}
 
           {/* Email */}
           <label className="input input-bordered border-0 border-b-2 rounded-none focus:outline-offset-0  focus-within:outline-offset-0 flex items-center gap-2">
             <MdEmail />
-            <input type="text" className="grow" placeholder="Email" {...register('email')} />
+            <input
+              type="text"
+              className="grow"
+              placeholder="Email"
+              {...register('email')}
+            />
           </label>
-          {errors.email?.message && <p className="text-error text-sm">{errors.email?.message}</p>}
+          {errors.email?.message && (
+            <p className="text-error text-sm">{errors.email?.message}</p>
+          )}
 
           {/* Password */}
           <label className="input input-bordered border-0 border-b-2 rounded-none focus:outline-offset-0  focus-within:outline-offset-0 flex items-center gap-2">
             <FaLock />
-            <input type="password" className="grow" placeholder="Contraseña" {...register('password')} />
+            <input
+              type="password"
+              className="grow"
+              placeholder="Contraseña"
+              {...register('password')}
+            />
           </label>
-          {errors.password?.message && <p className="text-error text-sm">{errors.password?.message}</p>}
+          {errors.password?.message && (
+            <p className="text-error text-sm">{errors.password?.message}</p>
+          )}
 
           <button className="btn btn-primary mt-5">Crear Cuenta</button>
 
@@ -71,6 +103,18 @@ export function SignUpPage() {
           </Link>
         </form>
       </div>
+
+      <dialog ref={modalRef} className="modal">
+        <div className="modal-content">
+          <p>Por favor, revise su correo electrónico para la verificación.</p>
+          <button
+            onClick={() => modalRef.current.close()}
+            className="btn btn-primary"
+          >
+            Cerrar
+          </button>
+        </div>
+      </dialog>
     </>
-  );
+  )
 }
