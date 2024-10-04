@@ -1,6 +1,10 @@
 import { Activities } from '../models/activitiesModel.js';
 import { Subtasks } from '../models/subtasksModel.js';
+import { generateSubtasks } from './subtasksService.js';
+import { sequelize } from '../../../config/databases.js';
 
+const OPTION_1 = 'Option 1';
+const OPTION_2 = 'Option 2';
 /**
  * Busca una actividad por su ID.
  * @param {number} activityId - ID de la actividad.
@@ -55,10 +59,28 @@ export const findActivitiesBySubjectId = async subjectId => {
  * @returns {Promise<Object>} - Actividad creada.
  * @throws {Error} - Si ocurre un error al crear la actividad.
  */
-export const createActivity = async activityData => {
+export const createActivity = async (activityData, option) => {
+  const transaction = await sequelize.transaction();
   try {
-    return await Activities.create(activityData);
+    if (!activityData) {
+      throw new Error('Datos de la actividad inválida');
+    }
+
+    if (option && ![OPTION_1, OPTION_2].includes(option)) {
+      throw new Error('Opción no válida');
+    }
+
+    const newActivity = await Activities.create(activityData, { transaction });
+
+    if (option) {
+      const subtasks = generateSubtasks(activityData, newActivity.id, option);
+      await Subtasks.bulkCreate(subtasks, { transaction });
+    }
+
+    await transaction.commit();
+    return newActivity;
   } catch (error) {
+    await transaction.rollback();
     console.error(`Ocurrió un error al crear la actividad: ${error}`);
 
     throw new Error('Error al crear la actividad');
@@ -101,46 +123,5 @@ export const deleteActivity = async activityId => {
     console.error(`Error al eliminar actividad con id: ${activityId}. Su error es: ${error.message}`);
 
     throw new Error('Error al eliminar la actividad');
-  }
-};
-
-export const createActivityWithSubtasks = async (activityData, option) => {
-  const transaction = await sequelize.transaction();
-  try {
-    const newActivity = await Activities.create(activityData, { transaction });
-    let subtasks = [];
-
-    if (option === 'Option 1') {
-      for (let i = 0; i < activityData.num_preguntas; i += 2) {
-        subtasks.push({
-          titulo: `${activityData.titulo} - Subtarea ${i / 2 + 1}`,
-          description: activityData.description,
-          fecha_inicio: activityData.fecha_inicio,
-          fecha_fin: activityData.fecha_fin,
-          estado: activityData.estado,
-          actividad_id: newActivity.id,
-        });
-      }
-    }
-
-    if (option === 'Option 2') {
-      for (let i = 0; i < activityData.num_preguntas * 2; i++) {
-        subtasks.push({
-          titulo: `${activityData.titulo} - Subtarea ${i + 1}`,
-          description: activityData.description,
-          fecha_inicio: activityData.fecha_inicio,
-          fecha_fin: activityData.fecha_fin,
-          estado: activityData.estado,
-          actividad_id: newActivity.id,
-        });
-      }
-    }
-
-    await Subtasks.bulkCreate(subtasks, { transaction });
-    await transaction.commit();
-    return newActivity;
-  } catch (error) {
-    await transaction.rollback();
-    throw error;
   }
 };

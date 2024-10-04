@@ -7,6 +7,7 @@ import {
 } from '../services/activitiesService.js';
 import { findSubjectByIdAndUserId } from '../../subjects/services/subjectsService.js';
 import { Subtasks } from '../models/subtasksModel.js';
+import { createActivityWithSubtasks } from '../services/subtasksService.js';
 
 export const getActivities = async (req, res) => {
   try {
@@ -37,44 +38,21 @@ export const createActivities = async (req, res) => {
 
     const subject = await findSubjectByIdAndUserId(id, userId);
 
-    const newActivity = await createActivity({
-      titulo,
-      description,
-      fecha_inicio,
-      fecha_fin,
-      estado,
-      num_preguntas,
-      prioridad_id,
-      option,
-      user_id: userId,
-      subject_id: subject.id,
-    });
-
-    if (option === 'Option 1') {
-      for (let i = 0; i < num_preguntas; i += 2) {
-        await Subtasks.create({
-          titulo: `${titulo} - Subtarea ${i / 2 + 1}`,
-          description,
-          fecha_inicio,
-          fecha_fin,
-          estado,
-          actividad_id: newActivity.id,
-        });
-      }
-    }
-
-    if (option === 'Option 2') {
-      for (let i = 0; i < num_preguntas * 2; i++) {
-        await Subtasks.create({
-          titulo: `${titulo} - Subtarea ${i + 1}`,
-          description,
-          fecha_inicio,
-          fecha_fin,
-          estado,
-          actividad_id: newActivity.id,
-        });
-      }
-    }
+    const newActivity = await createActivityWithSubtasks(
+      {
+        titulo,
+        description,
+        fecha_inicio,
+        fecha_fin,
+        estado,
+        num_preguntas,
+        prioridad_id,
+        option,
+        user_id: userId,
+        subject_id: subject.id,
+      },
+      option
+    );
 
     res.status(201).json(newActivity);
   } catch (error) {

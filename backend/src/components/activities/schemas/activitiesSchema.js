@@ -33,4 +33,5 @@ export const activitiesSchema = z.object({
   estado: z.enum(['pendiente', 'en_progreso', 'completada']).default('pendiente'),
   prioridad_id: z.number().int().positive(),
   num_preguntas: z.number().int().positive().min(1, 'Debe haber al menos una pregunta'),
+  option: z.enum(['Option 1', 'Option 2']).optional(),
 });
