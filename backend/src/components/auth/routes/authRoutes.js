@@ -13,17 +13,18 @@ import {
 import { validateSession } from '../controllers/sessionController.js';
 import { userSchema, signInSchema } from '../../users/schemas/userSchema.js';
 import { validationsZod } from '../../../middlewares/validationsZod.js';
+import logEndpointAccess from '../../logger/middleware/loggerMiddleware.js';
 
 const authRouter = Router();
 
 // Endpoint de registrarse
-authRouter.post('/sign-up', validationsZod(userSchema), signUpUser);
+authRouter.post('/sign-up', logEndpointAccess('/sign-up'), validationsZod(userSchema), signUpUser);
 
 // Endpoint de iniciar sesion
-authRouter.post('/sign-in', validationsZod(signInSchema), signInUser);
+authRouter.post('/sign-in', logEndpointAccess('/sign-in'), validationsZod(signInSchema), signInUser);
 
 // Endpoint de cerrar sesion
-authRouter.post('/sign-out', validateJwt, signOutUser);
+authRouter.post('/sign-out', logEndpointAccess('/sign-out'), validateJwt, signOutUser);
 
 // Endpoint para validar la sesión
 authRouter.get('/session', validateJwt, validateSession);

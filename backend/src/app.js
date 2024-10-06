@@ -1,6 +1,7 @@
 import express from 'express';
 import expressPinoLogger from 'express-pino-logger';
-import logger from 'express-pino-logger';
+import logger from './components/logger/config.js';
+
 import authRouter from './components/auth/routes/authRoutes.js';
 import activitiesRoutes from './components/activities/routes/activitiesRoute.js';
 import subjectRoute from './components/subjects/routes/subjectRoute.js';

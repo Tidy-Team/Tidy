@@ -6,20 +6,15 @@ import {
   verifyResetToken,
   verifyEmailToken,
 } from '../services/authService.js';
+import logger from '../../logger/config.js';
 
 export const signUpUser = async (req, res) => {
   try {
     const { token, message } = await signUp(req.body);
-
     res.status(201).json({ token, message });
   } catch (error) {
-    console.error(`Error en el controlador al registrar un usuario: ${error}`);
-
-    //Responde con error del servidor
-    res.status(500).json({
-      message: 'Error en el servidor al registrar el usuario',
-      error: error.message,
-    });
+    logger.error(`Error en el controlador al registrarse: ${error.stack}`, { email: req.body.email });
+    res.status(error.statusCode || 500).json({ message: 'Error al registrarse. Por favor, intentalo de nuevo.' });
   }
 };
 
@@ -40,23 +35,8 @@ export const signInUser = async (req, res) => {
 
     return res.json({ message: 'Inicio de sesión exitoso' });
   } catch (error) {
-    console.error(`Error en el controlador al iniciar sesión: ${error}`);
-    if (
-      error.message === 'El email ingresado no existe' ||
-      error.message === 'La contraseña es incorrecta' ||
-      error.message === 'Por favor, verifica tu email antes de iniciar sesión'
-    ) {
-      return res.status(400).json({
-        message: 'Error al iniciar sesión',
-        error: error.message,
-      });
-    }
-
-    // Responde con error del servidor
-    res.status(500).json({
-      message: 'Error en el servidor',
-      error: error.message,
-    });
+    logger.error(`Error en el controlador al iniciar sesión: ${error.stack}`, { email: req.body.email });
+    res.status(error.statusCode || 500).json({ message: 'Error al iniciar sesión. Por favor, intentalo de nuevo.' });
   }
 };
 
@@ -68,7 +48,7 @@ export const signOutUser = async (req, res) => {
       return res.status(400).json({ message: 'No hay token para cerrar sesión' });
     }
 
-    //Elimina el token de la sesión del servidor
+    // Elimina el token de la sesión del servidor
     req.session.token = null;
 
     // Elimina la cookie del cliente
@@ -76,15 +56,12 @@ export const signOutUser = async (req, res) => {
 
     return res.json({ message: 'Cierre de sesión exitoso' });
   } catch (error) {
-    console.error(`Error en el controlador al cerrar sesión: ${error}`);
-
-    res.status(500).json({
-      message: `Error en el servidor al cerrar sesión: ${error.message}`,
-    });
+    logger.error(`Error en el controlador al cerrar sesión: ${error.stack}`);
+    res.status(error.statusCode || 500).json({ message: 'Error al cerrar sesión. Por favor, intentalo de nuevo.' });
   }
 };
 
-// Controlador para enviar el correo de restablecer la contraseñ
+// Controlador para enviar el correo de restablecer la contraseña
 export const requestPasswordResetCtrl = async (req, res) => {
   const { email } = req.body;
 
@@ -94,9 +71,10 @@ export const requestPasswordResetCtrl = async (req, res) => {
 
     res.status(200).json({ message: 'Correo de restablecimiento de contraseña enviado' });
   } catch (error) {
-    console.error(`Error al solicitar el restablecimiento de contraseña: ${error}`);
-
-    res.status(500).json({ message: error.message });
+    logger.error(`Error en el controlador al solicitar el restablecimiento de contraseña: ${error.stack}`, { email });
+    res
+      .status(error.statusCode || 500)
+      .json({ message: 'Error al solicitar el restablecimiento de contraseña. Por favor, intentalo de nuevo.' });
   }
 };
 
@@ -110,9 +88,8 @@ export const verifyResetTokenCtrl = async (req, res) => {
 
     res.status(200).json({ message: 'Token válido' });
   } catch (error) {
-    console.error(`Error al verificar el token de restablecimiento: ${error}`);
-
-    res.status(500).json({ message: error.message });
+    logger.error(`Error en el controlador al verificar el token de restablecimiento: ${error.stack}`, { token });
+    res.status(error.statusCode || 500).json({ message: 'Error al verificar el token. Por favor, intentalo de nuevo.' });
   }
 };
 
@@ -127,9 +104,8 @@ export const resetPasswordCtrl = async (req, res) => {
 
     res.status(200).json({ message: 'Contraseña restablecida correctamente' });
   } catch (error) {
-    console.error(`Error al restablecer la contraseña: ${error}`);
-
-    res.status(500).json({ message: error.message });
+    logger.error(`Error en el controlador al restablecer la contraseña: ${error.stack}`, { token });
+    res.status(error.statusCode || 500).json({ message: 'Error al restablecer la contraseña. Por favor, intentalo de nuevo.' });
   }
 };
 
@@ -142,8 +118,7 @@ export const verifyEmail = async (req, res) => {
 
     res.status(200).json({ message: 'Email verificado correctamente' });
   } catch (error) {
-    console.error(`Error al verificar el email: ${error}`);
-
-    res.status(400).json({ message: error.message });
+    logger.error(`Error en el controlador al verificar el email: ${error.stack}`, { token });
+    res.status(error.statusCode || 500).json({ message: 'Error al verificar el email. Por favor, intentalo de nuevo.' });
   }
 };
