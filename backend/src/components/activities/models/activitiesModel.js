@@ -47,6 +47,10 @@ export const Activities = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    deletedAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
   },
-  { tableName: 'activities' }
+  { tableName: 'activities', paranoid: true }
 );

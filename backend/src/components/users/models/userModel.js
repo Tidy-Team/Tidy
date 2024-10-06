@@ -48,9 +48,14 @@ export const Users = sequelize.define(
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
+    deletedAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
   },
   {
     tableName: 'users',
     timestamps: false, //Saca createAt y updateAt
+    paranoid: true,
   }
 );

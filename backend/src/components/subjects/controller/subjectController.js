@@ -48,44 +48,44 @@ export const createSubjectCtrl = async (req, res) => {
 };
 
 export const updateSubjectCtrl = async (req, res) => {
-  const { subjectId } = req.params;
+  const { id } = req.params;
   const { subjectName, description, name_teacher } = req.body;
   const userId = req.user.id;
 
   try {
-    logger.info(`Solicitud para editar la materia con id: ${subjectId} para el usuario con id: ${userId}`);
-    const updatedSubject = await updateSubject(userId, subjectId, { subjectName, description, name_teacher });
+    logger.info(`Solicitud para editar la materia con id: ${id} para el usuario con id: ${userId}`);
+    const updatedSubject = await updateSubject(userId, id, { subjectName, description, name_teacher });
 
     res.status(200).json({ message: 'Materia actualizada exitosamente', subject: updatedSubject });
 
-    logger.info(`Materia con id: ${subjectId} actualizada para el usuario con id: ${userId}`);
+    logger.info(`Materia con id: ${id} actualizada para el usuario con id: ${userId}`);
   } catch (error) {
     logger.error(
       `Error en el controlador al actualizar la materia para el usuario con id: ${userId}. Su error es: ${error.stack}`
     );
 
     res.status(error.statusCode || 500).json({
-      message: 'Error en el servidor al actualizar la materia. Por favor, intentalo de nuevo.',
+      message: error.statusCode === 404 ? 'No se encontro la materia' : 'Error en el servidor. Por favor, intentalo de nuevo.',
     });
   }
 };
 
 export const deleteSubjectCtrl = async (req, res) => {
-  const { subjectId } = req.params;
+  const { id } = req.params;
   const userId = req.user.id;
 
   try {
-    logger.info(`Solicitud para eliminar la materia con id: ${subjectId} para el usuario con id: ${userId}`);
-    const deletedSubject = await deleteSubject(userId, subjectId);
+    logger.info(`Solicitud para eliminar la materia con id: ${id} para el usuario con id: ${userId}`);
+    const deletedSubject = await deleteSubject(userId, id);
 
     res.status(200).json({ message: 'Materia eliminada exitosamente', subject: deletedSubject });
 
-    logger.info(`Materia con id: ${subjectId} eliminada para el usuario con id: ${userId}`);
+    logger.info(`Materia con id: ${id} eliminada para el usuario con id: ${userId}`);
   } catch (error) {
-    logger.error(`Error en el controlador al eliminar la materia con id: ${subjectId}. Su error es: ${error.stack}`);
+    logger.error(`Error en el controlador al eliminar la materia con id: ${id}. Su error es: ${error.stack}`);
 
     res.status(error.statusCode || 500).json({
-      message: 'Error en el servidor al eliminar la materia. Por favor, intentalo de nuevo.',
+      message: error.statusCode === 404 ? 'No se encontro la materia' : 'Error en el servidor. Por favor, intentalo de nuevo.',
     });
   }
 };

@@ -18,14 +18,14 @@ export const findSubjectByIdAndUserId = async (subjectId, userId) => {
     });
 
     if (!subject) {
-      logger.info(`La materia con id: ${subjectId} no se encontró`);
+      logger.info(`La materia con id: ${subjectId} no se encontro`);
       throw createError('Materia no encontrada', 404);
     }
 
     return subject;
   } catch (error) {
     logger.error(`Error al buscar materia con id: ${subjectId}. Su error es: ${error.message}`);
-    throw createError('Error al encontrar la materia', 500);
+    throw createError(error.message, error.statusCode || 500);
   }
 };
 
@@ -70,7 +70,6 @@ export const createSubject = async (userId, { subjectName, description, name_tea
       name_teacher,
       userId,
     });
-
     if (!newSubject) {
       logger.info(`Error al crear la materia para el usuario con id: ${userId}`);
       throw createError('Error al crear la materia', 400);
@@ -80,7 +79,7 @@ export const createSubject = async (userId, { subjectName, description, name_tea
   } catch (error) {
     logger.error(`Error al crear la materia para el usuario con id: ${userId}. Su error es: ${error.message}`);
 
-    throw createError('Error al crear la materia', 500);
+    throw createError(error.message, error.statusCode || 500);
   }
 };
 
@@ -109,7 +108,7 @@ export const updateSubject = async (userId, subjectId, { subjectName, descriptio
   } catch (error) {
     logger.error(`Error al editar la materia con id: ${subjectId}. Su error es: ${error.message}`);
 
-    throw createError('Error al editar la materia', 500);
+    throw createError(error.message, error.statusCode || 500);
   }
 };
 
@@ -126,14 +125,15 @@ export const deleteSubject = async (userId, subjectId) => {
     const subject = await findSubjectByIdAndUserId(subjectId, userId);
 
     if (!subject) {
-      logger.info(`La materia con id: ${subjectId} no se encontró para el usuario con id: ${userId}`);
+      logger.info(`La materia con id: ${subjectId} no se encontro para el usuario con id: ${userId}`);
       throw createError('Materia no encontrada', 404);
     }
 
     await subject.destroy();
+    return subject;
   } catch (error) {
     logger.error(`Error al eliminar la materia con id: ${subjectId}. Su error es: ${error.message}`);
 
-    throw createError('Error al eliminar la materia', 500);
+    throw createError(error.message, error.statusCode || 500);
   }
 };
