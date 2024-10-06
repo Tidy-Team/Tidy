@@ -1,4 +1,6 @@
 import { Subjects } from '../models/subjectModel.js';
+import logger from '../../logger/config.js';
+import createError from '../../../helpers/createError.js';
 
 /**
  * Busca una materia por su ID y el ID del usuario.
@@ -7,23 +9,23 @@ import { Subjects } from '../models/subjectModel.js';
  * @returns {Promise<Object>} - Materia encontrada.
  * @throws {Error} - Si la materia no es encontrada.
  */
-
 export const findSubjectByIdAndUserId = async (subjectId, userId) => {
   try {
-    console.log(`Buscando materia con id: ${subjectId} y userId: ${userId}`);
+    logger.info(`Buscando materia con id: ${subjectId} y al usuario con id: ${userId}`);
 
     const subject = await Subjects.findOne({
       where: { id: subjectId, userId },
     });
 
     if (!subject) {
-      throw new Error('Materia no encontrada');
+      logger.info(`La materia con id: ${subjectId} no se encontro`);
+      throw createError('Materia no encontrada', 404);
     }
 
     return subject;
   } catch (error) {
-    console.error(`Error al buscar materia con id: ${subjectId}. Su error es: ${error.message}`);
-    throw new Error('Error al encontrar la materia');
+    logger.info(`Error al buscar materia con id: ${subjectId}. Su error es: ${error.message}`);
+    throw createError('Error al encontrar la materia', 500);
   }
 };
 
@@ -35,11 +37,14 @@ export const findSubjectByIdAndUserId = async (subjectId, userId) => {
  */
 export const getUserSubjects = async userId => {
   try {
-    return await Subjects.findAll({ where: { userId } });
-  } catch (error) {
-    console.error(`Error al obtener las materias para el usuario con id: ${userId}. Su error es: ${error.message}`);
+    logger.info(`Obteniendo materias para el usuario con id: ${userId}`);
+    const subject = await Subjects.findAll({ where: { userId } });
 
-    throw new Error('Error al obtener las materias');
+    return subject;
+  } catch (error) {
+    logger.error(`Error al obtener las materias para el usuario con id: ${userId}. Su error es: ${error.message}`);
+
+    throw createError('Error al obtener las materias', 500);
   }
 };
 
@@ -52,16 +57,18 @@ export const getUserSubjects = async userId => {
  */
 export const createSubject = async (userId, { subjectName, description, name_teacher }) => {
   try {
-    return await Subjects.create({
+    const newSubject = await Subjects.create({
       name: subjectName,
       description,
       name_teacher,
       userId,
     });
-  } catch (error) {
-    console.error(`Error al crear la materia para el usuario con id: ${userId}. Su error es: ${error.message}`);
 
-    throw new Error('Error al crear la materia');
+    return newSubject;
+  } catch (error) {
+    logger.error(`Error al crear la materia para el usuario con id: ${userId}. Su error es: ${error.message}`);
+
+    throw createError('Error al crear la materia', 500);
   }
 };
 
@@ -75,6 +82,7 @@ export const createSubject = async (userId, { subjectName, description, name_tea
  */
 export const updateSubject = async (userId, subjectId, { subjectName, description, name_teacher }) => {
   try {
+    logger.info(`Editando materia con id: ${subjectId} para el usuario con id: ${userId}`);
     const subject = await findSubjectByIdAndUserId(subjectId, userId);
 
     Object.assign(subject, { name: subjectName, description, name_teacher });
@@ -82,9 +90,9 @@ export const updateSubject = async (userId, subjectId, { subjectName, descriptio
 
     return subject;
   } catch (error) {
-    console.error(`Error al editar la materia con id: ${subjectId}. Su error es: ${error.message}`);
+    logger.error(`Error al editar la materia con id: ${subjectId}. Su error es: ${error.message}`);
 
-    throw new Error('Error al editar la materia');
+    throw createError('Error al editar la materia', 500);
   }
 };
 
@@ -97,12 +105,13 @@ export const updateSubject = async (userId, subjectId, { subjectName, descriptio
  */
 export const deleteSubject = async (userId, subjectId) => {
   try {
+    logger.info(`Editando materia con id: ${subjectId} para el usuario con id: ${userId}`);
     const subject = await findSubjectByIdAndUserId(subjectId, userId);
 
     await subject.destroy();
   } catch (error) {
-    console.error(`Error al eliminar la materia con id: ${subjectId}. Su error es: ${error.message}`);
+    logger.error(`Error al eliminar la materia con id: ${subjectId}. Su error es: ${error.message}`);
 
-    throw new Error('Error al eliminar la materia');
+    throw createError('Error al eliminar la materia', 500);
   }
 };

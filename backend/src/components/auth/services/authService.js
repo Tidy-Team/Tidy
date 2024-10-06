@@ -84,7 +84,7 @@ export const signIn = async ({ email, password }) => {
 
   if (!user.emailVerified) {
     logger.error(`Error en signIn: El email: ${email} no está verificado`);
-    throw createError('Por favor, verifica tu email antes de iniciar sesión', 400);
+    throw createError('Por favor, verifica tu email antes de iniciar sesion', 400);
   }
 
   const token = await generateJwt(user.id);
@@ -136,8 +136,8 @@ export const verifyResetToken = async token => {
   });
 
   if (!user) {
-    logger.error('Error en verifyResetToken: Token inválido o expiró');
-    throw createError('Token inválido o expirado', 400);
+    logger.error('Error en verifyResetToken: Token invalido o expiro');
+    throw createError('Token invalido o expirado', 400);
   }
 
   return user;
