@@ -35,7 +35,7 @@ export const signInUser = async (req, res) => {
 
     return res.json({ message: 'Inicio de sesión exitoso' });
   } catch (error) {
-    logger.error(`Error en el controlador al iniciar sesión: ${error.stack}`, { email: req.body.email });
+    logger.error(`Error en el controlador al iniciar sesion: ${error.stack}`, { email: req.body.email });
     res.status(error.statusCode || 500).json({ message: 'Error al iniciar sesión. Por favor, intentalo de nuevo.' });
   }
 };

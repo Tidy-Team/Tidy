@@ -27,14 +27,14 @@ authRouter.post('/sign-in', logEndpointAccess('/sign-in'), validationsZod(signIn
 authRouter.post('/sign-out', logEndpointAccess('/sign-out'), validateJwt, signOutUser);
 
 // Endpoint para validar la sesión
-authRouter.get('/session', validateJwt, validateSession);
+authRouter.get('/session', logEndpointAccess('/session'), validateJwt, validateSession);
 
 // Enpoints de reset password
-authRouter.post('/request-password-reset', requestPasswordResetCtrl);
-authRouter.get('/reset-password/:token', verifyResetTokenCtrl);
-authRouter.post('/reset-password/:token', resetPasswordCtrl);
+authRouter.post('/request-password-reset', logEndpointAccess('/request-password-reset'), requestPasswordResetCtrl);
+authRouter.get('/reset-password/:token', logEndpointAccess('/reset-password/:token'), verifyResetTokenCtrl);
+authRouter.post('/reset-password/:token', logEndpointAccess('/reset-password/:token'), resetPasswordCtrl);
 
 // Enpoint de verificar email
-authRouter.get('/verify-email/:token', verifyEmail);
+authRouter.get('/verify-email/:token', logEndpointAccess('/verify-email/:token'), verifyEmail);
 
 export default authRouter;

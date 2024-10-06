@@ -18,13 +18,13 @@ export const findSubjectByIdAndUserId = async (subjectId, userId) => {
     });
 
     if (!subject) {
-      logger.info(`La materia con id: ${subjectId} no se encontro`);
+      logger.info(`La materia con id: ${subjectId} no se encontró`);
       throw createError('Materia no encontrada', 404);
     }
 
     return subject;
   } catch (error) {
-    logger.info(`Error al buscar materia con id: ${subjectId}. Su error es: ${error.message}`);
+    logger.error(`Error al buscar materia con id: ${subjectId}. Su error es: ${error.message}`);
     throw createError('Error al encontrar la materia', 500);
   }
 };
@@ -38,22 +38,29 @@ export const findSubjectByIdAndUserId = async (subjectId, userId) => {
 export const getUserSubjects = async userId => {
   try {
     logger.info(`Obteniendo materias para el usuario con id: ${userId}`);
-    const subject = await Subjects.findAll({ where: { userId } });
+    const subjects = await Subjects.findAll({ where: { userId } });
 
-    return subject;
+    if (!subjects || subjects.length === 0) {
+      logger.info(`No se encontraron materias para el usuario con id: ${userId}`);
+      throw createError('No se encontraron materias', 404);
+    }
+
+    return subjects;
   } catch (error) {
     logger.error(`Error al obtener las materias para el usuario con id: ${userId}. Su error es: ${error.message}`);
-
-    throw createError('Error al obtener las materias', 500);
+    throw createError(error.message, error.statusCode || 500);
   }
 };
 
 /**
- * Servicio para crear una nueva materia para el usuario autenticado
- * @param {string} userId - ID del usuario autenticado
- * @param {Object} subjectData - Datos de la materia
- * @returns {Promise<Object>} - Materia creada
- * @throws {Error} - Si ocurre un error al crear la materia
+ * Servicio para crear una nueva materia para el usuario autenticado.
+ * @param {string} userId - ID del usuario autenticado.
+ * @param {Object} subjectData - Datos de la materia.
+ * @param {string} subjectData.subjectName - Nombre de la materia.
+ * @param {string} subjectData.description - Descripción de la materia.
+ * @param {string} subjectData.name_teacher - Nombre del profesor.
+ * @returns {Promise<Object>} - Materia creada.
+ * @throws {Error} - Si ocurre un error al crear la materia.
  */
 export const createSubject = async (userId, { subjectName, description, name_teacher }) => {
   try {
@@ -63,6 +70,11 @@ export const createSubject = async (userId, { subjectName, description, name_tea
       name_teacher,
       userId,
     });
+
+    if (!newSubject) {
+      logger.info(`Error al crear la materia para el usuario con id: ${userId}`);
+      throw createError('Error al crear la materia', 400);
+    }
 
     return newSubject;
   } catch (error) {
@@ -85,6 +97,11 @@ export const updateSubject = async (userId, subjectId, { subjectName, descriptio
     logger.info(`Editando materia con id: ${subjectId} para el usuario con id: ${userId}`);
     const subject = await findSubjectByIdAndUserId(subjectId, userId);
 
+    if (!subject) {
+      logger.info(`La materia con id: ${subjectId} no se encontró para el usuario con id: ${userId}`);
+      throw createError('Materia no encontrada', 404);
+    }
+
     Object.assign(subject, { name: subjectName, description, name_teacher });
     await subject.save();
 
@@ -105,8 +122,13 @@ export const updateSubject = async (userId, subjectId, { subjectName, descriptio
  */
 export const deleteSubject = async (userId, subjectId) => {
   try {
-    logger.info(`Editando materia con id: ${subjectId} para el usuario con id: ${userId}`);
+    logger.info(`Eliminando materia con id: ${subjectId} para el usuario con id: ${userId}`);
     const subject = await findSubjectByIdAndUserId(subjectId, userId);
+
+    if (!subject) {
+      logger.info(`La materia con id: ${subjectId} no se encontró para el usuario con id: ${userId}`);
+      throw createError('Materia no encontrada', 404);
+    }
 
     await subject.destroy();
   } catch (error) {
