@@ -9,6 +9,7 @@ import subjectRoute from './components/subjects/routes/subjectRoute.js';
 import { initMiddleware } from './middlewares/index.js';
 import { PORT } from './config/env.js';
 import { swaggerUi, swaggerDocument } from './config/swaggerConfig.js';
+import { showLogo } from './components/logger/showLogo.js';
 
 const app = express();
 const expressLogger = expressPinoLogger({ logger });
@@ -26,5 +27,6 @@ app.use('/', activitiesRoutes);
 app.use('/', subjectRoute);
 //Server
 app.listen(PORT, () => {
+  showLogo();
   console.log(`http//localhost:${PORT}`);
 });
