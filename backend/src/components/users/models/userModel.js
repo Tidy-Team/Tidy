@@ -28,10 +28,6 @@ export const Users = sequelize.define(
       defaultValue: 'estudiante',
       allowNull: true,
     },
-    fecha_registro: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
-    },
     resetPasswordToken: {
       type: DataTypes.STRING,
       allowNull: true,
@@ -55,7 +51,7 @@ export const Users = sequelize.define(
   },
   {
     tableName: 'users',
-    timestamps: false, //Saca createAt y updateAt
+    timestamps: true,
     paranoid: true,
   }
 );

@@ -47,7 +47,6 @@ export const signUp = async userData => {
     email,
     password: hashedPassword,
     rol,
-    fecha_registro: new Date(),
     emailVerificationToken,
     emailVerified: false,
   });
