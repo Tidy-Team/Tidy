@@ -31,7 +31,7 @@ export function SideNav({ children }) {
     <>
       <div className="bg-base-100 drawer lg:drawer-open">
         <input id="drawer" type="checkbox" className="drawer-toggle" />
-        <div className="drawer-content overflow-y-auto">
+        <div className="drawer-content overflow-y-scroll">
           <div className="bg-base-100 text-base-content sticky top-0 z-30 flex h-16 w-full justify-center bg-opacity-90 backdrop-blur transition-shadow duration-100 [transform:translate3d(0,0,0)]">
             <nav className="navbar w-full  px-6">
               <div className="flex flex-1 md:gap-1 lg:gap-2">

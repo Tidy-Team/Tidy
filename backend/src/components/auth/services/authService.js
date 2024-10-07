@@ -1,5 +1,4 @@
 import bcrypt, { genSalt } from 'bcrypt'
-import bcrypt, { genSalt } from 'bcrypt'
 import crypto from 'crypto'
 import generateJwt from '../../../helpers/generateJwt.js'
 import logger from '../../logger/config.js'
@@ -44,8 +43,6 @@ export const signUp = async (userData) => {
     throw createError('El usuario ya existe', 409)
   }
 
-  const salt = await genSalt(10)
-  const hashedPassword = await bcrypt.hash(password, salt)
   const salt = await genSalt(10)
   const hashedPassword = await bcrypt.hash(password, salt)
 
@@ -98,7 +95,6 @@ export const signIn = async ({ email, password }) => {
     )
   }
 
-  const token = await generateJwt(user.id)
   const token = await generateJwt(user.id)
 
   return { token }

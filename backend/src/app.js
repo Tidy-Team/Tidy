@@ -5,7 +5,6 @@ import logger from './components/logger/config.js'
 import authRouter from './components/auth/routes/authRoutes.js'
 import activitiesRoutes from './components/activities/routes/activitiesRoute.js'
 import subjectRoute from './components/subjects/routes/subjectRoute.js'
-import subjectRoute from './components/subjects/routes/subjectRoute.js'
 
 import { initMiddleware } from './middlewares/index.js'
 import { PORT } from './config/env.js'

@@ -47,7 +47,7 @@ export function HomePage() {
               <SubjectCard
                 key={subject.id} // Ensure each SubjectCard has a unique key
                 id={subject.id}
-                title={subject.name}
+                title={subject.subjectName}
                 description={subject.description}
                 teacher={subject.name_teacher}
               />

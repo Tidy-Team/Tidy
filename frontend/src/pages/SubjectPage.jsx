@@ -35,7 +35,9 @@ export function SubjectPage() {
     <div className="grid grid-cols-3  gap-4 md:h-[calc(100vh-90px)] max-h-full ">
       <div className="col-span-3 min-h-fit">
         <div className="flex flex-col-reverse p-5 h-48 w-full bg-gradient-to-r from-purple-500 to-blue-500 rounded-lg">
-          <h1 className="text-4xl font-semibold text-start ">{subject.name}</h1>
+          <h1 className="text-4xl font-semibold text-start text ">
+            {subject.subjectName}
+          </h1>
         </div>
       </div>
       <div className="row-start-2 col-span-3 md:col-span-1  bg-base-300 text-center content-center rounded-md p-5 md:h-40">

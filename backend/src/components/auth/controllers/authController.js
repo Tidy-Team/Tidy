@@ -42,11 +42,9 @@ export const signInUser = async (req, res) => {
     logger.error(`Error en el controlador al iniciar sesion: ${error.stack}`, {
       email: req.body.email,
     })
-    res
-      .status(error.statusCode || 500)
-      .json({
-        message: 'Error al iniciar sesión. Por favor, intentalo de nuevo.',
-      })
+    res.status(error.statusCode || 500).json({
+      message: 'Error al iniciar sesión. Por favor, intentalo de nuevo.',
+    })
   }
 }
 
@@ -69,11 +67,9 @@ export const signOutUser = async (req, res) => {
     return res.json({ message: 'Cierre de sesión exitoso' })
   } catch (error) {
     logger.error(`Error en el controlador al cerrar sesión: ${error.stack}`)
-    res
-      .status(error.statusCode || 500)
-      .json({
-        message: 'Error al cerrar sesión. Por favor, intentalo de nuevo.',
-      })
+    res.status(error.statusCode || 500).json({
+      message: 'Error al cerrar sesión. Por favor, intentalo de nuevo.',
+    })
   }
 }
 
@@ -93,12 +89,10 @@ export const requestPasswordResetCtrl = async (req, res) => {
       `Error en el controlador al solicitar el restablecimiento de contraseña: ${error.stack}`,
       { email }
     )
-    res
-      .status(error.statusCode || 500)
-      .json({
-        message:
-          'Error al solicitar el restablecimiento de contraseña. Por favor, intentalo de nuevo.',
-      })
+    res.status(error.statusCode || 500).json({
+      message:
+        'Error al solicitar el restablecimiento de contraseña. Por favor, intentalo de nuevo.',
+    })
   }
 }
 
@@ -116,11 +110,9 @@ export const verifyResetTokenCtrl = async (req, res) => {
       `Error en el controlador al verificar el token de restablecimiento: ${error.stack}`,
       { token }
     )
-    res
-      .status(error.statusCode || 500)
-      .json({
-        message: 'Error al verificar el token. Por favor, intentalo de nuevo.',
-      })
+    res.status(error.statusCode || 500).json({
+      message: 'Error al verificar el token. Por favor, intentalo de nuevo.',
+    })
   }
 }
 
@@ -139,12 +131,10 @@ export const resetPasswordCtrl = async (req, res) => {
       `Error en el controlador al restablecer la contraseña: ${error.stack}`,
       { token }
     )
-    res
-      .status(error.statusCode || 500)
-      .json({
-        message:
-          'Error al restablecer la contraseña. Por favor, intentalo de nuevo.',
-      })
+    res.status(error.statusCode || 500).json({
+      message:
+        'Error al restablecer la contraseña. Por favor, intentalo de nuevo.',
+    })
   }
 }
 
@@ -161,10 +151,8 @@ export const verifyEmail = async (req, res) => {
       `Error en el controlador al verificar el email: ${error.stack}`,
       { token }
     )
-    res
-      .status(error.statusCode || 500)
-      .json({
-        message: 'Error al verificar el email. Por favor, intentalo de nuevo.',
-      })
+    res.status(error.statusCode || 500).json({
+      message: 'Error al verificar el email. Por favor, intentalo de nuevo.',
+    })
   }
 }
