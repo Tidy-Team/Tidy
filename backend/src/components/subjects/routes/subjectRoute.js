@@ -6,6 +6,7 @@ import {
   updateSubjectCtrl,
   deleteSubjectCtrl,
   getUserSubjectsCtrl,
+  getSubjectByIdCtrl,
 } from '../controller/subjectController.js'
 import { validationsZod } from '../../../middlewares/validationsZod.js'
 import subjectSchema from '../schemas/subjectSchema.js'
@@ -19,6 +20,14 @@ subjectRoute.get(
   logEndpointAccess('/subjects'),
   validateJwt,
   getUserSubjectsCtrl
+)
+
+// Ruta para una materia por Id  del usuario autenticado
+subjectRoute.get(
+  '/subjects/:id',
+  logEndpointAccess('/subjects/:id'),
+  validateJwt,
+  getSubjectByIdCtrl
 )
 
 // Ruta para crear una nueva materia para el usuario autenticado

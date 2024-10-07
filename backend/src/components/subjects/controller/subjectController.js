@@ -3,6 +3,7 @@ import {
   deleteSubject,
   updateSubject,
   getUserSubjects,
+  findSubjectByIdAndUserId,
 } from '../services/subjectsService.js'
 import logger from '../../logger/config.js'
 
@@ -28,6 +29,17 @@ export const getUserSubjectsCtrl = async (req, res) => {
           ? 'No se encontraron materias'
           : 'Error en el servidor al obtener las materias. Por favor, intentalo de nuevo.',
     })
+  }
+}
+
+export const getSubjectByIdCtrl = async (req, res) => {
+  const { id } = req.params
+  const userId = req.user.id
+  try {
+    const subject = await findSubjectByIdAndUserId(userId, id)
+    res.status(200).json(subject)
+  } catch (error) {
+    res.status(500).json({ message: error.message })
   }
 }
 
@@ -70,12 +82,10 @@ export const updateSubjectCtrl = async (req, res) => {
     )
     const updatedSubject = await updateSubject(userId, id, subjectData)
 
-    res
-      .status(200)
-      .json({
-        message: 'Materia actualizada exitosamente',
-        subject: updatedSubject,
-      })
+    res.status(200).json({
+      message: 'Materia actualizada exitosamente',
+      subject: updatedSubject,
+    })
 
     logger.info(
       `Materia con id: ${id} actualizada para el usuario con id: ${userId}`
@@ -104,12 +114,10 @@ export const deleteSubjectCtrl = async (req, res) => {
     )
     const deletedSubject = await deleteSubject(userId, id)
 
-    res
-      .status(200)
-      .json({
-        message: 'Materia eliminada exitosamente',
-        subject: deletedSubject,
-      })
+    res.status(200).json({
+      message: 'Materia eliminada exitosamente',
+      subject: deletedSubject,
+    })
 
     logger.info(
       `Materia con id: ${id} eliminada para el usuario con id: ${userId}`
