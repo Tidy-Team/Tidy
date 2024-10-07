@@ -25,12 +25,12 @@ export const getUserSubjectsCtrl = async (req, res) => {
 };
 
 export const createSubjectCtrl = async (req, res) => {
-  const { subjectName, description, name_teacher } = req.body;
   const userId = req.user.id;
+  const subjectData = req.body;
 
   try {
     logger.info(`Solicitud para crear una nueva materia para el usuario con id: ${userId}`);
-    const newSubject = await createSubject(userId, { subjectName, description, name_teacher });
+    const newSubject = await createSubject(userId, subjectData);
 
     res.status(201).json({
       message: 'Materia creada exitosamente',
@@ -49,12 +49,12 @@ export const createSubjectCtrl = async (req, res) => {
 
 export const updateSubjectCtrl = async (req, res) => {
   const { id } = req.params;
-  const { subjectName, description, name_teacher } = req.body;
   const userId = req.user.id;
+  const subjectData = req.body;
 
   try {
     logger.info(`Solicitud para editar la materia con id: ${id} para el usuario con id: ${userId}`);
-    const updatedSubject = await updateSubject(userId, id, { subjectName, description, name_teacher });
+    const updatedSubject = await updateSubject(userId, id, subjectData);
 
     res.status(200).json({ message: 'Materia actualizada exitosamente', subject: updatedSubject });
 

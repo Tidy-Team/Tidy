@@ -1,4 +1,6 @@
 import { Activities } from '../models/activitiesModel.js';
+import logger from '../../logger/config.js';
+import createError from '../../../helpers/createError.js';
 
 /**
  * Busca una actividad por su ID.
@@ -8,19 +10,18 @@ import { Activities } from '../models/activitiesModel.js';
  */
 export const findActivityById = async activityId => {
   try {
-    // Se busca la actividad
+    logger.info(`Buscando la actividad con id: ${activityId}`);
     const activity = await Activities.findOne({ where: { id: activityId } });
 
-    // Si no se encuentra la actividad
     if (!activity) {
-      throw new Error('Actividad no encontrada');
+      logger.info(`La actividad con id: ${activityId} no se encontró`);
+      throw createError('Actividad no encontrada', 404);
     }
 
     return activity;
   } catch (error) {
-    console.error(`Error al buscar la actividad con id ${activityId}. Su error es: ${error.message}`);
-
-    throw new Error('Error al encontrar la actividad');
+    logger.error(`Error al buscar la actividad con id ${activityId}. Su error es: ${error.message}`);
+    throw createError('Error al encontrar la actividad', error.statusCode || 500);
   }
 };
 
@@ -32,19 +33,21 @@ export const findActivityById = async activityId => {
  */
 export const findActivitiesBySubjectId = async subjectId => {
   try {
-    console.log(`Buscando actividades para la materia con id: ${subjectId}`);
+    logger.info(`Buscando actividades para la materia con id: ${subjectId}`);
 
-    // Busca todas las actividades de una materia
     const activities = await Activities.findAll({
       where: { subject_id: subjectId },
     });
 
-    console.log(`Actividades encontradas: ${JSON.stringify(activities)}`);
+    if (!activities || activities.length === 0) {
+      logger.info(`No se encontraron actividades para la materia con id: ${subjectId}`);
+      throw createError('No se encontraron actividades', 404);
+    }
 
     return activities;
   } catch (error) {
-    console.error(`Error al buscar actividades para la materia con id: ${subjectId}. Su error es: ${error.message}`);
-    throw new Error('Error al encontrar la actividad');
+    logger.error(`Error al buscar actividades para la materia con id: ${subjectId}. Su error es: ${error.message}`);
+    throw createError('Error al buscar actividades', error.statusCode || 500);
   }
 };
 
@@ -56,49 +59,62 @@ export const findActivitiesBySubjectId = async subjectId => {
  */
 export const createActivity = async activityData => {
   try {
-    return await Activities.create(activityData);
-  } catch (error) {
-    console.error(`Ocurrió un error al crear la actividad: ${error}`);
+    logger.info('Creando una nueva actividad');
+    const newActivity = await Activities.create({ ...activityData });
 
-    throw new Error('Error al crear la actividad');
+    return newActivity;
+  } catch (error) {
+    logger.error(`Ocurrió un error al crear la actividad: ${error.message}`);
+    throw createError('Error al crear la actividad', error.statusCode || 500);
   }
 };
 
 /**
  * Actualiza una actividad existente.
  * @param {number} activityId - ID de la actividad.
- * @param {Object} updateData - Datos a actualizar.
+ * @param {Object} activityData - Datos a actualizar.
  * @returns {Promise<Object>} - Actividad actualizada.
  * @throws {Error} - Si ocurre un error al actualizar la actividad.
  */
-export const updateActivity = async (activityId, updateData) => {
+export const updateActivity = async (activityId, activityData) => {
   try {
+    logger.info(`Actualizando actividad con id: ${activityId}`);
     const activity = await findActivityById(activityId);
 
-    Object.assign(activity, updateData);
+    if (!activity) {
+      logger.info(`La actividad con id: ${activityId} no se encontró`);
+      throw createError('Actividad no encontrada', 404);
+    }
+
+    Object.assign(activity, activityData);
     await activity.save();
 
     return activity;
   } catch (error) {
-    console.error(`Error al actualizar actividad con id: ${activityId}.Su error es: ${error.message} `);
-
-    throw new Error('Error al actualizar la actividad');
+    logger.error(`Error al actualizar actividad con id: ${activityId}. Su error es: ${error.message}`);
+    throw createError('Error al actualizar la actividad', error.statusCode || 500);
   }
 };
 
 /**
- * Servicio para eliminar una actividad
- * @param {string} activityId - ID de la actividad
+ * Servicio para eliminar una actividad.
+ * @param {string} activityId - ID de la actividad.
  * @returns {Promise<void>}
+ * @throws {Error} - Si ocurre un error al eliminar la actividad.
  */
 export const deleteActivity = async activityId => {
   try {
+    logger.info(`Eliminando actividad con id: ${activityId}`);
     const activity = await findActivityById(activityId);
+
+    if (!activity) {
+      logger.info(`La actividad con id: ${activityId} no se encontró`);
+      throw createError('Actividad no encontrada', 404);
+    }
 
     await activity.destroy();
   } catch (error) {
-    console.error(`Error al eliminar actividad con id: ${activityId}. Su error es: ${error.message}`);
-
-    throw new Error('Error al eliminar la actividad');
+    logger.error(`Error al eliminar actividad con id: ${activityId}. Su error es: ${error.message}`);
+    throw createError('Error al eliminar la actividad', error.statusCode || 500);
   }
 };

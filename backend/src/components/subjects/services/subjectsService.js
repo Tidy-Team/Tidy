@@ -62,14 +62,10 @@ export const getUserSubjects = async userId => {
  * @returns {Promise<Object>} - Materia creada.
  * @throws {Error} - Si ocurre un error al crear la materia.
  */
-export const createSubject = async (userId, { subjectName, description, name_teacher }) => {
+export const createSubject = async (userId, subjectData) => {
   try {
-    const newSubject = await Subjects.create({
-      name: subjectName,
-      description,
-      name_teacher,
-      userId,
-    });
+    const newSubject = await Subjects.create({ ...subjectData, userId });
+
     if (!newSubject) {
       logger.info(`Error al crear la materia para el usuario con id: ${userId}`);
       throw createError('Error al crear la materia', 400);
@@ -91,7 +87,7 @@ export const createSubject = async (userId, { subjectName, description, name_tea
  * @returns {Promise<Object>} - Materia actualizada
  * @throws {Error} - Si ocurre un error al editar la materia
  */
-export const updateSubject = async (userId, subjectId, { subjectName, description, name_teacher }) => {
+export const updateSubject = async (userId, subjectId, subjectData) => {
   try {
     logger.info(`Editando materia con id: ${subjectId} para el usuario con id: ${userId}`);
     const subject = await findSubjectByIdAndUserId(subjectId, userId);
@@ -101,7 +97,7 @@ export const updateSubject = async (userId, subjectId, { subjectName, descriptio
       throw createError('Materia no encontrada', 404);
     }
 
-    Object.assign(subject, { name: subjectName, description, name_teacher });
+    Object.assign(subject, subjectData);
     await subject.save();
 
     return subject;

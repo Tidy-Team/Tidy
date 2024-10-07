@@ -31,6 +31,12 @@ export const activitiesSchema = z.object({
       return zonedDate >= moment().startOf('day').toDate(); // Permite la fecha actual o futura
     }, 'La fecha de fin no puede ser en el pasado'),
   estado: z.enum(['pendiente', 'en_progreso', 'completada']).default('pendiente'),
-  prioridad_id: z.number().int().positive(),
+  prioridad_id: z
+    .number()
+    .int()
+    .positive()
+    .refine(id => [1, 2, 3].includes(id), {
+      message: 'Prioridad no válida',
+    }),
   num_preguntas: z.number().int().positive().min(1, 'Debe haber al menos una pregunta'),
 });

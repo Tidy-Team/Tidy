@@ -9,7 +9,7 @@ export const Subjects = sequelize.define(
       autoIncrement: true,
       primaryKey: true,
     },
-    name: {
+    subjectName: {
       type: DataTypes.STRING,
       allowNull: false,
     },
