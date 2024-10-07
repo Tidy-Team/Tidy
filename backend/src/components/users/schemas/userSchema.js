@@ -3,6 +3,14 @@ import moment from 'moment-timezone';
 
 const timeZone = 'America/Argentina/Buenos_Aires';
 
+const parseDate = date => {
+  const parsedDate = moment(date);
+  if (!parsedDate.isValid()) {
+    throw new Error(`Fecha no válida: ${date}`);
+  }
+  return moment.tz(parsedDate, timeZone).toDate();
+};
+
 export const userSchema = z.object({
   name: z.string().min(1, 'Se requiere el nombre').max(50, 'El nombre debe ser de 50 caracteres o menos'),
   email: z
@@ -16,18 +24,12 @@ export const userSchema = z.object({
     .regex(/[a-z]/, 'La contraseña debe contener al menos una letra minúscula')
     .regex(/[0-9]/, 'La contraseña debe contener al menos un número'),
   rol: z.enum(['estudiante', 'tutor', 'padre']).optional().default('estudiante'), // Valor predeterminado
-  fecha_registro: z
-    .string()
-    .default(() => moment().tz(timeZone).toISOString()) // Establece la fecha actual en la zona horaria de Buenos Aires en formato ISO
-    .refine(date => {
-      const parsedDate = moment(date);
-      if (!parsedDate.isValid()) {
-        console.error(`fecha_registro no es una fecha válida: ${date}`);
-        return false;
-      }
-      const zonedDate = moment.tz(parsedDate, timeZone).toDate();
-      return zonedDate <= new Date();
-    }, 'La fecha de registro no puede ser en el futuro'), // Validación de fecha
+  fecha_registro: z.preprocess(
+    parseDate,
+    z.date().refine(date => date <= new Date(), {
+      message: 'La fecha de registro no puede ser en el futuro',
+    })
+  ),
   emailVerificationToken: z.string().optional(), // Token de verificación de email
   emailVerified: z.boolean().default(false), // Estado de verificación de email
 });

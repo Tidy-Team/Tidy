@@ -1,3 +1,4 @@
+import logger from '../../logger/config.js';
 import { Users } from '../models/userModel.js';
 
 /**
@@ -9,10 +10,10 @@ import { Users } from '../models/userModel.js';
  */
 export const getUserByEmail = async email => {
   try {
-    const existingUser = await Users.findOne({ where: { email } });
-    return existingUser;
+    const existsUser = await Users.findOne({ where: { email } });
+    return existsUser;
   } catch (error) {
-    console.error(`Se encontró un error al buscar el usuario: ${error}`);
+    logger.error(`Se encontró un error al buscar el usuario: ${error}`);
     throw error;
   }
 };
@@ -28,7 +29,7 @@ export const createUser = async userData => {
     const newUser = await Users.create(userData);
     return newUser;
   } catch (error) {
-    console.error(`Se encontró un error al crear el usuario: ${error}`);
+    logger.error(`Se encontró un error al crear el usuario: ${error}`);
     throw error;
   }
 };
