@@ -1,14 +1,19 @@
+//React
+import { useEffect } from 'react'
+import { Link } from 'react-router-dom'
+
+//Components and utilities
+import { useAuth } from '../context/useAuth.js'
+import { LocalStorage } from '../utils/localStorage.js'
+
+//Icons
 import { TiThMenu } from 'react-icons/ti'
 import { BiSolidBook } from 'react-icons/bi'
 import { FaCalendarAlt } from 'react-icons/fa'
 import { BsLightningChargeFill } from 'react-icons/bs'
-import { LocalStorage } from '../utils/localStorage.js'
-import { useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import { useAuth } from '../context/useAuth.js'
 
 export function SideNav({ children }) {
-  const { isAuthenticated, logOut } = useAuth()
+  const { logOut } = useAuth()
   const { saveTheme, loadTheme } = LocalStorage()
 
   useEffect(() => {
@@ -26,7 +31,7 @@ export function SideNav({ children }) {
     <>
       <div className="bg-base-100 drawer lg:drawer-open">
         <input id="drawer" type="checkbox" className="drawer-toggle" />
-        <div className="drawer-content">
+        <div className="drawer-content overflow-y-auto">
           <div className="bg-base-100 text-base-content sticky top-0 z-30 flex h-16 w-full justify-center bg-opacity-90 backdrop-blur transition-shadow duration-100 [transform:translate3d(0,0,0)]">
             <nav className="navbar w-full  px-6">
               <div className="flex flex-1 md:gap-1 lg:gap-2">
@@ -125,7 +130,7 @@ export function SideNav({ children }) {
           <div className='class="max-w-[100vw] px-6 pb-5 xl:pr-2"'>
             <div className="flex flex-col-reverse justify-between gap-6 xl:flex-row">
               {/* Main Content */}
-              <div className="flex-grow">{children}</div>
+              <div className="flex-grow ">{children}</div>
             </div>
           </div>
         </div>

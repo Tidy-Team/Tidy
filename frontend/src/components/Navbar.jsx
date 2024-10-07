@@ -1,7 +1,10 @@
+//React
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
+
+//Components and utilities
 import { useAuth } from '../context/useAuth.js'
 import { LocalStorage } from '../utils/localStorage.js'
-import { useEffect } from 'react'
 
 export const Navbar = () => {
   const { isAuthenticated, logOut } = useAuth()

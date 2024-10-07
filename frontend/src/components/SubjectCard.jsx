@@ -1,4 +1,7 @@
+//React
 import { useNavigate } from 'react-router-dom'
+
+//Icons
 import { FaChalkboardTeacher } from 'react-icons/fa'
 
 export function SubjectCard({ id, title, description, teacher }) {

@@ -1,8 +1,12 @@
+//React
 import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
+
+//Components and utilities
 import { useSubjects } from '../context/useSubject'
+
+//Icons
 import { useForm } from 'react-hook-form'
-import { GoNumber } from 'react-icons/go'
 import { IoText } from 'react-icons/io5'
 
 export function SubjectForm({ addSubject }) {

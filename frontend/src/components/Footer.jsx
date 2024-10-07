@@ -1,4 +1,5 @@
-import { FaFacebook, FaFacebookF, FaIcons, FaYoutube } from 'react-icons/fa'
+//Icons
+import { FaFacebookF, FaYoutube } from 'react-icons/fa'
 import { FaXTwitter } from 'react-icons/fa6'
 
 export const Footer = () => {

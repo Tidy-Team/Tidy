@@ -1,4 +1,7 @@
+//React
 import { Link } from 'react-router-dom'
+
+//Background Image
 import heroBg from '../assets/heroBG.jpg'
 
 export const Hero = () => {

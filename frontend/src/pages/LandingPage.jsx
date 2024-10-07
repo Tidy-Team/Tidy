@@ -1,7 +1,10 @@
-import { Footer, Hero, FeatureCard } from '../components';
-import { MdAssignmentAdd } from 'react-icons/md';
-import { FaRegClock } from 'react-icons/fa';
-import { FaArrowTrendUp } from 'react-icons/fa6';
+//Components and utilities
+import { Footer, Hero, FeatureCard } from '../components'
+
+//Icons
+import { MdAssignmentAdd } from 'react-icons/md'
+import { FaRegClock } from 'react-icons/fa'
+import { FaArrowTrendUp } from 'react-icons/fa6'
 
 export function LandingPage() {
   return (
@@ -37,5 +40,5 @@ export function LandingPage() {
       {/* Footer */}
       <Footer />
     </>
-  );
+  )
 }

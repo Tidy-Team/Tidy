@@ -1,13 +1,17 @@
-import { MdEmail } from 'react-icons/md'
-import { FaLock, FaUser } from 'react-icons/fa'
-
+//React
 import { useEffect, useRef } from 'react'
-import { useAuth } from '../context/useAuth'
 import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
+
+//Components and utilities
+import { useAuth } from '../context/useAuth'
 import { registerSchema } from '../schemas/authSchemas'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Modal } from '../components/Modal'
+import { Modal } from '../components'
+
+//Icons
+import { MdEmail } from 'react-icons/md'
+import { FaLock, FaUser } from 'react-icons/fa'
 
 export function SignUpPage() {
   const { signUp, errors: registerErrors = [], isAuthenticated } = useAuth()
@@ -98,12 +102,13 @@ export function SignUpPage() {
           <button className="btn btn-primary mt-5">Crear Cuenta</button>
 
           <div className="divider my-0">¿Ya tienes una cuenta?</div>
+          {/* Login Redirect */}
           <Link to="/login" className="w-full">
             <button className="btn btn-secondary w-full">Iniciar Sesión</button>
           </Link>
         </form>
       </div>
-
+      {/* Email Alert  */}
       <dialog ref={modalRef} className="modal">
         <div className="modal-content">
           <p>Por favor, revise su correo electrónico para la verificación.</p>

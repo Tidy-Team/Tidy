@@ -1,8 +1,9 @@
-import { SubjectCard } from '../components/SubjectCard.jsx'
-import { Modal } from '../components/Modal.jsx'
-import { SubjectForm } from '../components/SubjectForm.jsx'
-import { useSubjects } from '../context/useSubject.js'
+//React
 import { useEffect, useState } from 'react'
+
+//Components and utilities
+import { useSubjects } from '../context/useSubject.js'
+import { SubjectCard, SubjectForm, Modal } from '../components'
 
 export function HomePage() {
   const { subjects, getSubjects } = useSubjects()
