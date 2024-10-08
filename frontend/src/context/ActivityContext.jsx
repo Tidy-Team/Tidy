@@ -1,4 +1,4 @@
-import { createContext, useState, useCallback } from 'react'
+import React, { createContext, useState } from 'react'
 import {
   getActivitiesRequest,
   createActivitiesRequest,
@@ -10,22 +10,25 @@ const ActivityContext = createContext()
 
 function ActivityProvider({ children }) {
   const [activities, setActivities] = useState([])
-  const [activity, setActivity] = useState(null)
-  const [errors, setErrors] = useState([])
+  const [errors, setErrors] = useState(null)
 
-  const getActivities = async () => {
-    const res = await getActivitiesRequest()
-    setActivities(res.data)
+  const getActivities = async (id) => {
+    try {
+      const res = await getActivitiesRequest(id)
+      setActivities(res.data)
+    } catch (error) {
+      console.log(error)
+      setErrors(error.response.data)
+    }
   }
 
   const createActivity = async (activity) => {
     try {
       const res = await createActivitiesRequest(activity)
-      console.log(res.data)
-      return res
+      setActivities((prevActivities) => [...prevActivities, res.data])
     } catch (error) {
       console.log(error)
-      setErrors(error.response.data.message)
+      setErrors(error.response.data)
     }
   }
 

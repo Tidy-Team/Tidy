@@ -1,34 +1,37 @@
 //React
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 
 //Components and utilities
 import { useSubjects } from '../context/useSubject.js'
+import { useActivities } from '../context/useActvity.js'
 import { Modal, ActivityForm } from '../components'
 
 //Icons
 
 export function SubjectPage() {
   const { subject, getSubject } = useSubjects()
-  const [activities, setActivities] = useState([])
+  const {
+    activities,
+    getActivities,
+    errors: activitiesErrros,
+  } = useActivities()
   const { id } = useParams()
+  console.log(activitiesErrros)
 
   useEffect(() => {
     getSubject(id)
-  }, [id, getSubject])
+  }, [])
+
+  useEffect(() => {
+    getActivities(id)
+  }, [])
 
   if (!subject) {
     return <div>Loading...</div>
   }
-
-  const addActivity = (newActivity) => {
-    console.log('New activity response:', newActivity)
-    const activityData = newActivity.data.activity
-    if (activityData.id === undefined) {
-      console.error('New activity has undefined id:', activityData)
-      return
-    }
-    setActivities([...activities, activityData])
+  if (!activities) {
+    return <div>Loading...</div>
   }
 
   return (
@@ -53,19 +56,18 @@ export function SubjectPage() {
           </h1>
         </div>
         <div className="h-fit flex flex-col gap-2 md:mb-5 ">
-          <div className="p-5 bg-base-300 rounded-lg text-start  ">Tarea 1</div>
-          <div className="p-5 bg-base-300 rounded-lg text-start  ">Tarea 1</div>
-          <div className="p-5 bg-base-300 rounded-lg text-start  ">Tarea 1</div>
-          <div className="p-5 bg-base-300 rounded-lg text-start  ">Tarea 1</div>
-          <div className="p-5 bg-base-300 rounded-lg text-start  ">Tarea 1</div>
-          <div className="p-5 bg-base-300 rounded-lg text-start  ">Tarea 1</div>
-          <div className="p-5 bg-base-300 rounded-lg text-start  ">Tarea 1</div>
-          <div className="p-5 bg-base-300 rounded-lg text-start  ">Tarea 1</div>
-          <div className="p-5 bg-base-300 rounded-lg text-start  ">Tarea 1</div>
-          <div className="p-5 bg-base-300 rounded-lg text-start  ">Tarea 1</div>
-          <div className="p-5 bg-base-300 rounded-lg text-start  ">Tarea 1</div>
-          <div className="p-5 bg-base-300 rounded-lg text-start  ">Tarea 1</div>
-          <div className="p-5 bg-base-300 rounded-lg text-start  ">Tarea 1</div>
+          {activitiesErrros || (activities && activities === 0) ? (
+            <div>No hay tareas</div>
+          ) : (
+            activities.map((activity) => (
+              <div
+                key={activity.id}
+                className="p-5 bg-base-300 rounded-lg text-start"
+              >
+                {activity.titulo}
+              </div>
+            ))
+          )}
         </div>
       </div>
     </div>
