@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react'
 
 //Components and utilities
-import { useSubjects } from '../context/useSubject.js'
+import { useSubjects } from '../hooks/useSubject.js'
 import { SubjectCard, SubjectForm, Modal } from '../components'
 
 export function HomePage() {

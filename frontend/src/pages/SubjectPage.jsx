@@ -3,8 +3,8 @@ import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 
 //Components and utilities
-import { useSubjects } from '../context/useSubject.js'
-import { useActivities } from '../context/useActvity.js'
+import { useSubjects } from '../hooks/useSubject.js'
+import { useActivities } from '../hooks/useActvity.js'
 import { Modal, ActivityForm } from '../components'
 
 //Icons
@@ -17,7 +17,6 @@ export function SubjectPage() {
     errors: activitiesErrros,
   } = useActivities()
   const { id } = useParams()
-  console.log(activitiesErrros)
 
   useEffect(() => {
     getSubject(id)

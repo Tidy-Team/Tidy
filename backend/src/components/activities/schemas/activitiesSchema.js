@@ -32,9 +32,11 @@ export const activitiesSchema = z.object({
   estado: z
     .enum(['pendiente', 'en_progreso', 'completada'])
     .default('pendiente'),
-  prioridad_id: z.enum([1, 2, 3], {
-    errorMap: () => ({ message: 'Prioridad no válida' }),
-  }),
+  prioridad_id: z
+    .enum(['1', '2', '3'], {
+      errorMap: () => ({ message: 'Prioridad no válida' }),
+    })
+    .transform(Number),
   num_preguntas: z
     .number()
     .int()

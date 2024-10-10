@@ -3,8 +3,8 @@ import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
 //Components and utilities
-import { useAuth } from '../context/useAuth.js'
-import { LocalStorage } from '../utils/localStorage.js'
+import { useAuth } from '../../hooks/useAuth.js'
+import { LocalStorage } from '../../utils/localStorage.js'
 
 //Icons
 import { TiThMenu } from 'react-icons/ti'

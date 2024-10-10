@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 
 //Components and utilities
-import { useActivities } from '../context/useActvity'
+import { useActivities } from '../../hooks/useActvity'
 
 //Icons
 import { useForm } from 'react-hook-form'

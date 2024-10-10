@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 
 //Components and utilities
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useAuth } from '../context/useAuth'
+import { useAuth } from '../hooks/useAuth'
 import { loginSchema } from '../schemas/authSchemas'
 
 //Icons

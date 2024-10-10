@@ -53,7 +53,7 @@ export const createActivityCtrl = async (req, res) => {
       subject_id: subject.id,
     })
 
-    res.status(201).json({
+    return res.status(201).json({
       message: 'Actividad creada exitosamente',
       activity: newActivity,
     })
@@ -66,7 +66,7 @@ export const createActivityCtrl = async (req, res) => {
       `Error al crear la actividad para la materia con id: ${id} y el usuario con id: ${userId}. Su error es: ${error.stack}`
     )
 
-    res.status(error.statusCode || 500).json({
+    return res.status(error.statusCode || 500).json({
       message:
         error.statusCode === 404
           ? 'No se encontró la materia para la actividad'

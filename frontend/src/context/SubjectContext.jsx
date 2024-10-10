@@ -1,4 +1,4 @@
-import { createContext, useState, useCallback } from 'react'
+import { createContext, useState, useCallback, useEffect } from 'react'
 import {
   getSubjectsRequest,
   createSubjectsRequest,
@@ -46,13 +46,13 @@ function SubjectProvider({ children }) {
   const getSubject = useCallback(async (id) => {
     try {
       const res = await getSubjectRequest(id)
-      console.log(res.data)
       setSubject(res.data)
-      return res.data
     } catch (error) {
       console.error(error)
     }
   }, [])
+
+  useEffect(() => {}, [subject])
 
   const updateSubject = async (id, subject) => {
     try {

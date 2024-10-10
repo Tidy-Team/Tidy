@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 
 //Components and utilities
-import { useSubjects } from '../context/useSubject'
+import { useSubjects } from '../../hooks/useSubject'
 
 //Icons
 import { useForm } from 'react-hook-form'

@@ -1,13 +1,13 @@
-import { Navbar } from './Navbar'
-import { Footer } from './Footer'
-import { Hero } from './Hero'
-import { FeatureCard } from './FeatureCard'
-import { SideNav } from './SideNav'
-import { SubjectCard } from './SubjectCard'
-import { SubjectForm } from './SubjectForm'
-import { ActivityForm } from './ActivityForm'
-import { Activities } from './Activities'
-import { Modal } from './Modal'
+import { Navbar } from './layout/Navbar'
+import { Footer } from './layout/Footer'
+import { Hero } from './layout/Hero'
+import { FeatureCard } from './common/FeatureCard'
+import { SideNav } from './layout/SideNav'
+import { SubjectCard } from './subjects/SubjectCard'
+import { SubjectForm } from './subjects/SubjectForm'
+import { ActivityForm } from './activities/ActivityForm'
+import { Activities } from './activities/Activities'
+import { Modal } from './common/Modal'
 
 export {
   Navbar,
