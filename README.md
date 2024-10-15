@@ -8,7 +8,7 @@ Los estudiantes con TDAH tienen dificultad para concentrarse, lo que lleva a que
 
 - Node.js (v14 o superior)
 - npm (v6 o superior)
-- PostgreSQL (si estás usando Supabase, asegúrate de tener las credenciales)
+- MySQL (si estás usando Supabase, asegúrate de tener las credenciales)
 
 ## Instalación
 
@@ -41,15 +41,13 @@ Los estudiantes con TDAH tienen dificultad para concentrarse, lo que lleva a que
    API_KEY_RESEND=your_api_key_resend
    ```
 
-````
-
 ## Uso
 
 1. Inicia el servidor:
 
- ```sh
- npm dev
-````
+```sh
+npm run dev
+```
 
 2. El servidor estará corriendo en `http://localhost:3000`.
 
