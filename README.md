@@ -15,8 +15,8 @@ Los estudiantes con TDAH tienen dificultad para concentrarse, lo que lleva a que
 1. Clona el repositorio:
 
    ```sh
-   git clone https://github.com/tu-usuario/tu-repositorio.git
-   cd tu-repositorio/backend
+   git clone https://github.com/Tidy-Team/Tidy
+   cd Tidy/backend
    ```
 
 2. Instala las dependencias:
