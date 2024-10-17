@@ -1,4 +1,10 @@
-import { createSubject, deleteSubject, updateSubject, getUserSubjects } from '../services/subjectsService.js';
+import {
+  createSubject,
+  deleteSubject,
+  updateSubject,
+  getUserSubjects,
+  findSubjectByIdAndUserId,
+} from '../services/subjectsService.js';
 import logger from '../../logger/config.js';
 
 export const getUserSubjectsCtrl = async (req, res) => {
@@ -20,6 +26,30 @@ export const getUserSubjectsCtrl = async (req, res) => {
         error.statusCode === 404
           ? 'No se encontraron materias'
           : 'Error en el servidor al obtener las materias. Por favor, intentalo de nuevo.',
+    });
+  }
+};
+
+export const getSubjectByIdCtrl = async (req, res) => {
+  const { id } = req.params;
+  const userId = req.user.id;
+
+  try {
+    logger.info(`Solicitud para obtener la materia con id: ${id} para el usuario con id: ${userId}`);
+    const subject = await findSubjectByIdAndUserId(userId, id);
+
+    res.status(200).json(subject);
+    logger.info(`Materia con id: ${id} encontrada para el usuario con id: ${userId}`);
+  } catch (error) {
+    logger.error(
+      `Error en el controlador al obtener la materia con id: ${id} para el usuario con id: ${userId}. Su error es: ${error.stack}`
+    );
+
+    res.status(error.statusCode || 500).json({
+      message:
+        error.statusCode === 404
+          ? 'No se encontraron materias'
+          : 'Error en el servidor al obtener la materia. Intentalo de nuevo.',
     });
   }
 };
