@@ -6,7 +6,7 @@ import { SideNav } from './layout/SideNav'
 import { SubjectCard } from './subjects/SubjectCard'
 import { SubjectForm } from './subjects/SubjectForm'
 import { ActivityForm } from './activities/ActivityForm'
-import { Activities } from './activities/Activities'
+import { ActivitiesList } from './activities/ActivitiesList'
 import { Modal } from './common/Modal'
 
 export {
@@ -18,6 +18,6 @@ export {
   SubjectCard,
   SubjectForm,
   ActivityForm,
-  Activities,
+  ActivitiesList,
   Modal,
 }

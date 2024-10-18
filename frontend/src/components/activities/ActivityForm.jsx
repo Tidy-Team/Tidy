@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 
 //Components and utilities
-import { useActivities } from '../../hooks/useActvity'
+import { useFetch } from '../../hooks/useFetch'
 
 //Icons
 import { useForm } from 'react-hook-form'
@@ -11,86 +11,78 @@ import { GoNumber } from 'react-icons/go'
 import { IoText } from 'react-icons/io5'
 
 export function ActivityForm({ addActivity }) {
-  const { getActivities, createActivity } = useActivities()
-  const params = useParams()
+  const { id } = useParams()
 
   const {
     register,
-    setValue,
+
     handleSubmit,
     formState: { errors },
-  } = useForm()
-
-  const onSubmit = async (data) => {
-    try {
-      let newActivity
-
-      addActivity(newSubject)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  useEffect(() => {
-    const loadActivities = async () => {
-      if (params.id) {
-        const activity = await getActivities(params.id)
-        console.log(activity)
-        setValue('subjectName', activity.title)
-        setValue('description', activity.description)
-      }
-    }
-    loadActivities()
-  }, [])
+  } = useForm({
+    defaultValues: {
+      titulo: '',
+      description: '',
+      num_preguntas: 0,
+      prioridad: '',
+    },
+  })
 
   return (
-    <form className="flex flex-col gap-3" onSubmit={handleSubmit(onSubmit)}>
+    <form
+      className="flex flex-col gap-3"
+      onSubmit={handleSubmit((e) => {
+        console.log(e)
+      })}
+    >
       <h1 className="text-center font-semibold text-2xl mb-3">Agregar Tarea</h1>
       <label className="input input-bordered flex items-center gap-2 ">
         <IoText />
         <input
           type="text"
-          name="titulo"
           className="grow"
-          placeholder="Titulo"
-          {...register('titulo')}
+          placeholder="Example of activity"
+          {...register('titulo', { required: 'Required' })}
         />
+        {errors.titulo && <span>{errors.titulo.message}</span>}
       </label>
 
       <label className="input input-bordered flex items-center gap-2">
         <IoText />
         <input
           type="text"
-          name="description"
           className="grow"
           placeholder="Descripcion"
-          {...register('description')}
+          {...register('description', { required: 'Required' })}
         />
+        {errors.description && <span>{errors.description.message}</span>}
       </label>
 
       <label className="input input-bordered flex items-center gap-2">
         <GoNumber className="text-2xl" />
         <input
           type="number"
-          name="num_preguntas"
           className="grow"
           placeholder="Numero de preguntas"
-          {...register('num_preguntas')}
+          {...register('num_preguntas', { required: 'Required' })}
         />
+        {errors.num_preguntas && <span>{errors.num_preguntas.message}</span>}
       </label>
 
-      <select className="select select-bordered w-full  ">
-        <option disabled selected>
+      <select
+        className="select select-bordered w-full"
+        {...register('prioridad', { required: 'Prioridad no válida' })}
+        defaultValue=""
+      >
+        <option value="" disabled>
           Elegir Prioridad
         </option>
-        <option defaultValue={1}>Baja</option>
-        <option defaultValue={2}>Media</option>
-        <option defaultValue={3}>Alta</option>
+        <option value="1">Baja</option>
+        <option value="2">Media</option>
+        <option value="3">Alta</option>
       </select>
+      {errors.prioridad && <span>{errors.prioridad.message}</span>}
 
-      <button className="btn btn-primary" type="submit">
-        Ok
-      </button>
+      <button className="btn btn-primary" type="submit"></button>
     </form>
   )
 }

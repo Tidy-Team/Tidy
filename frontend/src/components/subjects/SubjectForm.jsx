@@ -3,14 +3,12 @@ import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 
 //Components and utilities
-import { useSubjects } from '../../hooks/useSubject'
 
 //Icons
 import { useForm } from 'react-hook-form'
 import { IoText } from 'react-icons/io5'
 
 export function SubjectForm({ addSubject }) {
-  const { createSubject, getSubject, updateSubject } = useSubjects()
   const params = useParams()
 
   const {

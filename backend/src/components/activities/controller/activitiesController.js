@@ -16,7 +16,7 @@ export const getActivities = async (req, res) => {
     logger.info(
       `Buscando actividad con id: ${id} para el usuario con id: ${userId}`
     )
-    const subject = await findSubjectByIdAndUserId(id, userId)
+    const subject = await findSubjectByIdAndUserId(userId, id)
 
     logger.info(`Materia encontrada: ${JSON.stringify(subject)}`)
 
@@ -45,7 +45,7 @@ export const createActivityCtrl = async (req, res) => {
     logger.info(
       `Solicitud para crear una nueva actividad para la materia con id: ${id} y el usuario con id: ${userId}`
     )
-    const subject = await findSubjectByIdAndUserId(id, userId)
+    const subject = await findSubjectByIdAndUserId(userId, id)
 
     const newActivity = await createActivity({
       ...activityData,
@@ -53,14 +53,14 @@ export const createActivityCtrl = async (req, res) => {
       subject_id: subject.id,
     })
 
+    logger.info(
+      `Actividad creada para la materia con id: ${id} y el usuario con id: ${userId}`
+    )
+
     return res.status(201).json({
       message: 'Actividad creada exitosamente',
       activity: newActivity,
     })
-
-    logger.info(
-      `Actividad creada para la materia con id: ${id} y el usuario con id: ${userId}`
-    )
   } catch (error) {
     logger.error(
       `Error al crear la actividad para la materia con id: ${id} y el usuario con id: ${userId}. Su error es: ${error.stack}`
