@@ -1,8 +1,9 @@
 import { sequelize } from './databases.js';
-import { Users } from '../components/users/models/userModel.js';
-import { Activities } from '../components/activities/models/activitiesModel.js';
-import { Priorities } from '../components/priorities/models/prioritiesModel.js';
-import { Subjects } from '../components/subjects/models/subjectModel.js';
+import { Users } from '../modules/users/models/userModel.js';
+import { Activities } from '../modules/activities/models/activitiesModel.js';
+import { Priorities } from '../modules/priorities/models/prioritiesModel.js';
+import { Subjects } from '../modules/subjects/models/subjectModel.js';
+
 import './relationships.js'; // Importar el archivo de relaciones
 import bcrypt from 'bcrypt';
 

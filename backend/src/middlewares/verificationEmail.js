@@ -1,4 +1,4 @@
-import { Users } from '../components/users/models/userModel';
+import { Users } from '../modules/users/models/userModel';
 
 export const requireEmailVerification = async (req, res, next) => {
   const userId = req.user.id;
