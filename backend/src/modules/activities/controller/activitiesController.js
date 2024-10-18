@@ -1,9 +1,9 @@
 import {
   findActivityById,
-  createActivity,
   updateActivity,
   deleteActivity,
   findActivitiesBySubjectId,
+  createActivityWithSubtasks,
 } from '../services/activitiesService.js';
 import { findSubjectByIdAndUserId } from '../../subjects/services/subjectsService.js';
 import logger from '../../logger/config.js';
@@ -34,18 +34,30 @@ export const getActivities = async (req, res) => {
 
 export const createActivityCtrl = async (req, res) => {
   const { id } = req.params;
+  const { titulo, description, fecha_inicio, fecha_fin, estado, num_preguntas, prioridad_id, option } = req.body;
   const userId = req.user.id;
-  const activityData = req.body;
+
+  logger.info(`Esta es la opcion: ${option}`);
 
   try {
     logger.info(`Solicitud para crear una nueva actividad para la materia con id: ${id} y el usuario con id: ${userId}`);
     const subject = await findSubjectByIdAndUserId(id, userId);
 
-    const newActivity = await createActivity({
-      ...activityData,
-      user_id: userId,
-      subject_id: subject.id,
-    });
+    const newActivity = await createActivityWithSubtasks(
+      {
+        titulo,
+        description,
+        fecha_inicio,
+        fecha_fin,
+        estado,
+        num_preguntas,
+        prioridad_id,
+        option,
+        user_id: userId,
+        subject_id: subject.id,
+      },
+      option
+    );
 
     res.status(201).json({
       message: 'Actividad creada exitosamente',
@@ -69,19 +81,30 @@ export const createActivityCtrl = async (req, res) => {
 
 export const updateActivityCtrl = async (req, res) => {
   const { id } = req.params;
+  const { titulo, description, fecha_inicio, fecha_fin, estado, num_preguntas, prioridad_id, option } = req.body;
   const userId = req.user.id;
-  const activityData = req.body;
 
   try {
     logger.info(`Solicitud para actualizar la actividad con id: ${id} para el usuario con id: ${userId}`);
     const activity = await findActivityById(id);
     const subject = await findSubjectByIdAndUserId(activity.subject_id, userId);
 
-    const updatedActivity = await updateActivity(id, {
-      ...activityData,
-      user_id: userId,
-      subject_id: subject.id,
-    });
+    const updatedActivity = await updateActivity(
+      id,
+      {
+        titulo,
+        description,
+        fecha_inicio,
+        fecha_fin,
+        estado,
+        num_preguntas,
+        prioridad_id,
+        option,
+        user_id: userId,
+        subject_id: subject.id,
+      },
+      option
+    );
 
     res.status(200).json({
       message: 'Actividad actualizada exitosamente',

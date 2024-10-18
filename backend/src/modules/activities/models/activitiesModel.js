@@ -35,6 +35,10 @@ export const Activities = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    option: {
+      type: DataTypes.ENUM('Option 1', 'Option 2'),
+      defaultValue: 'Option 1',
+    },
     prioridad_id: {
       type: DataTypes.INTEGER,
       allowNull: false,

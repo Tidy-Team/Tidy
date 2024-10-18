@@ -1,6 +1,12 @@
 import { Activities } from '../models/activitiesModel.js';
+import { Subtasks } from '../models/subtasksModel.js';
 import logger from '../../logger/config.js';
 import createError from '../../../helpers/createError.js';
+import { sequelize } from '../../../config/databases.js';
+import { generateSubtasks } from './subtasksService.js';
+
+const OPTION_1 = 'Option 1';
+const OPTION_2 = 'Option 2';
 
 /**
  * Busca una actividad por su ID.
@@ -52,20 +58,37 @@ export const findActivitiesBySubjectId = async subjectId => {
 };
 
 /**
- * Crea una nueva actividad.
+ * Crea una nueva actividad con subtareas.
  * @param {Object} activityData - Datos de la actividad.
+ * @param {string} option - Opción para crear subtareas.
  * @returns {Promise<Object>} - Actividad creada.
  * @throws {Error} - Si ocurre un error al crear la actividad.
  */
-export const createActivity = async activityData => {
+export const createActivityWithSubtasks = async (activityData, option) => {
+  const transaction = await sequelize.transaction();
   try {
-    logger.info('Creando una nueva actividad');
-    const newActivity = await Activities.create({ ...activityData });
+    // Validamos los datos de entrada
+    if (!activityData) {
+      throw createError('Datos de la actividad inválida', 400);
+    }
 
+    if (option && ![OPTION_1, OPTION_2].includes(option)) {
+      throw createError('Opcion no valida', 400);
+    }
+
+    const newActivity = await Activities.create(activityData, { transaction });
+    const subtasks = generateSubtasks(activityData, newActivity.id, option);
+
+    if (subtasks.length > 0) {
+      await Subtasks.bulkCreate(subtasks, { transaction });
+    }
+
+    await transaction.commit();
     return newActivity;
   } catch (error) {
-    logger.error(`Ocurrió un error al crear la actividad: ${error.message}`);
-    throw createError('Error al crear la actividad', error.statusCode || 500);
+    await transaction.rollback();
+
+    logger.error(`Error al crear la actividad con subtareas: ${error}`);
   }
 };
 
@@ -76,23 +99,39 @@ export const createActivity = async activityData => {
  * @returns {Promise<Object>} - Actividad actualizada.
  * @throws {Error} - Si ocurre un error al actualizar la actividad.
  */
-export const updateActivity = async (activityId, activityData) => {
-  try {
-    logger.info(`Actualizando actividad con id: ${activityId}`);
-    const activity = await findActivityById(activityId);
 
-    if (!activity) {
-      logger.info(`La actividad con id: ${activityId} no se encontró`);
-      throw createError('Actividad no encontrada', 404);
+export const updateActivity = async (activityId, activityData, option) => {
+  const transaction = await sequelize.transaction();
+  try {
+    // Validamos los datos de entrada
+    if (!activityData) {
+      throw createError('Datos de la actividad inválida', 400);
     }
 
-    Object.assign(activity, activityData);
-    await activity.save();
+    if (option && ![OPTION_1, OPTION_2].includes(option)) {
+      throw createError('Opción no válida', 400);
+    }
 
-    return activity;
+    const updatedActivity = await Activities.update(activityData, {
+      where: { id: activityId },
+      transaction,
+      returning: true,
+    });
+
+    const subtasks = generateSubtasks(activityData, activityId, option);
+
+    if (subtasks.length > 0) {
+      await Subtasks.destroy({ where: { actividad_id: activityId }, transaction });
+      await Subtasks.bulkCreate(subtasks, { transaction });
+    }
+
+    await transaction.commit();
+    return updatedActivity[1][0]; // Retorna la actividad actualizada
   } catch (error) {
-    logger.error(`Error al actualizar actividad con id: ${activityId}. Su error es: ${error.message}`);
-    throw createError('Error al actualizar la actividad', error.statusCode || 500);
+    await transaction.rollback();
+
+    logger.error(`Error al actualizar la actividad con subtareas: ${error}`);
+    throw error;
   }
 };
 

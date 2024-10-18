@@ -18,7 +18,7 @@ export const generateSubtasks = (activityData, activityId, option) => {
 
   switch (option) {
     case OPTION_1:
-      numSubtasks = math.ceil(activityData.num_preguntas / 2);
+      numSubtasks = Math.ceil(activityData.num_preguntas / 2);
       break;
     case OPTION_2:
       numSubtasks = activityData.num_preguntas * 2;

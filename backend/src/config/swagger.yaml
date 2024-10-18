@@ -12,7 +12,7 @@ servers:
   - url: http://tidy-app.me
     description: Ruta de dominio para enviar correos electrónicos
 
-components:
+modules:
   securitySchemes:
     bearerAuth:
       type: http
@@ -329,7 +329,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Subject'
+                  $ref: '#/modules/schemas/Subject'
         '401':
           description: No autorizado
 
@@ -361,7 +361,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Subject'
+                $ref: '#/modules/schemas/Subject'
         '400':
           description: Error en la solicitud
         '401':
@@ -402,7 +402,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Subject'
+                $ref: '#/modules/schemas/Subject'
         '400':
           description: Error en la solicitud
         '401':
@@ -449,7 +449,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Activity'
+                  $ref: '#/modules/schemas/Activity'
         '401':
           description: No autorizado
 
@@ -464,14 +464,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateActivityRequest'
+              $ref: '#/modules/schemas/CreateActivityRequest'
       responses:
         '201':
           description: Actividad creada exitosamente
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Activity'
+                $ref: '#/modules/schemas/Activity'
         '400':
           description: Error en la solicitud
         '401':
@@ -494,14 +494,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateActivityRequest'
+              $ref: '#/modules/schemas/CreateActivityRequest'
       responses:
         '200':
           description: Actividad actualizada exitosamente
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Activity'
+                $ref: '#/modules/schemas/Activity'
         '400':
           description: Error en la solicitud
         '401':
