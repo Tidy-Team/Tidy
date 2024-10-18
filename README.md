@@ -58,7 +58,7 @@ Puedes encontrar la documentación de los endpoints en el archivo [swagger.yaml]
 ## Estructura de Carpetas
 
 - `src/app.js`: Punto de entrada de la aplicación.
-- `src/components/`: Contiene los diferentes módulos de la aplicación como `activities`, `auth`, `email`, etc.
+- `src/modules/`: Contiene los diferentes módulos de la aplicación como `activities`, `auth`, `email`, etc.
 - `src/config/`: Configuraciones de la base de datos, entorno, Swagger, etc.
 - `src/helpers/`: Funciones de ayuda como `createError.js` y `generateJwt.js`.
 - `src/middlewares/`: Middlewares de la aplicación como `corsMiddleware.js`, `sessionMiddleware.js`, etc.
