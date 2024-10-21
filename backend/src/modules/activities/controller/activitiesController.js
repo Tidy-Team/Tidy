@@ -13,7 +13,7 @@ export const getActivities = async (req, res) => {
   const userId = req.user.id;
 
   try {
-    logger.info(`Buscando actividad con id: ${id} para el usuario con id: ${userId}`);
+    logger.info(`Buscando actividad de la materia con id: ${id} para el usuario con id: ${userId}`);
     const subject = await findSubjectByIdAndUserId(id, userId);
 
     logger.info(`Materia encontrada: ${JSON.stringify(subject)}`);
@@ -23,11 +23,44 @@ export const getActivities = async (req, res) => {
     logger.info(`Actividades encontradas para la materia con id: ${id}`);
   } catch (error) {
     logger.error(`Error al obtener las actividades para la materia con id: ${id}. Su error es: ${error.stack}`);
+
     res.status(error.statusCode || 500).json({
       message:
         error.statusCode === 404
           ? 'No se encontraron actividades'
           : 'Error en el servidor al obtener las actividades. Por favor, intentalo de nuevo.',
+    });
+  }
+};
+
+export const getActivitiesById = async (req, res) => {
+  const { id, idActivity } = req.params;
+  const userId = req.user.id;
+
+  logger.info(`El id de la actividad :${idActivity} de la materia con id: ${id}`);
+
+  try {
+    logger.info(`Buscando actividad con id: ${idActivity} de la materia con id: ${id} para el usuario con id: ${userId}`);
+    const subject = await findSubjectByIdAndUserId(id, userId);
+
+    const activity = await findActivityById(idActivity);
+
+    if (idActivity !== subject) {
+      return res.status(404).json({ message: 'No se encontro la actividad para la materia' });
+    }
+
+    res.status(200).json({ Materia: subject.subjectName, Actividad: activity });
+    logger.info(`Actividad encontrada con id: ${idActivity} para la materia con id: ${id}`);
+  } catch (error) {
+    logger.error(
+      `Error al obtener la actividad con id: ${idActivity} para la materia con id: ${id}. Su error es: ${error.stack}`
+    );
+
+    res.status(error.statusCode || 500).json({
+      message:
+        error.statusCode === 404
+          ? 'No se encontró la actividad'
+          : 'Error en el servidor al obtener la actividad. Por favor, intentalo de nuevo.',
     });
   }
 };

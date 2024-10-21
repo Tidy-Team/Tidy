@@ -1,5 +1,11 @@
 import { Router } from 'express';
-import { getActivities, createActivityCtrl, updateActivityCtrl, deleteActivityCtrl } from '../controller/activitiesController.js';
+import {
+  getActivities,
+  createActivityCtrl,
+  updateActivityCtrl,
+  deleteActivityCtrl,
+  getActivitiesById,
+} from '../controller/activitiesController.js';
 
 import validateJwt from '../../auth/middleware/validateJwt.js';
 import { validationsZod } from '../../../middlewares/validationsZod.js';
@@ -10,6 +16,13 @@ const activitiesRoutes = Router();
 
 // Ruta para obtener todas las actividades de una materia específica
 activitiesRoutes.get('/activities/:id', logEndpointAccess('/activities/:id'), validateJwt, getActivities);
+
+activitiesRoutes.get(
+  '/activities/:id/:idActivity',
+  logEndpointAccess('/activities/:id/idActivity'),
+  validateJwt,
+  getActivitiesById
+);
 
 // Ruta para crear una nueva actividad en una materia específica
 activitiesRoutes.post(

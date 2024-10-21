@@ -99,7 +99,6 @@ export const createActivityWithSubtasks = async (activityData, option) => {
  * @returns {Promise<Object>} - Actividad actualizada.
  * @throws {Error} - Si ocurre un error al actualizar la actividad.
  */
-
 export const updateActivity = async (activityId, activityData, option) => {
   const transaction = await sequelize.transaction();
   try {
