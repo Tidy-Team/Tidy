@@ -20,7 +20,7 @@ export const findActivityById = async activityId => {
     const activity = await Activities.findOne({ where: { id: activityId } });
 
     if (!activity) {
-      logger.info(`La actividad con id: ${activityId} no se encontró`);
+      logger.info(`La actividad con id: ${activityId} no se encontro`);
       throw createError('Actividad no encontrada', 404);
     }
 

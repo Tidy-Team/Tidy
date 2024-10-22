@@ -1,4 +1,6 @@
+import { where } from 'sequelize';
 import createError from '../../../helpers/createError.js';
+import { Subtasks } from '../models/subtasksModel.js';
 
 const OPTION_1 = 'Option 1';
 const OPTION_2 = 'Option 2';
@@ -32,4 +34,22 @@ export const generateSubtasks = (activityData, activityId, option) => {
   }
 
   return subtasks;
+};
+
+export const findSubtasksById = async subtasksId => {
+  try {
+    logger.info(`Buscando subtarea con id: ${subtasksId}`);
+    const subtask = await Subtasks.findOne({ where: { id: subtasksId } });
+
+    if (!subtask) {
+      logger.info(`La subtarea con id: ${subtasksId} no se encontro`);
+      throw createError('Subtarea no encontrada', 404);
+    }
+
+    return subtask;
+  } catch (error) {
+    logger.error(`Error al buscar la subtarea con id: ${subtasksId}`);
+
+    throw createError('Error en el servidor al buscar la subtarea', error.statusCode || 500);
+  }
 };

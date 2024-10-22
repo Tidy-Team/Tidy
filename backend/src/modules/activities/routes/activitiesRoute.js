@@ -14,15 +14,15 @@ import logEndpointAccess from '../../logger/middleware/loggerMiddleware.js';
 
 const activitiesRoutes = Router();
 
-// Ruta para obtener todas las actividades de una materia específica
-activitiesRoutes.get('/activities/:id', logEndpointAccess('/activities/:id'), validateJwt, getActivities);
-
 activitiesRoutes.get(
   '/activities/:id/:idActivity',
-  logEndpointAccess('/activities/:id/idActivity'),
+  logEndpointAccess('/activities/:id/:idActivity'),
   validateJwt,
   getActivitiesById
 );
+
+// Ruta para obtener todas las actividades de una materia específica
+activitiesRoutes.get('/activities/:id', logEndpointAccess('/activities/:id'), validateJwt, getActivities);
 
 // Ruta para crear una nueva actividad en una materia específica
 activitiesRoutes.post(

@@ -37,19 +37,24 @@ export const getActivitiesById = async (req, res) => {
   const { id, idActivity } = req.params;
   const userId = req.user.id;
 
-  logger.info(`El id de la actividad :${idActivity} de la materia con id: ${id}`);
+  logger.info(`El id de la actividad: ${idActivity} de la materia con id: ${id}`);
 
   try {
     logger.info(`Buscando actividad con id: ${idActivity} de la materia con id: ${id} para el usuario con id: ${userId}`);
     const subject = await findSubjectByIdAndUserId(id, userId);
 
-    const activity = await findActivityById(idActivity);
-
-    if (idActivity !== subject) {
-      return res.status(404).json({ message: 'No se encontro la actividad para la materia' });
+    if (!subject) {
+      return res.status(404).json({ message: 'No se encontró la materia para la actividad' });
     }
 
-    res.status(200).json({ Materia: subject.subjectName, Actividad: activity });
+    const activity = await findActivityById(idActivity);
+
+    if (!activity || activity.subject_id !== subject.id) {
+      return res.status(404).json({ message: 'No se encontró la actividad para la materia' });
+    }
+
+    res.status(200).json({ Materia: subject.id, Actividad: activity });
+
     logger.info(`Actividad encontrada con id: ${idActivity} para la materia con id: ${id}`);
   } catch (error) {
     logger.error(
