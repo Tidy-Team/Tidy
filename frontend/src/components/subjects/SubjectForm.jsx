@@ -1,6 +1,7 @@
 //React
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { useFetch } from '../../hooks/useFetch'
 
 //Components and utilities
 
@@ -9,42 +10,49 @@ import { useForm } from 'react-hook-form'
 import { IoText } from 'react-icons/io5'
 
 export function SubjectForm({ addSubject }) {
-  const params = useParams()
+  const [formData, setFormData] = useState(null)
 
   const {
     register,
-    setValue,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm()
+  } = useForm({
+    defaultValues: {
+      subjectName: '',
+      description: '',
+      name_teacher: '',
+    },
+  })
 
-  const onSubmit = async (data) => {
+  const { data, error, isLoading, fetchData } = useFetch(
+    `http://localhost:3000/subjects`,
+    'POST',
+    formData,
+    { 'Content-Type': 'application/json' },
+    { credentials: 'include' }
+  )
+
+  useEffect(() => {
+    if (formData) {
+      fetchData(formData)
+    }
+  }, [formData]) // Correctly associate the dependency array with the useEffect
+
+  useEffect(() => {
+    if (data) {
+      addSubject(data.subject)
+      reset() // Reset the form after successful submission
+    }
+  }, [data]) // Correctly associate the dependency array with the useEffect
+
+  const onSubmit = (formData) => {
     try {
-      let newSubject
-      if (params.id) {
-        newSubject = await updateSubject(params.id, data)
-      } else {
-        newSubject = await createSubject(data)
-      }
-      addSubject(newSubject)
-      reset()
+      setFormData(formData)
     } catch (error) {
       console.log(error)
     }
   }
-  useEffect(() => {
-    const loadSubject = async () => {
-      if (params.id) {
-        const subject = await getSubject(params.id)
-        console.log(subject)
-        setValue('subjectName', subject.subjectName)
-        setValue('description', subject.description)
-        setValue('name_teacher', subject.name_teacher)
-      }
-    }
-    loadSubject()
-  }, [])
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
@@ -55,10 +63,9 @@ export function SubjectForm({ addSubject }) {
         <IoText />
         <input
           type="text"
-          name="subjectName"
           className="grow"
           placeholder="Nombre de Materia"
-          {...register('subjectName')}
+          {...register('subjectName', { required: 'Required' })}
         />
       </label>
 
@@ -70,7 +77,7 @@ export function SubjectForm({ addSubject }) {
           name="description"
           className="grow"
           placeholder="Descripcion"
-          {...register('description')}
+          {...register('description', { required: 'Required' })}
         />
       </label>
 
@@ -88,7 +95,7 @@ export function SubjectForm({ addSubject }) {
           name="name_teacher"
           className="grow"
           placeholder="Nombre de Profesor"
-          {...register('name_teacher')}
+          {...register('name_teacher', { required: 'Required' })}
         />
       </label>
       <button

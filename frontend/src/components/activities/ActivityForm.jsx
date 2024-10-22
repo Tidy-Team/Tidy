@@ -1,12 +1,12 @@
 //React
 import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
 
 //Components and utilities
 import { useFetch } from '../../hooks/useFetch'
 
 //Icons
-import { useForm } from 'react-hook-form'
 import { GoNumber } from 'react-icons/go'
 import { IoText } from 'react-icons/io5'
 
@@ -15,7 +15,6 @@ export function ActivityForm({ addActivity }) {
 
   const {
     register,
-
     handleSubmit,
     formState: { errors },
   } = useForm({
@@ -27,13 +26,15 @@ export function ActivityForm({ addActivity }) {
     },
   })
 
+  const onSubmit = async (data) => {
+    try {
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
-    <form
-      className="flex flex-col gap-3"
-      onSubmit={handleSubmit((e) => {
-        console.log(e)
-      })}
-    >
+    <form className="flex flex-col gap-3" onSubmit={handleSubmit(onSubmit)}>
       <h1 className="text-center font-semibold text-2xl mb-3">Agregar Tarea</h1>
       <label className="input input-bordered flex items-center gap-2 ">
         <IoText />
