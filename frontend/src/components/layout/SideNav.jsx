@@ -26,6 +26,10 @@ export function SideNav({ children }) {
     document.documentElement.setAttribute('data-theme', theme)
     saveTheme(theme)
   }
+  const handleLogOut = () => {
+    logOut()
+    navigate('/')
+  }
 
   return (
     <>
@@ -117,7 +121,7 @@ export function SideNav({ children }) {
                         <a>Perfil</a>
                       </li>
                       <li>
-                        <Link to="/" onClick={() => logOut()}>
+                        <Link to="/" onClick={handleLogOut}>
                           Cerrar Sesión
                         </Link>
                       </li>
