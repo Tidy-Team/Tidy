@@ -1,5 +1,5 @@
 //React
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 
@@ -11,23 +11,53 @@ import { GoNumber } from 'react-icons/go'
 import { IoText } from 'react-icons/io5'
 
 export function ActivityForm({ addActivity }) {
+  const [formData, setFormData] = useState(null)
   const { id } = useParams()
 
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     defaultValues: {
       titulo: '',
       description: '',
       num_preguntas: 0,
-      prioridad: '',
+      prioridad_id: '',
     },
   })
 
-  const onSubmit = async (data) => {
+  const { data, error, isLoading, fetchData } = useFetch(
+    `http://localhost:3000/activities/${id}`,
+    'POST',
+    formData,
+    { 'Content-Type': 'application/json' },
+    { credentials: 'include' }
+  )
+
+  useEffect(() => {
+    if (formData) {
+      fetchData(formData)
+    }
+  }, [formData]) // Correctly associate the dependency array with the useEffect
+
+  useEffect(() => {
+    if (data) {
+      addActivity(data.activity)
+      reset() // Reset the form after successful submission
+    }
+  }, [data]) // Correctly associate the dependency array with the useEffect
+
+  const onSubmit = (formData) => {
     try {
+      const transformedData = {
+        ...formData,
+        num_preguntas: Number(formData.num_preguntas),
+        prioridad_id: String(formData.prioridad_id),
+      }
+
+      setFormData(transformedData)
     } catch (error) {
       console.log(error)
     }
@@ -71,7 +101,7 @@ export function ActivityForm({ addActivity }) {
 
       <select
         className="select select-bordered w-full"
-        {...register('prioridad', { required: 'Prioridad no válida' })}
+        {...register('prioridad_id', { required: 'Prioridad no válida' })}
         defaultValue=""
       >
         <option value="" disabled>
@@ -81,9 +111,15 @@ export function ActivityForm({ addActivity }) {
         <option value="2">Media</option>
         <option value="3">Alta</option>
       </select>
-      {errors.prioridad && <span>{errors.prioridad.message}</span>}
+      {errors.prioridad_id && <span>{errors.prioridad_id.message}</span>}
 
-      <button className="btn btn-primary" type="submit"></button>
+      <button
+        className="btn btn-primary"
+        type="submit"
+        onClick={() => {
+          document.getElementById('modal').close()
+        }}
+      ></button>
     </form>
   )
 }
