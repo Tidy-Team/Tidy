@@ -26,6 +26,16 @@ export const signInUser = async (req, res) => {
   try {
     const result = await signIn(req.body)
     const token = result.token
+    const user = result.user
+
+    // Sanitize the user object to exclude sensitive information
+    const sanitizedUser = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      rol: user.rol,
+      emailVerified: user.emailVerified,
+    }
 
     // Almacenar el token en la sesión del servidor
     req.session.token = token
@@ -37,7 +47,10 @@ export const signInUser = async (req, res) => {
       maxAge: 3600000, // Expiración en milisegundos (1 hora)
     })
 
-    return res.json({ message: 'Inicio de sesión exitoso' })
+    return res.json({
+      message: 'Inicio de sesión exitoso',
+      user: sanitizedUser,
+    })
   } catch (error) {
     logger.error(`Error en el controlador al iniciar sesion: ${error.stack}`, {
       email: req.body.email,

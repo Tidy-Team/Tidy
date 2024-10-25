@@ -97,7 +97,7 @@ export const signIn = async ({ email, password }) => {
 
   const token = await generateJwt(user.id)
 
-  return { token }
+  return { token, user }
 }
 
 /**
