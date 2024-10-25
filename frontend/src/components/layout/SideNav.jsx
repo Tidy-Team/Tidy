@@ -126,39 +126,48 @@ export function SideNav({ children }) {
                     '#898b75',
                   ]}
                   variant="beam"
-                  className="w-32"
+                  className="w-28 rounded-full "
                 />
                 <h2 className="font-bold text-lg">{user.name}</h2>
                 <span className="text-sm text-accent">{user.email}</span>
               </>
             )}
-            <ul className="menu menu-lg gap-1 w-full ">
+            <ul className="menu menu-lg gap-1 w-full">
               <li>
-                <Link to="/subjects">
+                <Link
+                  to="/subjects"
+                  className={location.pathname === '/subjects' ? 'active' : ''}
+                >
                   <BiSolidBook />
                   Materias
                 </Link>
               </li>
               <li>
-                <a>
+                <Link
+                  to="/stats"
+                  className={location.pathname === '/stats' ? 'active' : ''}
+                >
                   <BsLightningChargeFill />
                   Estadisticas
-                </a>
+                </Link>
               </li>
               <li>
-                <a>
+                <Link
+                  to="/calendar"
+                  className={location.pathname === '/calendar' ? 'active' : ''}
+                >
                   <FaCalendarAlt />
                   Calendario
-                </a>
+                </Link>
               </li>
 
               <li>
-                <details open>
+                <details close>
                   <summary>
                     <IoMdSettings />
                     Ajustes
                   </summary>
-                  <ul>
+                  <ul className="mt-1">
                     <li>
                       <a>
                         <FaUser />

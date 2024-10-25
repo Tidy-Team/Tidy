@@ -12,6 +12,8 @@ import {
   SignUpPage,
   HomePage,
   SubjectPage,
+  CalendarPage,
+  StatsPage,
 } from './pages'
 import { Navbar, SideNav } from './components'
 
@@ -42,7 +44,8 @@ function Layout() {
               <Route element={<ProtectedRoute />}>
                 <Route path="/subjects" element={<HomePage />} />
                 <Route path="/subjects/:id" element={<SubjectPage />} />
-                <Route path="/add-subject" />
+                <Route path="/stats" element={<StatsPage />} />
+                <Route path="/calendar" element={<CalendarPage />} />
               </Route>
             </Routes>
           </main>

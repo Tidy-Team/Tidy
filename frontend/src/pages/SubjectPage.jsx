@@ -8,9 +8,11 @@ import { Modal, ActivityForm, ActivitiesList } from '../components'
 
 //Icons
 import { HiDotsVertical } from 'react-icons/hi'
+import { FaChalkboardTeacher } from 'react-icons/fa'
 
 export function SubjectPage() {
   const { id } = useParams()
+  const randomImageUrl = `https://picsum.photos/seed/${id}/620/366`
 
   const {
     fetchData: fetchSubjectData,
@@ -68,24 +70,40 @@ export function SubjectPage() {
     return <div>Error: {subjectError.message}</div>
   }
 
-  if (activitiesError) {
-    return <div>Error: {activitiesError.message}</div>
-  }
-
   return (
     <div className="grid grid-cols-3  gap-4 md:h-[calc(100vh-90px)] max-h-full ">
-      <div className="col-span-3 min-h-fit">
-        <div className="flex flex-col-reverse p-5 h-48 w-full bg-gradient-to-r from-purple-500 to-blue-500 rounded-lg">
-          <h1 className="text-4xl font-semibold text-start text ">
-            {localSubject?.subjectName}
-          </h1>
+      <div className="col-span-3  ">
+        <div className="card image-full ">
+          <figure className="bg-cover bg-center h-48 ">
+            <img
+              src={randomImageUrl}
+              alt={localSubject?.subjectName}
+              className="w-full"
+            />
+          </figure>
+          <div className="card-body">
+            <h1 className="card-title text-3xl">{localSubject?.subjectName}</h1>
+            <p>{localSubject?.description}</p>
+            <div className="flex gap-3">
+              <FaChalkboardTeacher className=" text-2xl self-center" />
+              <h3 className="font-semibold text-base ">
+                {localSubject?.name_teacher}
+              </h3>
+            </div>
+          </div>
         </div>
       </div>
-      <div className="row-start-2 col-span-3 md:col-span-1  bg-base-300 text-center content-center rounded-md p-5 md:h-40">
-        <p className="text-xl font-semibold">
-          Profesores: {localSubject?.name_teacher}
-        </p>
-        <p className="text-xl font-semibold"> {localSubject?.description}</p>
+      <div className="collapse row-start-2 col-span-3 md:col-span-1  bg-base-300 text-center   rounded-md  max-h-40 ">
+        <input type="checkbox" />
+        <h1 className="collapse-title text-2xl font-semibold bg-base-300 rounded-md ">
+          Notas
+        </h1>
+        <div class="collapse-content">
+          <div className="divider m-0"></div>
+          <div>
+            <button className="btn btn-primary btn-wide">Agregar nota</button>
+          </div>
+        </div>
       </div>
       <div className="col-span-3 md:col-span-2 row-span-2 row-start-3 md:row-start-2 text-center  min-h-fit ">
         <div>
@@ -93,7 +111,7 @@ export function SubjectPage() {
             Tareas
           </h1>
         </div>
-        <div className="h-fit flex flex-col gap-2 md:mb-5 ">
+        <div className="h-fit flex flex-col gap-2 md:mb-5 max-h-screen ">
           {/* Activities */}
           {localActivities.length === 0 ? (
             <h1 className="p-5">No hay tareas</h1>
