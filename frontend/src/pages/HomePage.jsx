@@ -36,7 +36,11 @@ export function HomePage() {
   }
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return (
+      <div className=" flex justify-center h-screen w-full">
+        <span className="loading loading-spinner self-center loading-lg"></span>
+      </div>
+    )
   }
 
   return (
@@ -48,7 +52,7 @@ export function HomePage() {
           </div>
         )}
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5 m-5 max-h-svh ">
+        <div className="flex flex-wrap gap-5 m-5 max-h-svh">
           {localSubjects.map((subject) => {
             if (!subject.id) {
               console.warn('Skipping subject with undefined id:', subject)
