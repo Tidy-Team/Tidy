@@ -1,5 +1,5 @@
 import express from 'express';
-import expressPinoLogger from 'express-pino-logger';
+import expressPinoLogger from 'pino-http';
 import logger from './modules/logger/config.js';
 
 import authRouter from './modules/auth/routes/authRoutes.js';
