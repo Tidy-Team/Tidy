@@ -98,7 +98,7 @@ export function SubjectPage() {
       </div>
       <div className="flex-grow flex flex-col md:flex-row gap-2">
         <div className="bg-blue-600 md:w-1/3 rounded-lg h-fit">
-          <div className="collapse border-2 border-base-300 md:collapse-open row-start-2 col-span-3 md:col-span-1 bg-base-200 text-center rounded-md">
+          <div className="collapse  md:collapse-open row-start-2 col-span-3 md:col-span-1 bg-base-200 text-center rounded-md">
             <input type="checkbox" />
             <h1 className="collapse-title  text-xl font-semibold bg-base-200 rounded-md px-0">
               Notas
@@ -111,10 +111,10 @@ export function SubjectPage() {
           </div>
         </div>
         <div className="flex flex-col gap-2 max-h-[410px] md:w-2/3 rounded-lg  ">
-          <div className="text-center text-xl bg-base-200 rounded-lg p-4 font-semibold border-2 border-base-300">
+          <div className="text-center text-xl bg-base-200 rounded-lg p-4 font-semibold ">
             Tareas
           </div>
-          <div className="flex flex-col md:overflow-y-auto gap-2  p-1 rounded-lg border-2 border-base-300">
+          <div className="flex flex-col md:overflow-y-auto gap-2  p-1 rounded-lg ">
             {localActivities.length === 0 ? (
               <h1 className="p-5 text-center">No hay tareas</h1>
             ) : (

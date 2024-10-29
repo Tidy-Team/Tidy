@@ -119,7 +119,9 @@ export function ActivityForm({ addActivity }) {
         onClick={() => {
           document.getElementById('modal').close()
         }}
-      ></button>
+      >
+        Confirmar
+      </button>
     </form>
   )
 }

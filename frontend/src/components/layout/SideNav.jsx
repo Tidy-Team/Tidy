@@ -32,7 +32,29 @@ export function SideNav({ children }) {
     if (themeRadio) {
       themeRadio.checked = true
     }
+    // Trigger the transition on initial load
+    const mainContent = document.getElementById('main-content')
+    const sidebar = document.getElementById('sidebar')
+    if (mainContent && sidebar) {
+      console.log('Applying transition on initial load')
+      mainContent.classList.remove('opacity-0', 'translate-y-5')
+      sidebar.classList.remove('opacity-0', 'translate-y-5')
+    }
   }, [])
+
+  useEffect(() => {
+    // Trigger the transition on location change
+    const mainContent = document.getElementById('main-content')
+    const sidebar = document.getElementById('sidebar')
+    if (mainContent) {
+      console.log('Applying transition on location change')
+      mainContent.classList.add('opacity-0', 'translate-y-5')
+
+      setTimeout(() => {
+        mainContent.classList.remove('opacity-0', 'translate-y-5')
+      }, 0)
+    }
+  }, [location.pathname])
 
   const handleThemeChange = (event) => {
     const theme = event.target.value
@@ -44,6 +66,13 @@ export function SideNav({ children }) {
     logOut()
     navigate('/')
   }
+
+  const buttonText =
+    location.pathname === '/subjects' ? 'Añadir Materia' : 'Añadir Tarea'
+
+  const showButton = ['/subjects', '/subject/:id'].some((path) =>
+    location.pathname.startsWith(path)
+  )
 
   return (
     <>
@@ -75,20 +104,25 @@ export function SideNav({ children }) {
               </div>
               <div className="flex-0">
                 <div className="flex ">
-                  <button
-                    className="btn btn-primary h-10 min-h-10"
-                    onClick={() => document.getElementById('modal').showModal()}
-                  >
-                    {location.pathname === '/subjects'
-                      ? 'Añadir materia'
-                      : 'Añadir tarea'}
-                  </button>
+                  {showButton && (
+                    <button
+                      className="btn btn-primary h-10 min-h-10 w-36 "
+                      onClick={() =>
+                        document.getElementById('modal').showModal()
+                      }
+                    >
+                      {buttonText}
+                    </button>
+                  )}
                 </div>
               </div>
             </nav>
           </div>
           <div className='class="max-w-[100vw] px-6 pb-5 xl:pr-2"'>
-            <div className="flex flex-col-reverse justify-between gap-6 xl:flex-row">
+            <div
+              className="flex flex-col-reverse justify-between gap-6 xl:flex-row transition-opacity duration-500 ease-out opacity-0 transform translate-y-5"
+              id="main-content"
+            >
               {/* Main Content */}
               <div className="flex-grow ">{children}</div>
             </div>
@@ -106,7 +140,10 @@ export function SideNav({ children }) {
             aria-label="Close menu"
             className="drawer-overlay"
           ></label>
-          <aside className="bg-base-300 h-screen w-72 overflow-y-auto sticky top-0 items-center z-20 py-6 px-4 space-y-3 bg-opacity-90 backdrop-blur flex flex-col">
+          <aside
+            className="bg-base-300 h-screen w-72 overflow-y-auto sticky top-0 items-center z-20 py-6 px-4 space-y-3 bg-opacity-90 backdrop-blur flex flex-col transition-opacity duration-500 ease-out opacity-0 transform translate-y-5"
+            id="sidebar"
+          >
             <div className="bg-base-300 hidden lg:flex ">
               <Link to="/subjects">
                 <button className="btn btn-ghost text-3xl font-bold text-purple-500">
