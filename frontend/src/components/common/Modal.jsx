@@ -1,8 +1,7 @@
 //Icons
-import { FaPlus } from 'react-icons/fa'
 import { IoClose } from 'react-icons/io5'
 
-export function Modal({ children, tooltip }) {
+export function Modal({ children }) {
   return (
     <>
       <dialog id="modal" className="modal modal-bottom sm:modal-middle">
