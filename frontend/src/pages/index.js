@@ -6,6 +6,7 @@ import { SubjectPage } from './SubjectPage'
 import { StatsPage } from './StatsPage'
 import { CalendarPage } from './CalendarPage'
 import { ActivityTimer } from './ActivityTimer'
+import { ProfilePage } from './ProfilePage'
 
 export {
   LandingPage,
@@ -16,4 +17,5 @@ export {
   CalendarPage,
   StatsPage,
   ActivityTimer,
+  ProfilePage,
 }

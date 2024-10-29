@@ -45,7 +45,6 @@ export function SideNav({ children }) {
   useEffect(() => {
     // Trigger the transition on location change
     const mainContent = document.getElementById('main-content')
-    const sidebar = document.getElementById('sidebar')
     if (mainContent) {
       console.log('Applying transition on location change')
       mainContent.classList.add('opacity-0', 'translate-y-5')
@@ -73,6 +72,10 @@ export function SideNav({ children }) {
   const showButton = ['/subjects', '/subject/:id'].some((path) =>
     location.pathname.startsWith(path)
   )
+
+  const closeDrawer = () => {
+    document.getElementById('drawer').checked = false
+  }
 
   return (
     <>
@@ -145,7 +148,7 @@ export function SideNav({ children }) {
             id="sidebar"
           >
             <div className="bg-base-300 hidden lg:flex ">
-              <Link to="/subjects">
+              <Link to="/subjects" onClick={closeDrawer}>
                 <button className="btn btn-ghost text-3xl font-bold text-purple-500">
                   Tidy
                 </button>
@@ -173,6 +176,7 @@ export function SideNav({ children }) {
               <li>
                 <Link
                   to="/subjects"
+                  onClick={closeDrawer}
                   className={location.pathname === '/subjects' ? 'active' : ''}
                 >
                   <BiSolidBook />
@@ -182,6 +186,7 @@ export function SideNav({ children }) {
               <li>
                 <Link
                   to="/stats"
+                  onClick={closeDrawer}
                   className={location.pathname === '/stats' ? 'active' : ''}
                 >
                   <BsLightningChargeFill />
@@ -191,6 +196,7 @@ export function SideNav({ children }) {
               <li>
                 <Link
                   to="/calendar"
+                  onClick={closeDrawer}
                   className={location.pathname === '/calendar' ? 'active' : ''}
                 >
                   <FaCalendarAlt />
@@ -206,10 +212,16 @@ export function SideNav({ children }) {
                   </summary>
                   <ul className="mt-1">
                     <li>
-                      <a>
+                      <Link
+                        to="/profile"
+                        onClick={closeDrawer}
+                        className={
+                          location.pathname === '/profile' ? 'active' : ''
+                        }
+                      >
                         <FaUser />
                         Cuenta
-                      </a>
+                      </Link>
                     </li>
                     <li className="dropdown dropdown-top w-full">
                       <a tabIndex={0} role="button">

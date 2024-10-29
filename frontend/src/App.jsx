@@ -15,6 +15,7 @@ import {
   CalendarPage,
   StatsPage,
   ActivityTimer,
+  ProfilePage,
 } from './pages'
 import { Navbar, SideNav } from './components'
 
@@ -47,6 +48,7 @@ function Layout() {
                 <Route path="/subjects/:id" element={<SubjectPage />} />
                 <Route path="/stats" element={<StatsPage />} />
                 <Route path="/calendar" element={<CalendarPage />} />
+                <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/activity/:id" element={<ActivityTimer />} />
               </Route>
             </Routes>
