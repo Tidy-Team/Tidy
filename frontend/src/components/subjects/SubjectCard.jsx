@@ -1,9 +1,11 @@
 //React
+
 import { useNavigate } from 'react-router-dom'
 
 //Icons
 import { FaChalkboardTeacher } from 'react-icons/fa'
 import { HiDotsVertical } from 'react-icons/hi'
+import { MdDelete, MdModeEdit } from 'react-icons/md'
 
 export function SubjectCard({ id, title, description, teacher }) {
   const navigate = useNavigate()
@@ -21,7 +23,7 @@ export function SubjectCard({ id, title, description, teacher }) {
         <div>
           <h2 className="card-title justify-between">
             {title}
-            <div className="dropdown dropdown-right">
+            <div className="dropdown dropdown-left">
               <div
                 tabIndex="0"
                 role="button"
@@ -32,14 +34,20 @@ export function SubjectCard({ id, title, description, teacher }) {
               </div>
               <ul
                 tabIndex="0"
-                className="dropdown-content !absolute !z-[70] menu p-2 shadow bg-base-200 rounded-box"
+                className="dropdown-content !absolute z-50 menu p-2 shadow bg-base-200 rounded-box"
                 onClick={(e) => e.stopPropagation()}
               >
                 <li>
-                  <a>Edit</a>
+                  <a>
+                    <MdModeEdit className="text-xl" />
+                    Edit
+                  </a>
                 </li>
                 <li>
-                  <a>Delete</a>
+                  <a>
+                    <MdDelete className="text-xl" />
+                    Delete
+                  </a>
                 </li>
               </ul>
             </div>
