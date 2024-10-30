@@ -5,6 +5,7 @@ import logger from './modules/logger/config.js';
 import authRouter from './modules/auth/routes/authRoutes.js';
 import activitiesRoutes from './modules/activities/routes/activitiesRoute.js';
 import subjectRoute from './modules/subjects/routes/subjectRoute.js';
+import subtaskRoute from './modules/activities/routes/subtasksRoute.js';
 
 import { initMiddleware } from './middlewares/index.js';
 import { PORT } from './config/env.js';
@@ -25,6 +26,8 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/', authRouter);
 app.use('/', activitiesRoutes);
 app.use('/', subjectRoute);
+app.use('/', subtaskRoute);
+
 //Server
 app.listen(PORT, () => {
   showLogo();

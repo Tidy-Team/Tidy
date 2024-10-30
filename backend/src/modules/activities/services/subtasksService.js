@@ -1,6 +1,7 @@
-import { where } from 'sequelize';
-import createError from '../../../helpers/createError.js';
 import { Subtasks } from '../models/subtasksModel.js';
+
+import createError from '../../../helpers/createError.js';
+import logger from '../../logger/config.js';
 
 const OPTION_1 = 'Option 1';
 const OPTION_2 = 'Option 2';

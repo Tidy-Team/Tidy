@@ -6,14 +6,15 @@ import {
   deleteActivityCtrl,
   getActivitiesById,
 } from '../controller/activitiesController.js';
+import { activitiesSchema } from '../schemas/activitiesSchema.js';
+import { validationsZod } from '../../../middlewares/validationsZod.js';
 
 import validateJwt from '../../auth/middleware/validateJwt.js';
-import { validationsZod } from '../../../middlewares/validationsZod.js';
-import { activitiesSchema } from '../schemas/activitiesSchema.js';
 import logEndpointAccess from '../../logger/middleware/loggerMiddleware.js';
 
 const activitiesRoutes = Router();
 
+// Ruta para obtener una actividad por id
 activitiesRoutes.get(
   '/activities/:id/:idActivity',
   logEndpointAccess('/activities/:id/:idActivity'),

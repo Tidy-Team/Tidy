@@ -1,9 +1,10 @@
 import { Activities } from '../models/activitiesModel.js';
 import { Subtasks } from '../models/subtasksModel.js';
-import logger from '../../logger/config.js';
-import createError from '../../../helpers/createError.js';
 import { sequelize } from '../../../config/databases.js';
 import { generateSubtasks } from './subtasksService.js';
+
+import createError from '../../../helpers/createError.js';
+import logger from '../../logger/config.js';
 
 const OPTION_1 = 'Option 1';
 const OPTION_2 = 'Option 2';
@@ -20,7 +21,7 @@ export const findActivityById = async activityId => {
     const activity = await Activities.findOne({ where: { id: activityId } });
 
     if (!activity) {
-      logger.info(`La actividad con id: ${activityId} no se encontro`);
+      logger.info(`La actividad con id: ${activityId} no se encontro `);
       throw createError('Actividad no encontrada', 404);
     }
 
