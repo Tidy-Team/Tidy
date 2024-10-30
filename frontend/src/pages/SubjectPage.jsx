@@ -74,7 +74,7 @@ export function SubjectPage() {
   }
 
   return (
-    <div className="max-h-[calc(100vh-94px)] flex flex-col gap-2">
+    <div className="max-h-[calc(100vh-94px)] flex flex-col gap-3">
       <div className="min-h-48 rounded-2xl">
         <div className="card card-compact image-full">
           <figure className="bg-cover bg-center  max-h-48">
@@ -96,32 +96,32 @@ export function SubjectPage() {
           </div>
         </div>
       </div>
-      <div className="flex-grow flex flex-col md:flex-row gap-2">
+      <div className="flex-grow flex flex-col md:flex-row gap-3">
         <div className="bg-blue-600 md:w-1/3 rounded-lg h-fit">
-          <div className="collapse  md:collapse-open row-start-2 col-span-3 md:col-span-1 bg-base-200 text-center rounded-md">
+          <div className="collapse  md:collapse-open row-start-2 col-span-3 md:col-span-1 bg-base-300 text-center rounded-md">
             <input type="checkbox" />
-            <h1 className="collapse-title  text-xl font-semibold bg-base-200 rounded-md px-0">
+            <h1 className="collapse-title text-xl font-semibold rounded-md px-0">
               Notas
             </h1>
             <div className="collapse-content">
               <div>
-                <button className="btn btn-primary ">Agregar nota</button>
+                <button className="btn btn-primary">Agregar nota</button>
               </div>
             </div>
           </div>
         </div>
-        <div className="flex flex-col gap-2 max-h-[410px] md:w-2/3 rounded-lg  ">
-          <div className="text-center text-xl bg-base-200 rounded-lg p-4 font-semibold ">
+        <div className="flex flex-col md:max-h-[410px] md:w-2/3 rounded-lg bg-base-300 ">
+          <div className="text-center text-xl bg-base-300 rounded-lg p-4 font-semibold ">
             Tareas
           </div>
-          <div className="flex flex-col md:overflow-y-auto gap-2  p-1 rounded-lg ">
+          <div className="flex flex-col md:overflow-y-auto gap-2 p-2 rounded-lg md:min-h-28 min-h-fit">
             {localActivities.length === 0 ? (
               <h1 className="p-5 text-center">No hay tareas</h1>
             ) : (
               localActivities.map((activity) => (
                 <div
                   key={activity.id}
-                  className="p-3  bg-base-200  rounded-lg text-start flex justify-between items-center"
+                  className="p-3 bg-base-200 rounded-lg text-start flex justify-between items-center"
                 >
                   {activity.titulo}
                   <div className="flex items-center gap-3">
@@ -163,75 +163,5 @@ export function SubjectPage() {
       </div>
       <Modal children={<ActivityForm addActivity={addActivity} />} />
     </div>
-
-    // <div className="grid grid-cols-3 gap-4 md:h-[calc(100vh-90px)] max-h-full">
-    //   <div className="col-span-3">
-    //
-    //   </div>
-    //   <div className="collapse row-start-2 col-span-3 md:col-span-1 bg-base-300 text-center rounded-md  max-h-40">
-    //     <input type="checkbox" />
-    //     <h1 className="collapse-title text-2xl font-semibold bg-base-300 rounded-md">
-    //       Notas
-    //     </h1>
-    //     <div class="collapse-content">
-    //       <div className="divider m-0"></div>
-    //       <div>
-    //         <button className="btn btn-primary btn-wide">Agregar nota</button>
-    //       </div>
-    //     </div>
-    //   </div>
-    //   <div className="col-span-3 md:col-span-2 row-span-2 row-start-3 md:row-start-2 text-center  min-h-fit">
-    //     <div>
-    //       <h1 className="text-2xl font-semibold bg-base-300 rounded-md p-3 mb-2">
-    //         Tareas
-    //       </h1>
-    //     </div>
-    //     <div className="h-fit flex flex-col gap-2 md:mb-5 max-h-screen">
-    //       {/* Activities */}
-    //       {localActivities.length === 0 ? (
-    //         <h1 className="p-5">No hay tareas</h1>
-    //       ) : (
-    //         localActivities.map((activity) => (
-    //           <div
-    //             key={activity.id}
-    //             className="p-3 bg-base-300 rounded-lg text-start flex justify-between items-center"
-    //           >
-    //             {activity.titulo}
-    //             <div className="flex items-center gap-3">
-    //               <button
-    //                 className="btn btn-sm btn-primary btn-circle"
-    //                 onClick={() => {
-    //                   console.log(activity.id)
-    //                 }}
-    //               ></button>
-    //               <div className="dropdown dropdown-left">
-    //                 <div
-    //                   tabIndex="0"
-    //                   role="button"
-    //                   className="btn btn-circle btn-sm mb-1"
-    //                 >
-    //                   <HiDotsVertical />
-    //                 </div>
-
-    //                 <ul
-    //                   tabIndex="0"
-    //                   className="dropdown-content z-[1] menu p-2 shadow bg-base-200 rounded-box"
-    //                 >
-    //                   <li>
-    //                     <a>Edit</a>
-    //                   </li>
-    //                   <li>
-    //                     <a>Delete</a>
-    //                   </li>
-    //                 </ul>
-    //               </div>
-    //             </div>
-    //           </div>
-    //         ))
-    //       )}
-    //     </div>
-    //   </div>
-    //   <Modal children={<ActivityForm addActivity={addActivity} />} />
-    // </div>
   )
 }

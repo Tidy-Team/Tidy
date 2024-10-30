@@ -27,14 +27,14 @@ export function SubjectCard({ id, title, description, teacher }) {
               <div
                 tabIndex="0"
                 role="button"
-                className="btn text-xl btn-circle   btn-ghost "
+                className="btn text-xl btn-circle btn-ghost "
                 onClick={(e) => e.stopPropagation()}
               >
                 <HiDotsVertical />
               </div>
               <ul
                 tabIndex="0"
-                className="dropdown-content !absolute z-50 menu p-2 shadow bg-base-200 rounded-box"
+                className="dropdown-content !absolute z-50 menu p-2 shadow bg-base-200 rounded-box text-base-content"
                 onClick={(e) => e.stopPropagation()}
               >
                 <li>
@@ -55,7 +55,7 @@ export function SubjectCard({ id, title, description, teacher }) {
         </div>
         <p>{description}</p>
         <div className="flex gap-3">
-          <FaChalkboardTeacher className=" text-2xl self-center" />
+          <FaChalkboardTeacher className="text-2xl self-center" />
           <h3 className="font-semibold text-base ">{teacher}</h3>
         </div>
       </div>
