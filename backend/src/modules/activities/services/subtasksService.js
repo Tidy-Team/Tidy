@@ -54,3 +54,41 @@ export const findSubtasksById = async subtasksId => {
     throw createError('Error en el servidor al buscar la subtarea', error.statusCode || 500);
   }
 };
+
+export const updateSubtasks = async (subtasksId, updateData) => {
+  try {
+    logger.info(`Actualizando subtarea con id: ${subtasksId}`);
+    const subtask = await findSubtasksById(subtasksId);
+
+    if (!subtask) {
+      throw createError('Subtarea no encontrada', 404);
+    }
+
+    await subtask.update(updateData);
+
+    return { message: 'Subtarea actualizada' };
+  } catch (error) {
+    logger.error(`Error al actualizar la subtarea con id: ${subtasksId}`);
+
+    throw createError('Error en el servidor al actualizar la subtarea', error.statusCode || 500);
+  }
+};
+
+export const deleteSubtasks = async subtasksId => {
+  try {
+    logger.info(`Eliminando subtarea con id: ${subtasksId}`);
+    const subtask = await findSubtasksById(subtasksId);
+
+    if (!subtask) {
+      throw createError('Subtarea no encontrada', 404);
+    }
+
+    await subtask.destroy();
+
+    return { message: 'Subtarea eliminada' };
+  } catch (error) {
+    logger.error(`Error al eliminar la subtarea con id: ${subtasksId}`);
+
+    throw createError('Error en el servidor al eliminar la subtarea', error.statusCode || 500);
+  }
+};
