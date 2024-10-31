@@ -169,6 +169,11 @@ export const deleteActivityCtrl = async (req, res) => {
     logger.info(`Solicitud para eliminar la actividad con id: ${id} para el usuario con id: ${userId}`);
     const activity = await findActivityById(id);
     const subject = await findSubjectByIdAndUserId(activity.subject_id, userId);
+
+    if (!subject) {
+      return res.status(404).json({ message: 'No se encontró la materia para la actividad' });
+    }
+
     await deleteActivity(id);
 
     res.status(200).json({

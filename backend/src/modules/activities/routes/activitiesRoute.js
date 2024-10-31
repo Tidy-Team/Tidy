@@ -16,19 +16,19 @@ const activitiesRoutes = Router();
 
 // Ruta para obtener una actividad por id
 activitiesRoutes.get(
-  '/activities/:id/:idActivity',
-  logEndpointAccess('/activities/:id/:idActivity'),
+  '/subjects/:id/activities/:idActivity',
+  logEndpointAccess('/subjects/:id/activities/:idActivity'),
   validateJwt,
   getActivitiesById
 );
 
 // Ruta para obtener todas las actividades de una materia específica
-activitiesRoutes.get('/activities/:id', logEndpointAccess('/activities/:id'), validateJwt, getActivities);
+activitiesRoutes.get('/subjects/:id/activities', logEndpointAccess('/subjects/:id/activities'), validateJwt, getActivities);
 
 // Ruta para crear una nueva actividad en una materia específica
 activitiesRoutes.post(
-  '/activities/:id',
-  logEndpointAccess('/activities/:id'),
+  '/subjects/:id/activities',
+  logEndpointAccess('/subjects/:id/activities'),
   validateJwt,
   validationsZod(activitiesSchema),
   createActivityCtrl
@@ -36,14 +36,19 @@ activitiesRoutes.post(
 
 // Ruta para actualizar una actividad existente
 activitiesRoutes.put(
-  '/activities/:id',
-  logEndpointAccess('/activities/:id'),
+  '/subjects/:id/activities/:idActivity',
+  logEndpointAccess('/subjects/:id/activities/:idActivity'),
   validateJwt,
   validationsZod(activitiesSchema),
   updateActivityCtrl
 );
 
 // Ruta para eliminar una actividad existente
-activitiesRoutes.delete('/activities/:id', logEndpointAccess('/activities/:id'), validateJwt, deleteActivityCtrl);
+activitiesRoutes.delete(
+  '/subjects/:id/activities/:idActivity',
+  logEndpointAccess('/subjects/:id/activities/:idActivity'),
+  validateJwt,
+  deleteActivityCtrl
+);
 
 export default activitiesRoutes;

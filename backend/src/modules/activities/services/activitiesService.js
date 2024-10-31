@@ -1,7 +1,7 @@
 import { Activities } from '../models/activitiesModel.js';
 import { Subtasks } from '../models/subtasksModel.js';
 import { sequelize } from '../../../config/databases.js';
-import { generateSubtasks } from './subtasksService.js';
+import { findSubtasksByActivityId, generateSubtasks } from './subtasksService.js';
 
 import createError from '../../../helpers/createError.js';
 import logger from '../../logger/config.js';
@@ -142,17 +142,30 @@ export const updateActivity = async (activityId, activityData, option) => {
  * @throws {Error} - Si ocurre un error al eliminar la actividad.
  */
 export const deleteActivity = async activityId => {
+  const transaction = await sequelize.transaction();
+
   try {
     logger.info(`Eliminando actividad con id: ${activityId}`);
-    const activity = await findActivityById(activityId);
+    const activity = await findActivityById(activityId, { transaction });
 
     if (!activity) {
       logger.info(`La actividad con id: ${activityId} no se encontró`);
       throw createError('Actividad no encontrada', 404);
     }
 
-    await activity.destroy();
+    logger.info(`Buscando subtareas para la actividad con id: ${activityId}`);
+    const subtasks = await findSubtasksByActivityId(activityId, { transaction });
+
+    if (subtasks.length > 0) {
+      logger.info(`Eliminando ${subtasks.length} subtareas asociadas a la actividad con id: ${activityId}`);
+      await Promise.all(subtasks.map(subtask => subtask.destroy({ transaction })));
+    }
+
+    await activity.destroy({ transaction });
+    await transaction.commit();
+    logger.info(`Actividad con id: ${activityId} eliminada exitosamente junto con sus subtareas`);
   } catch (error) {
+    await transaction.rollback();
     logger.error(`Error al eliminar actividad con id: ${activityId}. Su error es: ${error.message}`);
     throw createError('Error al eliminar la actividad', error.statusCode || 500);
   }
