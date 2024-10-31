@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import express from 'express';
 import expressPinoLogger from 'pino-http';
 import logger from './modules/logger/config.js';
@@ -11,25 +12,46 @@ import { initMiddleware } from './middlewares/index.js';
 import { PORT } from './config/env.js';
 import { swaggerUi, swaggerDocument } from './config/swaggerConfig.js';
 import { showLogo } from './modules/logger/showLogo.js';
+=======
+import express from 'express'
+import expressPinoLogger from 'express-pino-logger'
+import logger from './components/logger/config.js'
 
-const app = express();
-const expressLogger = expressPinoLogger({ logger });
+import authRouter from './components/auth/routes/authRoutes.js'
+import activitiesRoutes from './components/activities/routes/activitiesRoute.js'
+import subjectRoute from './components/subjects/routes/subjectRoute.js'
+
+import { initMiddleware } from './middlewares/index.js'
+import { PORT } from './config/env.js'
+import { swaggerUi, swaggerDocument } from './config/swaggerConfig.js'
+import { showLogo } from './components/logger/showLogo.js'
+>>>>>>> dev_cuellaMateo
+
+const app = express()
+const expressLogger = expressPinoLogger({ logger })
 
 // Middleware
-initMiddleware(app);
-app.use(expressLogger);
+// Middleware
+initMiddleware(app)
+app.use(expressLogger)
 
 // Swagger
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 // Routes
+<<<<<<< HEAD
 app.use('/', authRouter);
 app.use('/', activitiesRoutes);
 app.use('/', subjectRoute);
 app.use('/', subtaskRoute);
 
+=======
+app.use('/', authRouter)
+app.use('/', activitiesRoutes)
+app.use('/', subjectRoute)
+>>>>>>> dev_cuellaMateo
 //Server
 app.listen(PORT, () => {
-  showLogo();
-  console.log(`http//localhost:${PORT}`);
-});
+  showLogo()
+  console.log(`http//localhost:${PORT}`)
+})
