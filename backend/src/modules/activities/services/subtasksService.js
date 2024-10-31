@@ -55,6 +55,24 @@ export const findSubtasksById = async subtasksId => {
   }
 };
 
+export const findSubtasksByActivityId = async activityId => {
+  try {
+    logger.info(`Buscando subtareas para la actividad con id: ${activityId}`);
+    const subtasks = await Subtasks.findAll({ where: { actividad_id: activityId } });
+
+    if (!subtasks || subtasks.length === 0) {
+      logger.info(`No se encontraron subtareas para la actividad con id: ${activityId}`);
+      throw createError('No se encontraron subtareas', 404);
+    }
+
+    return subtasks;
+  } catch (error) {
+    logger.error(`Error al buscar subtareas para la actividad con id: ${activityId}`);
+
+    throw createError('Error en el servidor al buscar subtareas', error.statusCode || 500);
+  }
+};
+
 export const updateSubtasks = async (subtasksId, updateData) => {
   try {
     logger.info(`Actualizando subtarea con id: ${subtasksId}`);

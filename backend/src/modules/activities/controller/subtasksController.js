@@ -1,11 +1,35 @@
 import { findSubjectByIdAndUserId } from '../../subjects/services/subjectsService.js';
 import { findActivityById } from '../services/activitiesService.js';
-import { deleteSubtasks, findSubtasksById } from '../services/subtasksService.js';
+import { deleteSubtasks, findSubtasksByActivityId, findSubtasksById } from '../services/subtasksService.js';
 
 import logger from '../../logger/config.js';
 
 export const getSubtasks = async (req, res) => {
   const { idActivity } = req.params;
+
+  try {
+    logger.info(`Buscando la actividad con id: ${idActivity}`);
+    const isActivity = await findActivityById(idActivity);
+
+    if (!isActivity) {
+      logger.error(`No se encontro la actividad con id: ${idActivity}`);
+      return res.status(404).json({ message: 'No se encontro la actividad' });
+    }
+
+    logger.info(`Buscando subtareas para la actividad con id: ${idActivity}`);
+    const subtasks = await findSubtasksByActivityId(idActivity);
+
+    return res.status(200).json({ Actividad: isActivity.titulo, Subtareas: subtasks });
+  } catch (error) {
+    logger.error(`Error al obtener las subtareas para la actividad con id: ${idActivity}. Su error es: ${error.stack}`);
+
+    res.status(error.statusCode || 500).json({
+      message:
+        error.statusCode === 404
+          ? 'No se encontraron subtareas'
+          : 'Error en el servidor al obtener las subtareas. Por favor, intentalo de nuevo.',
+    });
+  }
 };
 
 export const subtasksByIdCtrl = async (req, res) => {

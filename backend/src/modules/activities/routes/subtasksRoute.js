@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { subtasksByIdCtrl, updateSubtasksCtrl } from '../controller/subtasksController.js';
+import { subtasksByIdCtrl, updateSubtasksCtrl, getSubtasks } from '../controller/subtasksController.js';
 
 import logEndpointAccess from '../../logger/middleware/loggerMiddleware.js';
 import validateJwt from '../../auth/middleware/validateJwt.js';
@@ -13,6 +13,8 @@ subtaskRoute.get(
   validateJwt,
   subtasksByIdCtrl
 );
+
+subtaskRoute.get('/subtasks/:idActivity', logEndpointAccess('/subtasks/:idActivity'), validateJwt, getSubtasks);
 
 // Definir la ruta para actualizar una subtarea por su ID
 subtaskRoute.put(
