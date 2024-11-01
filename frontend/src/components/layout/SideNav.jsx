@@ -205,7 +205,7 @@ export function SideNav({ children }) {
               </li>
 
               <li>
-                <details close>
+                <details close="true">
                   <summary>
                     <IoMdSettings />
                     Ajustes
