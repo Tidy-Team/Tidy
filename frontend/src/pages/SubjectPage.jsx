@@ -35,7 +35,7 @@ export function SubjectPage() {
     error: activitiesError,
     isLoading: isActivitiesLoading,
   } = useFetch(
-    `http://localhost:3000/activities/${id}`,
+    `http://localhost:3000/subjects/${id}/activities`,
     'GET',
     { 'Content-Type': 'application/json' },
     { credentials: 'include' }

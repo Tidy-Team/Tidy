@@ -4,13 +4,8 @@ import {
   updateSubject,
   getUserSubjects,
   findSubjectByIdAndUserId,
-<<<<<<< HEAD:backend/src/modules/subjects/controller/subjectController.js
-} from '../services/subjectsService.js';
-import logger from '../../logger/config.js';
-=======
 } from '../services/subjectsService.js'
 import logger from '../../logger/config.js'
->>>>>>> dev_cuellaMateo:backend/src/components/subjects/controller/subjectController.js
 
 export const getUserSubjectsCtrl = async (req, res) => {
   const userId = req.user.id
@@ -40,37 +35,30 @@ export const getUserSubjectsCtrl = async (req, res) => {
 export const getSubjectByIdCtrl = async (req, res) => {
   const { id } = req.params
   const userId = req.user.id
+
   try {
-    const subject = await findSubjectByIdAndUserId(userId, id)
+    logger.info(
+      `Solicitud para obtener la materia con id: ${id} para el usuario con id: ${userId}`
+    )
+    const subject = await findSubjectByIdAndUserId(id, userId)
+
     res.status(200).json(subject)
-  } catch (error) {
-    res.status(500).json({ message: error.message })
-  }
-}
-
-export const getSubjectByIdCtrl = async (req, res) => {
-  const { id } = req.params;
-  const userId = req.user.id;
-
-  try {
-    logger.info(`Solicitud para obtener la materia con id: ${id} para el usuario con id: ${userId}`);
-    const subject = await findSubjectByIdAndUserId(userId, id);
-
-    res.status(200).json(subject);
-    logger.info(`Materia con id: ${id} encontrada para el usuario con id: ${userId}`);
+    logger.info(
+      `Materia con id: ${id} encontrada para el usuario con id: ${userId}`
+    )
   } catch (error) {
     logger.error(
       `Error en el controlador al obtener la materia con id: ${id} para el usuario con id: ${userId}. Su error es: ${error.stack}`
-    );
+    )
 
     res.status(error.statusCode || 500).json({
       message:
         error.statusCode === 404
           ? 'No se encontraron materias'
           : 'Error en el servidor al obtener la materia. Intentalo de nuevo.',
-    });
+    })
   }
-};
+}
 
 export const createSubjectCtrl = async (req, res) => {
   const userId = req.user.id

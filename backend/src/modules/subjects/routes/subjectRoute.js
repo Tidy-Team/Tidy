@@ -1,29 +1,16 @@
-<<<<<<< HEAD:backend/src/modules/subjects/routes/subjectRoute.js
-import { Router } from 'express';
-import { validateSession } from '../../auth/controllers/sessionController.js';
-import validateJwt from '../../auth/middleware/validateJwt.js';
-=======
 import { Router } from 'express'
 import { validateSession } from '../../auth/controllers/sessionController.js'
 import validateJwt from '../../auth/middleware/validateJwt.js'
->>>>>>> dev_cuellaMateo:backend/src/components/subjects/routes/subjectRoute.js
 import {
   createSubjectCtrl,
   updateSubjectCtrl,
   deleteSubjectCtrl,
   getUserSubjectsCtrl,
   getSubjectByIdCtrl,
-<<<<<<< HEAD:backend/src/modules/subjects/routes/subjectRoute.js
-} from '../controller/subjectController.js';
-import { validationsZod } from '../../../middlewares/validationsZod.js';
-import subjectSchema from '../schemas/subjectSchema.js';
-import logEndpointAccess from '../../logger/middleware/loggerMiddleware.js';
-=======
 } from '../controller/subjectController.js'
 import { validationsZod } from '../../../middlewares/validationsZod.js'
 import subjectSchema from '../schemas/subjectSchema.js'
 import logEndpointAccess from '../../logger/middleware/loggerMiddleware.js'
->>>>>>> dev_cuellaMateo:backend/src/components/subjects/routes/subjectRoute.js
 
 const subjectRoute = Router()
 
@@ -35,15 +22,12 @@ subjectRoute.get(
   getUserSubjectsCtrl
 )
 
-// Ruta para una materia por Id  del usuario autenticado
 subjectRoute.get(
   '/subjects/:id',
   logEndpointAccess('/subjects/:id'),
   validateJwt,
   getSubjectByIdCtrl
 )
-
-subjectRoute.get('/subjects/:id', logEndpointAccess('/subjects/:id'), validateJwt, getSubjectByIdCtrl);
 
 // Ruta para crear una nueva materia para el usuario autenticado
 subjectRoute.post(

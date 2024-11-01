@@ -29,7 +29,7 @@ export function ActivityForm({ addActivity }) {
   })
 
   const { data, error, isLoading, fetchData } = useFetch(
-    `http://localhost:3000/activities/${id}`,
+    `http://localhost:3000/subjects/${id}/activities`,
     'POST',
     formData,
     { 'Content-Type': 'application/json' },
@@ -38,6 +38,8 @@ export function ActivityForm({ addActivity }) {
 
   useEffect(() => {
     if (formData) {
+      console.log(formData)
+
       fetchData(formData)
     }
   }, [formData]) // Correctly associate the dependency array with the useEffect
@@ -53,8 +55,9 @@ export function ActivityForm({ addActivity }) {
     try {
       const transformedData = {
         ...formData,
+        option: 'Option 1',
         num_preguntas: Number(formData.num_preguntas),
-        prioridad_id: String(formData.prioridad_id),
+        prioridad_id: Number(formData.prioridad_id),
       }
 
       setFormData(transformedData)

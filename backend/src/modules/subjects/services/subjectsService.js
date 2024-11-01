@@ -9,7 +9,7 @@ import createError from '../../../helpers/createError.js'
  * @returns {Promise<Object>} - Materia encontrada.
  * @throws {Error} - Si la materia no es encontrada.
  */
-export const findSubjectByIdAndUserId = async (userId, subjectId) => {
+export const findSubjectByIdAndUserId = async (subjectId, userId) => {
   try {
     logger.info(
       `Buscando materia con id: ${subjectId} y al usuario con id: ${userId}`

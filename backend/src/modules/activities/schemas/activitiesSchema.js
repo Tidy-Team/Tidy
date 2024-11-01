@@ -29,29 +29,18 @@ export const activitiesSchema = z.object({
       message: 'La fecha de fin no puede ser en el pasado',
     })
   ),
-<<<<<<< HEAD:backend/src/modules/activities/schemas/activitiesSchema.js
-  estado: z.enum(['pendiente', 'en_progreso', 'completada']).default('pendiente'),
+  estado: z
+    .enum(['pendiente', 'en_progreso', 'completada'])
+    .default('pendiente'),
   prioridad_id: z
     .union([z.literal(1), z.literal(2), z.literal(3)], {
       errorMap: () => ({ message: 'Prioridad no válida' }),
     })
     .default(3),
-  num_preguntas: z.number().int().positive().min(1, 'Debe haber al menos una pregunta'),
-  option: z.enum(['Option 1', 'Option 2']).optional(),
-});
-=======
-  estado: z
-    .enum(['pendiente', 'en_progreso', 'completada'])
-    .default('pendiente'),
-  prioridad_id: z
-    .enum(['1', '2', '3'], {
-      errorMap: () => ({ message: 'Prioridad no válida' }),
-    })
-    .transform(Number),
   num_preguntas: z
     .number()
     .int()
     .positive()
     .min(1, 'Debe haber al menos una pregunta'),
+  option: z.enum(['Option 1', 'Option 2']).optional(),
 })
->>>>>>> dev_cuellaMateo:backend/src/components/activities/schemas/activitiesSchema.js
