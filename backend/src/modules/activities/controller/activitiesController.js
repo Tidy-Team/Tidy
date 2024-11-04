@@ -104,7 +104,7 @@ export const createActivityCtrl = async (req, res) => {
     logger.info(
       `Solicitud para crear una nueva actividad para la materia con id: ${id} y el usuario con id: ${userId}`
     )
-    const subject = await findSubjectByIdAndUserId(userId, id)
+    const subject = await findSubjectByIdAndUserId(id, userId)
 
     const newActivity = await createActivityWithSubtasks(
       {
