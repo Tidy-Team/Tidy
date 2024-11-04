@@ -7,8 +7,6 @@ import { useForm } from 'react-hook-form'
 import { useFetch } from '../../hooks/useFetch'
 
 //Icons
-import { GoNumber } from 'react-icons/go'
-import { IoText } from 'react-icons/io5'
 
 export function ActivityForm({ addActivity }) {
   const [formData, setFormData] = useState(null)
@@ -53,11 +51,25 @@ export function ActivityForm({ addActivity }) {
 
   const onSubmit = (formData) => {
     try {
+      const currentDate = new Date()
+      const dueDate = new Date(formData.fecha_fin)
+      const timeDiff = dueDate - currentDate
+      const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24))
+
+      let prioridad_id
+      if (daysDiff <= 7) {
+        prioridad_id = 3 // High priority
+      } else if (daysDiff <= 14) {
+        prioridad_id = 2 // Medium priority
+      } else {
+        prioridad_id = 1 // Low priority
+      }
+
       const transformedData = {
         ...formData,
-        option: 'Option 1',
+        option: 'Option 2',
         num_preguntas: Number(formData.num_preguntas),
-        prioridad_id: Number(formData.prioridad_id),
+        prioridad_id: prioridad_id,
       }
 
       setFormData(transformedData)
@@ -67,59 +79,90 @@ export function ActivityForm({ addActivity }) {
   }
 
   return (
-    <form className="flex flex-col gap-3" onSubmit={handleSubmit(onSubmit)}>
-      <h1 className="text-center font-semibold text-2xl mb-3">Agregar Tarea</h1>
-      <label className="input input-bordered flex items-center gap-2 ">
-        <IoText />
+    <form className="flex flex-col " onSubmit={handleSubmit(onSubmit)}>
+      <h1 className="text-center font-semibold text-2xl ">Agregar Tarea</h1>
+
+      <label className="form-control w-full  ">
+        <div className="label">
+          <span className="label-text">Título</span>
+        </div>
+
         <input
           type="text"
-          className="grow"
-          placeholder="Example of activity"
-          {...register('titulo', { required: 'Required' })}
+          className="input input-bordered"
+          placeholder="ej: Matemática 1: Funciones"
+          {...register('titulo', { required: 'Obligatorio' })}
         />
-        {errors.titulo && <span>{errors.titulo.message}</span>}
+        {errors.titulo && (
+          <span className="text-error text-sm mt-1">
+            {errors.titulo.message}
+          </span>
+        )}
       </label>
 
-      <label className="input input-bordered flex items-center gap-2">
-        <IoText />
-        <input
-          type="text"
-          className="grow"
-          placeholder="Descripcion"
-          {...register('description', { required: 'Required' })}
-        />
-        {errors.description && <span>{errors.description.message}</span>}
-      </label>
+      <div className="flex flex-col md:flex-row w-full md:gap-2">
+        <label className="form-control md:w-1/2">
+          <div className="label">
+            <span className="label-text">Número de consignas</span>
+          </div>
 
-      <label className="input input-bordered flex items-center gap-2">
-        <GoNumber className="text-2xl" />
-        <input
-          type="number"
-          className="grow"
-          placeholder="Numero de preguntas"
-          {...register('num_preguntas', { required: 'Required' })}
-        />
-        {errors.num_preguntas && <span>{errors.num_preguntas.message}</span>}
-      </label>
+          <input
+            type="number"
+            className="input input-bordered"
+            placeholder="ej: 1, 5, 10"
+            min={1}
+            {...register('num_preguntas', { required: 'Obligatorio' })}
+          />
+          {errors.num_preguntas && (
+            <span className="text-error text-sm mt-1">
+              {errors.num_preguntas.message}
+            </span>
+          )}
+        </label>
 
-      <select
-        className="select select-bordered w-full"
-        {...register('prioridad_id', { required: 'Prioridad no válida' })}
-        defaultValue=""
-      >
-        <option value="" disabled>
-          Elegir Prioridad
-        </option>
-        <option value="1">Baja</option>
-        <option value="2">Media</option>
-        <option value="3">Alta</option>
-      </select>
-      {errors.prioridad_id && <span>{errors.prioridad_id.message}</span>}
+        <label className="form-control md:w-1/2">
+          <div className="label">
+            <span className="label-text">Fecha de entrega</span>
+          </div>
+
+          <input
+            type="date"
+            className="input input-bordered"
+            min={new Date().toJSON().slice(0, 10)}
+            {...register('fecha_fin', { required: 'Obligatorio' })}
+          />
+          {errors.fecha_fin && (
+            <span className="text-error text-sm mt-1">
+              {errors.fecha_fin.message}
+            </span>
+          )}
+        </label>
+
+        {/*         <label className="form-control md:w-1/2">
+          <div className="label">
+            <span className="label-text">Prioridad</span>
+          </div>
+
+          <select
+            className="select select-bordered w-full"
+            {...register('prioridad_id', { required: 'Prioridad no válida' })}
+            defaultValue=""
+          >
+            <option value="" disabled>
+              Elegir Prioridad
+            </option>
+            <option value="1">Baja</option>
+            <option value="2">Media</option>
+            <option value="3">Alta</option>
+          </select>
+          {errors.prioridad_id && <span>{errors.prioridad_id.message}</span>}
+        </label> */}
+      </div>
 
       <button
-        className="btn btn-primary"
+        className="btn btn-primary mt-4"
         type="submit"
-        onClick={() => {
+        onSubmit={() => {
           document.getElementById('modal').close()
         }}
       >
