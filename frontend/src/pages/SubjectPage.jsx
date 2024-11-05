@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 
 //Components and utilities
 import { useFetch } from '../hooks/useFetch.js'
-import { Modal, ActivityForm, ActivitiesList } from '../components'
+import { Modal, ActivityForm, ActivitiesList, NotesList } from '../components'
 
 //Icons
 import { HiDotsVertical } from 'react-icons/hi'
@@ -66,7 +66,15 @@ export function SubjectPage() {
   }
 
   if (isSubjectLoading || isActivitiesLoading) {
-    return <div>Loading...</div>
+    return (
+      <div className="max-h-[calc(100vh-94px)] flex flex-col gap-3">
+        <div className="min-h-48 rounded-2xl bg-base-200 animate-pulse"></div>
+        <div className="flex-grow flex flex-col md:flex-row gap-3">
+          <div className="bg-base-200 md:w-1/3 rounded-2xl h-56 animate-pulse"></div>
+          <div className="md:max-h-[410px] md:w-2/3 rounded-lg bg-base-200 animate-pulse"></div>
+        </div>
+      </div>
+    )
   }
 
   if (subjectError) {
@@ -105,6 +113,7 @@ export function SubjectPage() {
             </h1>
             <div className="collapse-content">
               <div>
+                <NotesList />
                 <button className="btn btn-primary">Agregar nota</button>
               </div>
             </div>
