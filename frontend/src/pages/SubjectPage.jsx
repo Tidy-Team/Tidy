@@ -43,6 +43,7 @@ export function SubjectPage() {
 
   const [localSubject, setLocalSubject] = useState(null)
   const [localActivities, setLocalActivities] = useState([])
+  const [imageLoaded, setImageLoaded] = useState(false)
 
   useEffect(() => {
     fetchSubjectData()
@@ -85,11 +86,15 @@ export function SubjectPage() {
     <div className="max-h-[calc(100vh-94px)] flex flex-col gap-3">
       <div className="min-h-48 rounded-2xl">
         <div className="card card-compact image-full">
-          <figure className="bg-cover bg-center  max-h-48">
+          <figure className="bg-cover bg-center max-h-48">
+            {!imageLoaded && (
+              <div className="w-full h-full bg-gray-200 animate-pulse"></div>
+            )}
             <img
               src={randomImageUrl}
               alt={localSubject?.subjectName}
-              className="w-full"
+              className={`w-full ${imageLoaded ? 'block' : 'hidden'}`}
+              onLoad={() => setImageLoaded(true)}
             />
           </figure>
           <div className="card-body">
@@ -105,17 +110,15 @@ export function SubjectPage() {
         </div>
       </div>
       <div className="flex-grow flex flex-col md:flex-row gap-3">
-        <div className="bg-blue-600 md:w-1/3 rounded-lg h-fit">
+        <div className=" md:w-1/3 rounded-lg  ">
           <div className="collapse  md:collapse-open row-start-2 col-span-3 md:col-span-1 bg-base-300 text-center rounded-md">
             <input type="checkbox" />
             <h1 className="collapse-title text-xl font-semibold rounded-md px-0">
               Notas
             </h1>
             <div className="collapse-content">
-              <div>
-                <NotesList />
-                <button className="btn btn-primary">Agregar nota</button>
-              </div>
+              <NotesList />
+              <button className="btn btn-primary">Agregar nota</button>
             </div>
           </div>
         </div>
@@ -123,7 +126,7 @@ export function SubjectPage() {
           <div className="text-center text-xl bg-base-300 rounded-lg p-4 font-semibold ">
             Tareas
           </div>
-          <div className="flex flex-col md:overflow-y-auto gap-2 p-2 rounded-lg md:min-h-28 min-h-fit">
+          <div className="flex flex-col md:overflow-y-auto gap-2 p-2 rounded-lg md:min-h-fit min-h-fit">
             {localActivities.length === 0 ? (
               <h1 className="p-5 text-center">No hay tareas</h1>
             ) : (
