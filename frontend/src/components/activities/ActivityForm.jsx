@@ -137,26 +137,6 @@ export function ActivityForm({ addActivity }) {
             </span>
           )}
         </label>
-
-        {/*         <label className="form-control md:w-1/2">
-          <div className="label">
-            <span className="label-text">Prioridad</span>
-          </div>
-
-          <select
-            className="select select-bordered w-full"
-            {...register('prioridad_id', { required: 'Prioridad no válida' })}
-            defaultValue=""
-          >
-            <option value="" disabled>
-              Elegir Prioridad
-            </option>
-            <option value="1">Baja</option>
-            <option value="2">Media</option>
-            <option value="3">Alta</option>
-          </select>
-          {errors.prioridad_id && <span>{errors.prioridad_id.message}</span>}
-        </label> */}
       </div>
 
       <button

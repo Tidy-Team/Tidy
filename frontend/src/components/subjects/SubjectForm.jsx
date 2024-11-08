@@ -55,51 +55,64 @@ export function SubjectForm({ addSubject }) {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
-      <h1 className="text-center font-semibold text-2xl mb-3">
-        Agregar Materia
-      </h1>
-      <label className="input input-bordered flex items-center gap-2">
-        <IoText />
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
+      <h1 className="text-center font-semibold text-2xl">Agregar Materia</h1>
+      <label className="inform-control w-full">
+        <div className="label">
+          <span className="label-text">Nombre de materia</span>
+        </div>
+
         <input
           type="text"
-          className="grow"
-          placeholder="Nombre de Materia"
+          className="input input-bordered w-full"
+          placeholder="Matemática"
           {...register('subjectName', { required: 'Required' })}
         />
+        {errors.subjectName && (
+          <span className="text-error text-sm mt-1">
+            {errors.subjectName.message}
+          </span>
+        )}
       </label>
 
-      <label className="input input-bordered flex items-center gap-2">
-        <IoText />
+      <label className="inform-control w-full">
+        <div className="label">
+          <span className="label-text">Descripción</span>
+        </div>
 
         <input
           type="text"
           name="description"
-          className="grow"
-          placeholder="Descripcion"
+          className="input input-bordered w-full"
+          placeholder="2ndo cuatrimestre"
           {...register('description', { required: 'Required' })}
         />
+        {errors.description && (
+          <span className="text-error text-sm mt-1">
+            {errors.description.message}
+          </span>
+        )}
       </label>
 
-      <label className="input input-bordered flex items-center gap-2">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 16 16"
-          fill="currentColor"
-          className="h-4 w-4 opacity-70"
-        >
-          <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" />
-        </svg>
+      <label className="inform-control w-full">
+        <div className="label">
+          <span className="label-text">Nombre del profesor/a</span>
+        </div>
         <input
           type="text"
           name="name_teacher"
-          className="grow"
-          placeholder="Nombre de Profesor"
+          className="input input-bordered w-full"
+          placeholder="Johanna"
           {...register('name_teacher', { required: 'Required' })}
         />
+        {errors.name_teacher && (
+          <span className="text-error text-sm mt-1">
+            {errors.name_teacher.message}
+          </span>
+        )}
       </label>
       <button
-        className="btn btn-primary"
+        className="btn btn-primary mt-4"
         type="submit"
         onClick={() => {
           document.getElementById('modal').close()
