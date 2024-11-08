@@ -9,8 +9,10 @@ import { Modal, ActivityForm, ActivitiesList, NotesList } from '../components'
 
 //Icons
 import { HiDotsVertical } from 'react-icons/hi'
+import { BiPlus } from 'react-icons/bi'
 import { FaChalkboardTeacher } from 'react-icons/fa'
 import { FaPlay } from 'react-icons/fa'
+import { MdEdit, MdDelete } from 'react-icons/md'
 
 export function SubjectPage() {
   const { id } = useParams()
@@ -68,11 +70,11 @@ export function SubjectPage() {
 
   if (isSubjectLoading || isActivitiesLoading) {
     return (
-      <div className="max-h-[calc(100vh-94px)] flex flex-col gap-3">
+      <div className="min-h-[calc(100vh-94px)] flex flex-col gap-3">
         <div className="min-h-48 rounded-2xl bg-base-200 animate-pulse"></div>
         <div className="flex-grow flex flex-col md:flex-row gap-3">
           <div className="bg-base-200 md:w-1/3 rounded-2xl h-56 animate-pulse"></div>
-          <div className="md:max-h-[410px] md:w-2/3 rounded-lg bg-base-200 animate-pulse"></div>
+          <div className="md:max-h-[410px] md:w-2/3 rounded-2xl bg-base-200 animate-pulse"></div>
         </div>
       </div>
     )
@@ -83,7 +85,7 @@ export function SubjectPage() {
   }
 
   return (
-    <div className="max-h-[calc(100vh-94px)] flex flex-col gap-3">
+    <div className="min-h-[calc(100vh-94px)] flex flex-col gap-3">
       <div className="min-h-48 rounded-2xl">
         <div className="card card-compact image-full">
           <figure className="bg-cover bg-center max-h-48">
@@ -110,30 +112,38 @@ export function SubjectPage() {
         </div>
       </div>
       <div className="flex-grow flex flex-col md:flex-row gap-3">
-        <div className=" md:w-1/3 rounded-lg  ">
-          <div className="collapse  md:collapse-open row-start-2 col-span-3 md:col-span-1 bg-base-300 text-center rounded-md">
+        <div className=" md:w-1/3 rounded-2xl  ">
+          <div className="collapse  md:collapse-open row-start-2 col-span-3 md:col-span-1 bg-base-200 text-center rounded-2xl">
             <input type="checkbox" />
-            <h1 className="collapse-title text-xl font-semibold rounded-md px-0">
-              Notas
-            </h1>
-            <div className="collapse-content">
+            <div className="collapse-title flex justify-between items-center px-5">
+              <h1 className=" text-xl font-semibold rounded-2xl text-left">
+                Notas
+              </h1>
+              <button className="btn btn-primary btn-sm ">Añadir Nota</button>
+            </div>
+            <div className="collapse-content ">
               <NotesList />
-              <button className="btn btn-primary">Agregar nota</button>
             </div>
           </div>
         </div>
-        <div className="flex flex-col md:max-h-[410px] md:w-2/3 rounded-lg bg-base-300 ">
-          <div className="text-center text-xl bg-base-300 rounded-lg p-4 font-semibold ">
+        <div className="flex flex-col md:max-h-[410px] md:w-2/3 rounded-2xl bg-base-200 ">
+          <div className="text-start text-xl bg-base-200 rounded-2xl p-4 px-5 font-semibold justify-between flex ">
             Tareas
+            <button
+              className="btn btn-sm btn-primary"
+              onClick={() => document.getElementById('modal').showModal()}
+            >
+              Añadir Tarea
+            </button>
           </div>
-          <div className="flex flex-col md:overflow-y-auto gap-2 p-2 rounded-lg md:min-h-fit min-h-fit">
+          <div className="flex flex-col md:overflow-y-auto gap-2 p-2 rounded-2xl h-full">
             {localActivities.length === 0 ? (
               <h1 className="p-5 text-center">No hay tareas</h1>
             ) : (
               localActivities.map((activity) => (
                 <div
                   key={activity.id}
-                  className="p-3 bg-base-200 rounded-lg text-start flex justify-between items-center"
+                  className="p-3 bg-base-100 rounded-lg text-start flex justify-between items-center"
                 >
                   {activity.titulo}
                   <div className="flex items-center gap-3">
@@ -149,21 +159,23 @@ export function SubjectPage() {
                       <div
                         tabIndex="0"
                         role="button"
-                        className="btn btn-circle btn-sm mb-1"
+                        className="btn btn-ghost btn-circle btn-sm mb-1"
                       >
                         <HiDotsVertical />
                       </div>
 
                       <ul
                         tabIndex="0"
-                        className="dropdown-content z-[1] menu p-2 shadow bg-base-300 rounded-box"
+                        className="dropdown-content z-[1] join join-vertical shadow bg-base-200 rounded-box w-28"
                       >
-                        <li>
-                          <a>Edit</a>
-                        </li>
-                        <li>
-                          <a>Delete</a>
-                        </li>
+                        <button className="btn flex  join-item min-h-fit">
+                          <MdEdit className="text-lg" />
+                          Editar
+                        </button>
+                        <button className="btn join-item">
+                          <MdDelete />
+                          Eliminar
+                        </button>
                       </ul>
                     </div>
                   </div>
