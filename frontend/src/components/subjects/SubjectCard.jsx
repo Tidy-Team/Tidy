@@ -1,25 +1,55 @@
 //React
-
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useFetch } from '../../hooks/useFetch'
 
 //Icons
 import { FaChalkboardTeacher } from 'react-icons/fa'
 import { HiDotsVertical } from 'react-icons/hi'
 import { MdDelete, MdModeEdit } from 'react-icons/md'
 
-export function SubjectCard({ id, title, description, teacher }) {
+export function SubjectCard({
+  id,
+  title,
+  description,
+  teacher,
+  onEdit,
+  onDelete,
+}) {
   const navigate = useNavigate()
   const randomImageUrl = `https://picsum.photos/seed/${id}/620/366`
+  const [imageLoaded, setImageLoaded] = useState(false)
+
+  const { fetchData: deleteSubject } = useFetch(
+    `http://localhost:3000/subjects/${id}`,
+    'DELETE'
+  )
+
+  const handleDelete = async (e) => {
+    e.stopPropagation()
+    await deleteSubject()
+    onDelete(id)
+  }
 
   return (
     <div
       className="card card-bordered card-compact image-full w-full sm:w-80 bg-base-200 hover:shadow-lg cursor-pointer transition-all"
       onClick={() => navigate(`/subjects/${id}`)}
     >
-      <figure>
-        <img src={randomImageUrl} alt={title} />
+      <figure className="relative">
+        {!imageLoaded && <div className=" h-[187.95px] skeleteon"></div>}
+        <img
+          src={randomImageUrl}
+          alt={title}
+          className={`w-full ${imageLoaded ? 'block' : 'hidden'}`}
+          onLoad={() => setImageLoaded(true)}
+        />
       </figure>
-      <div className="card-body">
+      <div
+        className={`card-body transition-opacity duration-500 ${
+          imageLoaded ? 'opacity-100' : 'opacity-0'
+        }`}
+      >
         <div>
           <h2 className="card-title justify-between">
             {title}
@@ -38,13 +68,18 @@ export function SubjectCard({ id, title, description, teacher }) {
                 onClick={(e) => e.stopPropagation()}
               >
                 <li>
-                  <a>
+                  <a
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      onEdit(id)
+                    }}
+                  >
                     <MdModeEdit className="text-xl" />
                     Edit
                   </a>
                 </li>
                 <li>
-                  <a>
+                  <a onClick={handleDelete}>
                     <MdDelete className="text-xl" />
                     Delete
                   </a>
