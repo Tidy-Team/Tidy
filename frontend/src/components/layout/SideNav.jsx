@@ -18,7 +18,7 @@ import { FiLogOut } from 'react-icons/fi'
 import { CgDarkMode } from 'react-icons/cg'
 
 export function SideNav({ children }) {
-  const { user, logOut } = useAuth()
+  const { user, logOut, loading } = useAuth()
   const location = useLocation()
   const navigate = useNavigate()
   const { saveTheme, loadTheme } = LocalStorage()
@@ -32,28 +32,7 @@ export function SideNav({ children }) {
     if (themeRadio) {
       themeRadio.checked = true
     }
-    // Trigger the transition on initial load
-    const mainContent = document.getElementById('main-content')
-    const sidebar = document.getElementById('sidebar')
-    if (mainContent && sidebar) {
-      console.log('Applying transition on initial load')
-      mainContent.classList.remove('opacity-0', 'translate-y-5')
-      sidebar.classList.remove('opacity-0', 'translate-y-5')
-    }
   }, [])
-
-  useEffect(() => {
-    // Trigger the transition on location change
-    const mainContent = document.getElementById('main-content')
-    if (mainContent) {
-      console.log('Applying transition on location change')
-      mainContent.classList.add('opacity-0', 'translate-y-5')
-
-      setTimeout(() => {
-        mainContent.classList.remove('opacity-0', 'translate-y-5')
-      }, 0)
-    }
-  }, [location.pathname])
 
   const handleThemeChange = (event) => {
     const theme = event.target.value
@@ -66,12 +45,9 @@ export function SideNav({ children }) {
     navigate('/')
   }
 
-  const buttonText =
-    location.pathname === '/subjects' ? 'Añadir Materia' : 'Añadir Tarea'
+  const buttonText = location.pathname === '/subjects' ? 'Añadir Materia' : ''
 
-  const showButton = ['/subjects', '/subject/:id'].some((path) =>
-    location.pathname.startsWith(path)
-  )
+  const showButton = '/subjects'
 
   const closeDrawer = () => {
     document.getElementById('drawer').checked = false
@@ -105,25 +81,11 @@ export function SideNav({ children }) {
                   </Link>
                 </div>
               </div>
-              <div className="flex-0">
-                <div className="flex ">
-                  {showButton && (
-                    <button
-                      className="btn btn-primary h-10 min-h-10 w-36 "
-                      onClick={() =>
-                        document.getElementById('modal').showModal()
-                      }
-                    >
-                      {buttonText}
-                    </button>
-                  )}
-                </div>
-              </div>
             </nav>
           </div>
-          <div className='class="max-w-[100vw] px-6 pb-5 xl:pr-2"'>
+          <div className="max-w-[100vw] px-6 pb-5">
             <div
-              className="flex flex-col-reverse justify-between gap-6 xl:flex-row transition-opacity duration-500 ease-out opacity-0 transform translate-y-5"
+              className="flex flex-col-reverse justify-between gap-6 xl:flex-row"
               id="main-content"
             >
               {/* Main Content */}
@@ -144,33 +106,42 @@ export function SideNav({ children }) {
             className="drawer-overlay"
           ></label>
           <aside
-            className="bg-base-300 h-screen w-72 overflow-y-auto sticky top-0 items-center z-20 py-6 px-4 space-y-3 bg-opacity-90 backdrop-blur flex flex-col transition-opacity duration-500 ease-out opacity-0 transform translate-y-5"
+            className="bg-base-200 h-screen w-72 overflow-y-auto sticky top-0 items-center z-20 py-6 px-4 space-y-3 bg-opacity-90 backdrop-blur flex flex-col "
             id="sidebar"
           >
-            <div className="bg-base-300 hidden lg:flex ">
+            <div className="bg-base-200 hidden lg:flex ">
               <Link to="/subjects" onClick={closeDrawer}>
                 <button className="btn btn-ghost text-3xl font-bold text-purple-500">
                   Tidy
                 </button>
               </Link>
             </div>
-            {user && (
+            {/* User */}
+            {loading ? (
               <>
-                <Avatar
-                  name={user.name}
-                  colors={[
-                    '#d94052',
-                    '#ee7e4c',
-                    '#ead56c',
-                    '#94c5a5',
-                    '#898b75',
-                  ]}
-                  variant="beam"
-                  className="w-28 rounded-full "
-                />
-                <h2 className="font-bold text-lg">{user.name}</h2>
-                <span className="text-sm text-accent">{user.email}</span>
+                <div className="w-28 h-28 rounded-full animate-pulse bg-neutral"></div>
+                <div className="h-[28px] w-1/2 rounded-full animate-pulse bg-neutral"></div>
+                <div className="h-[20px] w-1/2 rounded-full animate-pulse bg-neutral"></div>
               </>
+            ) : (
+              user && (
+                <>
+                  <Avatar
+                    name={user.name}
+                    colors={[
+                      '#d94052',
+                      '#ee7e4c',
+                      '#ead56c',
+                      '#94c5a5',
+                      '#898b75',
+                    ]}
+                    variant="beam"
+                    className="w-28 rounded-full "
+                  />
+                  <h2 className="font-bold text-lg">{user.name}</h2>
+                  <span className="text-sm text-accent">{user.email}</span>
+                </>
+              )
             )}
             <ul className="menu menu-lg gap-1 w-full">
               <li>
