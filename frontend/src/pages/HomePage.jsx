@@ -2,35 +2,47 @@
 import { useEffect, useState } from 'react'
 
 //Components and utilities
-import { useSubjects } from '../context/useSubject.js'
+import { useFetch } from '../hooks/useFetch.js'
 import { SubjectCard, SubjectForm, Modal } from '../components'
 
 export function HomePage() {
-  const { subjects, getSubjects } = useSubjects()
-  const [localSubjects, setLocalSubjects] = useState(subjects)
+  const {
+    fetchData,
+    data: subjects,
+    error,
+    isLoading,
+  } = useFetch(
+    'http://localhost:3000/subjects',
+    'GET',
+    { 'Content-Type': 'application/json' },
+    { credentials: 'include' }
+  )
+
+  const [localSubjects, setLocalSubjects] = useState([])
 
   useEffect(() => {
-    getSubjects()
+    fetchData()
   }, [])
 
   useEffect(() => {
-    console.log('Fetched subjects:', subjects) // Debugging statement
-    const validSubjects = subjects.filter((subject) => subject.id !== undefined)
-    if (validSubjects.length !== subjects.length) {
-      console.warn('Some subjects have undefined id:', subjects)
+    if (subjects) {
+      setLocalSubjects(subjects)
     }
-    setLocalSubjects(validSubjects)
   }, [subjects])
 
   const addSubject = (newSubject) => {
-    console.log('New subject response:', newSubject) // Debugging statement
-    const subjectData = newSubject.data.subject
-    if (subjectData.id === undefined) {
-      console.error('New subject has undefined id:', subjectData)
-      return
-    }
+    const subjectData = newSubject
     setLocalSubjects([...localSubjects, subjectData])
   }
+
+  if (isLoading) {
+    return (
+      <div className=" flex justify-center h-screen w-full">
+        <span className="loading loading-spinner self-center loading-lg"></span>
+      </div>
+    )
+  }
+
   return (
     <>
       <div className="bg-base-100">
@@ -40,9 +52,12 @@ export function HomePage() {
           </div>
         )}
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5 m-5 max-h-svh ">
+        <div className="flex flex-wrap gap-5 m-5 max-h-svh">
           {localSubjects.map((subject) => {
-            console.log('Rendering subject with id:', subject.id) // Debugging statement
+            if (!subject.id) {
+              console.warn('Skipping subject with undefined id:', subject)
+              return null
+            }
             return (
               <SubjectCard
                 key={subject.id} // Ensure each SubjectCard has a unique key

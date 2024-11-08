@@ -37,6 +37,7 @@ function ActivityProvider({ children }) {
       value={{
         activities,
         errors,
+        setActivities,
         getActivities,
         createActivity,
       }}

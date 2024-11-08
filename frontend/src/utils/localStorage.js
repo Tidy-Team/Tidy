@@ -4,8 +4,14 @@ export function LocalStorage() {
   }
 
   const loadTheme = () => {
-    return localStorage.getItem('theme') || 'light'
+    const theme = localStorage.getItem('theme')
+    if (theme) {
+      return theme
+    }
+    // Return system theme if no theme is set
+    return window.matchMedia('(prefers-color-scheme: dark)').matches
+      ? 'dark'
+      : 'cupcake'
   }
-
   return { saveTheme, loadTheme }
 }

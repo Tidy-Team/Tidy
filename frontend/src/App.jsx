@@ -1,28 +1,36 @@
-import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
-import { SubjectProvider } from './context/SubjectContext';
-import { ProtectedRoute } from './routes';
-import { LandingPage, LoginPage, SignUpPage, HomePage } from './pages';
-import { Navbar, SideNav } from './components';
-import { SubjectPage } from './pages/SubjectPage';
-import { ActivityProvider } from './context/ActivityContext';
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useLocation,
+} from 'react-router-dom'
+import { AuthProvider } from './context/AuthContext'
+import { ProtectedRoute } from './routes'
+import {
+  LandingPage,
+  LoginPage,
+  SignUpPage,
+  HomePage,
+  SubjectPage,
+  CalendarPage,
+  StatsPage,
+  ActivityTimer,
+  ProfilePage,
+} from './pages'
+import { Navbar, SideNav } from './components'
 
 function App() {
   return (
     <AuthProvider>
-      <SubjectProvider>
-        <ActivityProvider>
-          <Router>
-            <Layout />
-          </Router>
-        </ActivityProvider>
-      </SubjectProvider>
+      <Router>
+        <Layout />
+      </Router>
     </AuthProvider>
-  );
+  )
 }
 function Layout() {
-  const location = useLocation();
-  const showNavbar = ['/', '/login', '/register'].includes(location.pathname);
+  const location = useLocation()
+  const showNavbar = ['/', '/login', '/register'].includes(location.pathname)
 
   return (
     <>
@@ -38,7 +46,10 @@ function Layout() {
               <Route element={<ProtectedRoute />}>
                 <Route path="/subjects" element={<HomePage />} />
                 <Route path="/subjects/:id" element={<SubjectPage />} />
-                <Route path="/add-subject" />
+                <Route path="/stats" element={<StatsPage />} />
+                <Route path="/calendar" element={<CalendarPage />} />
+                <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/activity/:id" element={<ActivityTimer />} />
               </Route>
             </Routes>
           </main>
@@ -54,6 +65,6 @@ function Layout() {
         </main>
       )}
     </>
-  );
+  )
 }
-export default App;
+export default App

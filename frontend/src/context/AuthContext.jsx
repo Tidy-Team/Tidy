@@ -28,8 +28,7 @@ const AuthProvider = ({ children }) => {
     try {
       const res = await signUpRequest(user)
       setIsAuthenticated(true)
-      setUser(res.data)
-      Cookies.set('token', res.data.token) // Ensure the token is stored in cookies
+      setUser(res.data.user)
     } catch (error) {
       console.log(error.response.data)
       setError(error.response.data.errors || [error.response.data.error])
@@ -40,9 +39,7 @@ const AuthProvider = ({ children }) => {
     try {
       const res = await signInnRequest(user)
       setIsAuthenticated(true)
-      setUser(res.data)
-      Cookies.set('token', res.data.token) // Ensure the token is stored in cookies
-      console.log(res.data)
+      setUser(res.data.user)
     } catch (error) {
       console.log(error.response.data)
       setError(error.response.data.errors || [error.response.data.error])
@@ -52,7 +49,7 @@ const AuthProvider = ({ children }) => {
   const logOut = async () => {
     try {
       await logoutRequest()
-      Cookies.remove('token')
+      Cookies.remove('authToken')
       setIsAuthenticated(false)
       setUser(null)
     } catch (error) {
@@ -66,27 +63,23 @@ const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     async function checkLogin() {
-      const token = Cookies.get('token') // Get the token from cookies
-
-      if (!token) {
-        setIsAuthenticated(false)
-        setUser(null)
-        setLoading(false)
-        return
-      }
       try {
-        const res = await verifySession(token)
-        if (!res.data) {
+        const res = await verifySession()
+
+        if (!res.data || !res.data.user) {
+          console.log('No user data found in response, setting user to null')
+
           setIsAuthenticated(false)
           setLoading(false)
           setUser(null)
           return
         }
         setIsAuthenticated(true)
-        setUser(res.data)
+        setUser(res.data.user)
         setLoading(false)
       } catch (error) {
-        console.log(error)
+        console.log('Error during session verification:', error)
+
         setIsAuthenticated(false)
         setUser(null)
         setLoading(false)

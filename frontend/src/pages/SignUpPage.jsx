@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 
 //Components and utilities
-import { useAuth } from '../context/useAuth'
+import { useAuth } from '../hooks/useAuth'
 import { registerSchema } from '../schemas/authSchemas'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Modal } from '../components'
