@@ -41,7 +41,7 @@ const AuthProvider = ({ children }) => {
       setIsAuthenticated(true)
       setUser(res.data.user)
     } catch (error) {
-      console.log(error.response.data)
+      console.log(error)
       setError(error.response.data.errors || [error.response.data.error])
     }
   }
@@ -78,7 +78,7 @@ const AuthProvider = ({ children }) => {
         setUser(res.data.user)
         setLoading(false)
       } catch (error) {
-        console.log('Error during session verification:', error)
+        console.log('Error during session verification:', error.response.data)
 
         setIsAuthenticated(false)
         setUser(null)

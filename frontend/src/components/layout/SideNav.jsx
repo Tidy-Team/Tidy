@@ -16,9 +16,10 @@ import { IoMdSettings } from 'react-icons/io'
 import { FaUser } from 'react-icons/fa'
 import { FiLogOut } from 'react-icons/fi'
 import { CgDarkMode } from 'react-icons/cg'
+import { FaMusic } from 'react-icons/fa'
 
 export function SideNav({ children }) {
-  const { user, logOut, loading } = useAuth()
+  const { user, logOut, loading, isAuthenticated } = useAuth()
   const location = useLocation()
   const navigate = useNavigate()
   const { saveTheme, loadTheme } = LocalStorage()
@@ -40,14 +41,10 @@ export function SideNav({ children }) {
     saveTheme(theme)
   }
 
-  const handleLogOut = () => {
-    logOut()
+  const handleLogOut = async () => {
+    await logOut()
     navigate('/')
   }
-
-  const buttonText = location.pathname === '/subjects' ? 'Añadir Materia' : ''
-
-  const showButton = '/subjects'
 
   const closeDrawer = () => {
     document.getElementById('drawer').checked = false
@@ -79,6 +76,13 @@ export function SideNav({ children }) {
                       Tidy
                     </button>
                   </Link>
+                </div>
+              </div>
+              <div className="flex-0 ">
+                <div className="flex" id="buttons">
+                  <button className="btn">
+                    <FaMusic className="text-xl" />
+                  </button>
                 </div>
               </div>
             </nav>
