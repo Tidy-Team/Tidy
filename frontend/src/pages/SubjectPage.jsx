@@ -1,23 +1,15 @@
-//React
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
-
-//Components and utilities
-import { useFetch } from '../hooks/useFetch.js'
-import { Modal, ActivityForm, ActivitiesList, NotesList } from '../components'
-
-//Icons
+import { useParams, useNavigate } from 'react-router-dom'
+import { useFetch } from '../hooks/useFetch'
+import { FaChalkboardTeacher, FaPlay } from 'react-icons/fa'
 import { HiDotsVertical } from 'react-icons/hi'
-import { BiPlus } from 'react-icons/bi'
-import { FaChalkboardTeacher } from 'react-icons/fa'
-import { FaPlay } from 'react-icons/fa'
 import { MdEdit, MdDelete } from 'react-icons/md'
+import { Modal, ActivityForm, NotesList, TimerModal } from '../components'
 
 export function SubjectPage() {
-  const { id } = useParams()
+  const { id: subjectId } = useParams()
   const navigate = useNavigate()
-  const randomImageUrl = `https://picsum.photos/seed/${id}/620/366`
+  const randomImageUrl = `https://picsum.photos/seed/${subjectId}/620/366`
 
   const {
     fetchData: fetchSubjectData,
@@ -25,7 +17,7 @@ export function SubjectPage() {
     error: subjectError,
     isLoading: isSubjectLoading,
   } = useFetch(
-    `http://localhost:3000/subjects/${id}`,
+    `http://localhost:3000/subjects/${subjectId}`,
     'GET',
     { 'Content-Type': 'application/json' },
     { credentials: 'include' }
@@ -37,7 +29,7 @@ export function SubjectPage() {
     error: activitiesError,
     isLoading: isActivitiesLoading,
   } = useFetch(
-    `http://localhost:3000/subjects/${id}/activities`,
+    `http://localhost:3000/subjects/${subjectId}/activities`,
     'GET',
     { 'Content-Type': 'application/json' },
     { credentials: 'include' }
@@ -45,7 +37,9 @@ export function SubjectPage() {
 
   const [localSubject, setLocalSubject] = useState(null)
   const [localActivities, setLocalActivities] = useState([])
+  const [subtasksMap, setSubtasksMap] = useState({})
   const [imageLoaded, setImageLoaded] = useState(false)
+  const [selectedActivityId, setSelectedActivityId] = useState(null)
 
   useEffect(() => {
     fetchSubjectData()
@@ -60,12 +54,37 @@ export function SubjectPage() {
 
   useEffect(() => {
     if (activities) {
-      setLocalActivities(activities)
+      setLocalActivities(activities.reverse())
+      activities.forEach((activity) => {
+        fetchSubtasks(activity.id)
+      })
     }
   }, [activities])
 
   const addActivity = (newActivity) => {
-    setLocalActivities((prevActivities) => [...prevActivities, newActivity])
+    setLocalActivities((prevActivities) => [newActivity, ...prevActivities])
+  }
+
+  const calculateCompletionPercentage = (subtasks) => {
+    if (!Array.isArray(subtasks) || subtasks.length === 0) return 0
+    const completedSubtasks = subtasks.filter(
+      (subtask) => subtask.estado === 'completada'
+    ).length
+    return (completedSubtasks / subtasks.length) * 100
+  }
+
+  const fetchSubtasks = async (activityId) => {
+    const response = await fetch(
+      `http://localhost:3000/subtasks/${activityId}`,
+      {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+      }
+    )
+    const data = await response.json()
+    const subtasks = data.Subtareas || []
+    setSubtasksMap((prev) => ({ ...prev, [activityId]: subtasks }))
   }
 
   if (isSubjectLoading || isActivitiesLoading) {
@@ -131,7 +150,9 @@ export function SubjectPage() {
             Tareas
             <button
               className="btn btn-sm btn-primary"
-              onClick={() => document.getElementById('modal').showModal()}
+              onClick={() =>
+                document.getElementById('modal-activity').showModal()
+              }
             >
               Añadir Tarea
             </button>
@@ -140,52 +161,77 @@ export function SubjectPage() {
             {localActivities.length === 0 ? (
               <h1 className="p-5 text-center">No hay tareas</h1>
             ) : (
-              localActivities.map((activity) => (
-                <div
-                  key={activity.id}
-                  className="p-3 bg-base-100 rounded-lg text-start flex justify-between items-center"
-                >
-                  {activity.titulo}
-                  <div className="flex items-center gap-3">
-                    <button
-                      className="btn btn-sm btn-primary btn-circle"
-                      onClick={() => {
-                        navigate(`/activity/${activity.id}`)
-                      }}
-                    >
-                      <FaPlay className="fill-base-200" />
-                    </button>
-                    <div className="dropdown dropdown-left">
-                      <div
-                        tabIndex="0"
-                        role="button"
-                        className="btn btn-ghost btn-circle btn-sm mb-1"
-                      >
-                        <HiDotsVertical />
+              localActivities.map((activity) => {
+                const subtasks = subtasksMap[activity.id] || []
+                const completionPercentage =
+                  calculateCompletionPercentage(subtasks)
+                return (
+                  <div
+                    key={activity.id}
+                    className="p-3 bg-base-100 rounded-lg text-start flex justify-between items-center"
+                  >
+                    {activity.titulo}
+                    <div className="flex items-center gap-3">
+                      <div className="flex flex-col">
+                        <p className="text-center font-semibold">
+                          {completionPercentage.toFixed(0)}%
+                        </p>
+                        <progress
+                          className="progress w-10 progress-accent"
+                          value={completionPercentage}
+                          max="100"
+                        ></progress>
                       </div>
-
-                      <ul
-                        tabIndex="0"
-                        className="dropdown-content z-[1] join join-vertical shadow bg-base-200 rounded-box w-28"
+                      <button
+                        className="btn btn-sm btn-primary btn-circle"
+                        onClick={() => {
+                          setSelectedActivityId(activity.id)
+                          document.getElementById('timer-modal').showModal()
+                        }}
                       >
-                        <button className="btn flex  join-item min-h-fit">
-                          <MdEdit className="text-lg" />
-                          Editar
-                        </button>
-                        <button className="btn join-item">
-                          <MdDelete />
-                          Eliminar
-                        </button>
-                      </ul>
+                        <FaPlay className="fill-base-200" />
+                      </button>
+                      <div className="dropdown dropdown-left">
+                        <div
+                          tabIndex="0"
+                          role="button"
+                          className="btn btn-ghost btn-circle btn-sm mb-1"
+                        >
+                          <HiDotsVertical />
+                        </div>
+
+                        <ul
+                          tabIndex="0"
+                          className="dropdown-content z-[1] join join-vertical shadow bg-base-200 rounded-box w-28"
+                        >
+                          <button className="btn flex  join-item min-h-fit">
+                            <MdEdit className="text-lg" />
+                            Editar
+                          </button>
+                          <button className="btn join-item">
+                            <MdDelete />
+                            Eliminar
+                          </button>
+                        </ul>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))
+                )
+              })
             )}
           </div>
         </div>
       </div>
-      <Modal children={<ActivityForm addActivity={addActivity} />} />
+      <Modal
+        id="modal-activity"
+        children={<ActivityForm addActivity={addActivity} />}
+      />
+      <TimerModal
+        id="timer-modal"
+        activityId={selectedActivityId}
+        subjectId={subjectId}
+        subjectName={localSubject?.subjectName}
+      />
     </div>
   )
 }

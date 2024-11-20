@@ -67,12 +67,13 @@ export function ActivityForm({ addActivity }) {
 
       const transformedData = {
         ...formData,
-        option: 'Option 2',
+        option: 'Option-1',
         num_preguntas: Number(formData.num_preguntas),
         prioridad_id: prioridad_id,
       }
 
       setFormData(transformedData)
+      document.getElementById('modal-activity').close()
     } catch (error) {
       console.log(error)
     }
@@ -139,13 +140,7 @@ export function ActivityForm({ addActivity }) {
         </label>
       </div>
 
-      <button
-        className="btn btn-primary mt-4"
-        type="submit"
-        onSubmit={() => {
-          document.getElementById('modal').close()
-        }}
-      >
+      <button className="btn btn-primary mt-4" type="submit">
         Confirmar
       </button>
     </form>
