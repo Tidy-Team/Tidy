@@ -5,12 +5,12 @@ import { useEffect, useState } from 'react'
 import { MdDelete, MdEdit } from 'react-icons/md'
 import { HiDotsVertical } from 'react-icons/hi'
 
-export const NotesList = () => {
+export const NotesList = ({ notes }) => {
   const { id } = useParams()
 
   const {
     fetchData,
-    data: notes,
+    data: fetchedNotes,
     error,
     isLoading,
   } = useFetch(
@@ -27,19 +27,23 @@ export const NotesList = () => {
   }, [])
 
   useEffect(() => {
+    if (fetchedNotes) {
+      setLocalNotes((prevNotes) => [
+        ...fetchedNotes.Notes.reverse(),
+        ...prevNotes,
+      ])
+    }
+  }, [fetchedNotes])
+
+  useEffect(() => {
     if (notes) {
-      setLocalNotes(notes.Notes)
+      setLocalNotes((prevNotes) => [...notes, ...prevNotes])
     }
   }, [notes])
 
-  const addNote = (newNote) => {
-    const noteData = newNote
-    setLocalNotes([...localNotes, noteData])
-  }
-
   if (isLoading) {
     return (
-      <div className="flex justify-center  mx-auto">
+      <div className="flex justify-center mx-auto">
         <span className="loading loading-spinner self-center loading-sm"></span>
       </div>
     )
@@ -48,15 +52,13 @@ export const NotesList = () => {
   return (
     <div>
       {localNotes.length === 0 && (
-        <div className="flex justify-center items-center p-10 m-10">
-          <div>Vacio</div>
-        </div>
+        <div className="flex justify-center items-center h-0"></div>
       )}
       {localNotes.map((note) => {
         return (
           <div
-            className=" flex items-center pb-3 overflow-visible"
-            key={note.id}
+            className="flex items-center pb-3 overflow-visible"
+            key={note.id} // Ensure each note has a unique key
           >
             <p className="text-left w-full text-wrap">- {note.description}</p>
             <div className="dropdown dropdown-left !z-[80]">
@@ -72,7 +74,7 @@ export const NotesList = () => {
                 tabIndex="0"
                 className="dropdown-content z-[1] join join-vertical shadow bg-base-100 rounded-box w-28"
               >
-                <button className="btn btn-ghost flex  join-item min-h-fit">
+                <button className="btn btn-ghost flex join-item min-h-fit">
                   <MdEdit className="text-lg" />
                   Editar
                 </button>

@@ -17,7 +17,6 @@ import {
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 
 import {
-  CartesianGrid,
   Legend,
   Line,
   LineChart,
@@ -34,6 +33,160 @@ import {
 } from 'recharts'
 import { Tooltip } from '@mui/material'
 
+const fakeSubjects = [
+  {
+    subjectId: '1',
+    data: {
+      subjectName: 'Matemáticas',
+      activities: [
+        {
+          activityId: '101',
+          totalTimeTaken: 600000, // 10 minutes in milliseconds
+          completionDate: null,
+          subTasks: [
+            {
+              subTaskId: '1001',
+              timeTaken: 300000, // 5 minutes in milliseconds
+              completionDate: '2023-11-06T11:55:00Z',
+            },
+            {
+              subTaskId: '1002',
+              timeTaken: 300000, // 5 minutes in milliseconds
+              completionDate: '2023-11-01T10:00:00Z',
+            },
+          ],
+        },
+        {
+          activityId: '102',
+          totalTimeTaken: 600000, // 10 minutes in milliseconds
+          completionDate: null,
+          subTasks: [
+            {
+              subTaskId: '1003',
+              timeTaken: 300000, // 5 minutes in milliseconds
+              completionDate: '2023-11-02T11:55:00Z',
+            },
+            {
+              subTaskId: '1004',
+              timeTaken: 300000, // 5 minutes in milliseconds
+              completionDate: '2023-11-02T12:00:00Z',
+            },
+          ],
+        },
+      ],
+    },
+  },
+
+  {
+    subjectId: '3',
+    data: {
+      subjectName: 'Biología',
+      activities: [
+        {
+          activityId: '301',
+          totalTimeTaken: 600000, // 10 minutes in milliseconds
+          completionDate: '2023-11-04T16:00:00Z',
+          subTasks: [
+            {
+              subTaskId: '3001',
+              timeTaken: 300000, // 5 minutes in milliseconds
+              completionDate: '2023-11-04T15:55:00Z',
+            },
+            {
+              subTaskId: '3002',
+              timeTaken: 300000, // 5 minutes in milliseconds
+              completionDate: '2023-11-04T16:00:00Z',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    subjectId: '4',
+    data: {
+      subjectName: 'Geografía',
+      activities: [
+        {
+          activityId: '401',
+          totalTimeTaken: 600000, // 10 minutes in milliseconds
+          completionDate: '2023-11-05T10:00:00Z',
+          subTasks: [
+            {
+              subTaskId: '4001',
+              timeTaken: 300000, // 5 minutes in milliseconds
+              completionDate: '2023-11-03T14:00:00Z',
+            },
+            {
+              subTaskId: '4002',
+              timeTaken: 300000, // 5 minutes in milliseconds
+              completionDate: '2023-11-05T10:00:00Z',
+            },
+          ],
+        },
+        {
+          activityId: '402',
+          totalTimeTaken: 600000, // 10 minutes in milliseconds
+          completionDate: '2023-11-06T12:00:00Z',
+          subTasks: [
+            {
+              subTaskId: '4003',
+              timeTaken: 300000, // 5 minutes in milliseconds
+              completionDate: '2023-11-06T11:55:00Z',
+            },
+            {
+              subTaskId: '4004',
+              timeTaken: 300000, // 5 minutes in milliseconds
+              completionDate: '2023-11-06T12:00:00Z',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    subjectId: '5',
+    data: {
+      subjectName: 'Inglés',
+      activities: [
+        {
+          activityId: '501',
+          totalTimeTaken: 600000, // 10 minutes in milliseconds
+          completionDate: '2023-11-07T15:00:00Z',
+          subTasks: [
+            {
+              subTaskId: '5001',
+              timeTaken: 300000, // 5 minutes in milliseconds
+              completionDate: '2023-11-06T11:55:00Z',
+            },
+            {
+              subTaskId: '5002',
+              timeTaken: 300000, // 5 minutes in milliseconds
+              completionDate: '2023-11-07T15:00:00Z',
+            },
+          ],
+        },
+        {
+          activityId: '502',
+          totalTimeTaken: 600000, // 10 minutes in milliseconds
+          completionDate: '2023-11-08T17:00:00Z',
+          subTasks: [
+            {
+              subTaskId: '5003',
+              timeTaken: 300000, // 5 minutes in milliseconds
+              completionDate: '2023-11-08T16:55:00Z',
+            },
+            {
+              subTaskId: '5004',
+              timeTaken: 300000, // 5 minutes in milliseconds
+              completionDate: '2023-11-08T17:00:00Z',
+            },
+          ],
+        },
+      ],
+    },
+  },
+]
 // Helper function to format time in MM:SS
 const formatTime = (seconds) => {
   const roundedSeconds = Math.floor(seconds)
@@ -42,12 +195,24 @@ const formatTime = (seconds) => {
   return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`
 }
 
-// Create a dark theme
+// Retrieve theme from local storage
+const savedTheme = localStorage.getItem('theme') || 'dark'
+
+// Create themes
+const lightTheme = createTheme({
+  palette: {
+    mode: 'light',
+  },
+})
+
 const darkTheme = createTheme({
   palette: {
     mode: 'dark',
   },
 })
+
+// Determine which theme to use
+const theme = savedTheme === 'cupcake' ? lightTheme : darkTheme
 
 // Helper function to calculate average time
 const calculateAverageTime = (times) => {
@@ -145,7 +310,7 @@ const MostEfficientDays = ({ data }) => {
   }))
 
   return (
-    <ThemeProvider theme={darkTheme}>
+    <ThemeProvider theme={theme}>
       <div className="flex flex-col h-full">
         <h2 className="text-xl font-semibold mb-2 text-center">
           Tareas Completadas por Día
@@ -186,7 +351,7 @@ const CompletedVsStartedActivities = ({ data }) => {
   ]
 
   return (
-    <ThemeProvider theme={darkTheme}>
+    <ThemeProvider theme={theme}>
       <div className="flex flex-col h-full">
         <h2 className="text-xl font-semibold mb-2 text-center">
           Actividades Iniciadas vs Completadas
@@ -227,17 +392,20 @@ const SubjectEfficiencyRadarChart = ({ data }) => {
   }))
 
   return (
-    <ThemeProvider theme={darkTheme}>
+    <ThemeProvider theme={theme}>
       <div className="flex flex-col h-full">
         <h2 className="text-xl font-semibold mb-2 text-center">
           Puntos de Eficiencia por Materia
         </h2>
         <div className="flex-grow">
           <ResponsiveContainer width="100%" height="100%">
-            <RadarChart data={radarData}>
+            <RadarChart
+              data={radarData}
+              margin={{ top: 5, right: 50, left: 50, bottom: 5 }}
+            >
               <PolarGrid />
               <PolarAngleAxis dataKey="subjectName" />
-              <PolarRadiusAxis />
+
               <Radar
                 name="Efficiency Points"
                 dataKey="efficiencyPoints"
@@ -259,10 +427,13 @@ export const StatsPage = () => {
   const keys = Object.keys(localStorage).filter((key) =>
     key.startsWith('subject_')
   )
-  const subjects = keys.map((key) => ({
+
+  const realSubjects = keys.map((key) => ({
     subjectId: key.split('_')[1],
     data: JSON.parse(localStorage.getItem(key)),
   }))
+
+  const subjects = [...fakeSubjects, ...realSubjects]
 
   // Aggregate total time for each subject
   const timeSpentPerSubjectData = subjects.map((subject) => {
@@ -299,7 +470,7 @@ export const StatsPage = () => {
   const averageActivityTime = calculateAverageTime(activityTimes)
 
   return (
-    <div className="container p-4">
+    <div className="container  min-h-[calc(100vh-94px)]">
       <div className="grid grid-cols-4 grid-rows-2 gap-6  ">
         <div className="col-span-2 h-72 space-y-5 ">
           {/* Timepo actividad */}
@@ -342,11 +513,11 @@ export const StatsPage = () => {
           <TimeSpentPerSubject data={timeSpentPerSubjectData} />
         </div>
         <div className="col-start-3 row-start-2 bg-base-200 p-4  rounded-xl shadow h-72">
-          <CompletedVsStartedActivities
+          {/* <CompletedVsStartedActivities
             data={subjects.flatMap((subject) => subject.data.activities)}
-          />
+          /> */}
         </div>
-        <div className="col-start-4 row-start-2 bg-base-200 p-4 rounded-xl shadow h-72">
+        <div className="col-start-3 col-span-2 row-start-2 bg-base-200 p-4 rounded-xl shadow h-72">
           <SubjectEfficiencyRadarChart data={subjects} />
         </div>
       </div>

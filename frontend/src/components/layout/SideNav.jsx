@@ -16,10 +16,9 @@ import { IoMdSettings } from 'react-icons/io'
 import { FaUser } from 'react-icons/fa'
 import { FiLogOut } from 'react-icons/fi'
 import { CgDarkMode } from 'react-icons/cg'
-import { FaMusic } from 'react-icons/fa'
 
 export function SideNav({ children }) {
-  const { user, logOut, loading, isAuthenticated } = useAuth()
+  const { user, logOut, loading } = useAuth()
   const location = useLocation()
   const navigate = useNavigate()
   const { saveTheme, loadTheme } = LocalStorage()
@@ -80,9 +79,9 @@ export function SideNav({ children }) {
               </div>
               <div className="flex-0 ">
                 <div className="flex" id="buttons">
-                  <button className="btn">
+                  {/* <button className="btn">
                     <FaMusic className="text-xl" />
-                  </button>
+                  </button> */}
                 </div>
               </div>
             </nav>
@@ -143,7 +142,9 @@ export function SideNav({ children }) {
                     className="w-28 rounded-full "
                   />
                   <h2 className="font-bold text-lg">{user.name}</h2>
-                  <span className="text-sm text-accent">{user.email}</span>
+                  <span className="text-sm text-secondary font-semibold">
+                    {user.email}
+                  </span>
                 </>
               )
             )}

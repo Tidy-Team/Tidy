@@ -36,8 +36,6 @@ export function ActivityForm({ addActivity }) {
 
   useEffect(() => {
     if (formData) {
-      console.log(formData)
-
       fetchData(formData)
     }
   }, [formData]) // Correctly associate the dependency array with the useEffect

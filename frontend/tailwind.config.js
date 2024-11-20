@@ -7,7 +7,12 @@ export default {
   plugins: [require('daisyui')],
   daisyui: {
     themes: [
-      'cupcake',
+      {
+        cupcake: {
+          ...require('daisyui/src/theming/themes')['cupcake'],
+          primary: '#A855F7',
+        },
+      },
       {
         dark: {
           ...require('daisyui/src/theming/themes')['dark'],

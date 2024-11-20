@@ -120,7 +120,9 @@ export const TimerPage = () => {
   useEffect(() => {
     const allSubTasksCompleted =
       localSubTasks.length > 0 &&
-      localSubTasks.every((subtask) => subtask.estado === 'completada')
+      localSubTasks.every(
+        (subtask) => subtask.estado === 'completada' || subtask.completionDate
+      )
 
     const existingData = JSON.parse(
       localStorage.getItem(`subject_${subjectId}`)
@@ -179,40 +181,11 @@ export const TimerPage = () => {
       setShowFinishModal(true)
       triggerConfetti()
 
-      // Delete all subtasks when all are completed
-      for (const subTask of localSubTasks) {
-        await deleteSubTask(subTask.id)
-      }
       // Delete the main activity after deleting all subtasks
       await deleteActivity(activityId)
     } else {
       setCurrentSubTaskIndex((prevIndex) => prevIndex + 1)
       setSubTaskStartTime(Date.now())
-    }
-  }
-
-  const deleteSubTask = async (subTaskId) => {
-    const url = `http://localhost:3000/activities/${activityId}/subtasks/${subTaskId}`
-    const fetchOptions = {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-    }
-
-    try {
-      const response = await fetch(url, fetchOptions)
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}))
-        throw new Error(
-          JSON.stringify({
-            status: response.status,
-            statusText: response.statusText,
-            data: errorData,
-          })
-        )
-      }
-    } catch (error) {
-      console.error('Error deleting subtask:', error)
     }
   }
 
@@ -379,6 +352,9 @@ export const TimerPage = () => {
           className={`btn btn-error w-fit self-center transition-opacity duration-500 ease-in-out ${
             hasStarted ? 'opacity-100' : 'opacity-0'
           }`}
+          onClick={() => {
+            navigate(`/subjects/${subjectId}`)
+          }}
         >
           Finalizar
         </button>

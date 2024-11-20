@@ -10,6 +10,7 @@ import {
   LandingPage,
   LoginPage,
   SignUpPage,
+  VerificationPage,
   HomePage,
   SubjectPage,
   CalendarPage,
@@ -31,18 +32,19 @@ function App() {
 function Layout() {
   const location = useLocation()
   const showNavbar = ['/', '/login', '/register'].includes(location.pathname)
+  const showSideNav = !showNavbar && location.pathname !== '/verify'
 
   return (
     <>
-      {showNavbar ? (
-        <Navbar />
-      ) : (
+      {showNavbar && <Navbar />}
+      {showSideNav ? (
         <SideNav>
           <main>
             <Routes>
               <Route path="/" element={<LandingPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<SignUpPage />} />
+              <Route path="/verify" element={<VerificationPage />} />
               <Route element={<ProtectedRoute />}>
                 <Route path="/subjects" element={<HomePage />} />
                 <Route path="/subjects/:id" element={<SubjectPage />} />
@@ -54,13 +56,13 @@ function Layout() {
             </Routes>
           </main>
         </SideNav>
-      )}
-      {showNavbar && (
+      ) : (
         <main>
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<SignUpPage />} />
+            <Route path="/verify" element={<VerificationPage />} />
           </Routes>
         </main>
       )}

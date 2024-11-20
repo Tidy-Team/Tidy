@@ -7,11 +7,12 @@ import { useForm } from 'react-hook-form'
 import { useAuth } from '../hooks/useAuth'
 import { registerSchema } from '../schemas/authSchemas'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Modal } from '../components'
 
 //Icons
 import { MdEmail } from 'react-icons/md'
 import { FaLock, FaUser } from 'react-icons/fa'
+
+import { Modal } from '../components'
 
 export function SignUpPage() {
   const { signUp, errors: registerErrors = [], isAuthenticated } = useAuth()
@@ -24,18 +25,11 @@ export function SignUpPage() {
   })
 
   const navigate = useNavigate()
-  const modalRef = useRef(null)
 
   const onSubmit = async (value) => {
     await signUp(value)
-    if (modalRef.current) {
-      modalRef.current.showModal()
-    }
+    document.getElementById('modal').showModal()
   }
-
-  useEffect(() => {
-    if (isAuthenticated) navigate('/')
-  }, [isAuthenticated, navigate])
 
   return (
     <>
@@ -109,17 +103,12 @@ export function SignUpPage() {
         </form>
       </div>
       {/* Email Alert  */}
-      <dialog ref={modalRef} className="modal">
-        <div className="modal-content">
-          <p>Por favor, revise su correo electrónico para la verificación.</p>
-          <button
-            onClick={() => modalRef.current.close()}
-            className="btn btn-primary"
-          >
-            Cerrar
-          </button>
-        </div>
-      </dialog>
+
+      <Modal>
+        <p className="text-2xl text center">
+          Por favor, revise su correo electrónico para la verificación.
+        </p>
+      </Modal>
     </>
   )
 }

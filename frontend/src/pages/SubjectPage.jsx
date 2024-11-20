@@ -4,7 +4,13 @@ import { useFetch } from '../hooks/useFetch'
 import { FaChalkboardTeacher, FaPlay } from 'react-icons/fa'
 import { HiDotsVertical } from 'react-icons/hi'
 import { MdEdit, MdDelete } from 'react-icons/md'
-import { Modal, ActivityForm, NotesList, TimerModal } from '../components'
+import {
+  Modal,
+  ActivityForm,
+  NotesList,
+  TimerModal,
+  NoteForm,
+} from '../components'
 
 export function SubjectPage() {
   const { id: subjectId } = useParams()
@@ -40,6 +46,7 @@ export function SubjectPage() {
   const [subtasksMap, setSubtasksMap] = useState({})
   const [imageLoaded, setImageLoaded] = useState(false)
   const [selectedActivityId, setSelectedActivityId] = useState(null)
+  const [localNotes, setLocalNotes] = useState([])
 
   useEffect(() => {
     fetchSubjectData()
@@ -65,6 +72,9 @@ export function SubjectPage() {
     setLocalActivities((prevActivities) => [newActivity, ...prevActivities])
   }
 
+  const addNote = (newNote) => {
+    setLocalNotes((prevNotes) => [newNote, ...prevNotes])
+  }
   const calculateCompletionPercentage = (subtasks) => {
     if (!Array.isArray(subtasks) || subtasks.length === 0) return 0
     const completedSubtasks = subtasks.filter(
@@ -138,10 +148,17 @@ export function SubjectPage() {
               <h1 className=" text-xl font-semibold rounded-2xl text-left">
                 Notas
               </h1>
-              <button className="btn btn-primary btn-sm ">Añadir Nota</button>
+              <button
+                className="btn btn-sm btn-primary z-10"
+                onClick={() =>
+                  document.getElementById('modal-note').showModal()
+                }
+              >
+                Añadir Nota
+              </button>
             </div>
             <div className="collapse-content ">
-              <NotesList />
+              <NotesList notes={localNotes} />
             </div>
           </div>
         </div>
@@ -226,6 +243,7 @@ export function SubjectPage() {
         id="modal-activity"
         children={<ActivityForm addActivity={addActivity} />}
       />
+      <Modal id="modal-note" children={<NoteForm addNote={addNote} />} />
       <TimerModal
         id="timer-modal"
         activityId={selectedActivityId}

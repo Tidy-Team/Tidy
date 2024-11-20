@@ -1,3 +1,20 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* calendar.css */
+.dark .rbc-calendar {
+  background-color: #1a202c; /* Dark background */
+  color: #cbd5e0; /* Light text */
+}
+
+.dark .rbc-event {
+  background-color: #2d3748; /* Darker event background */
+  color: #cbd5e0; /* Light text */
+}
+
+/* Add more custom styles as needed */
+
+.fade-in {
+  opacity: 1 !important;
+}
