@@ -28,7 +28,9 @@ export function SignUpPage() {
 
   const onSubmit = async (value) => {
     await signUp(value)
-    document.getElementById('modal').showModal()
+    if (!registerErrors) {
+      document.getElementById('modal').showModal()
+    }
   }
 
   return (
@@ -40,9 +42,6 @@ export function SignUpPage() {
             Bienvenido a <span className="font-bold text-purple-600">Tidy</span>
           </h1>
           <p className="mb-5">Por favor, rellene el siguiente formulario</p>
-          {registerErrors && (
-            <p className="text-error text-sm mb-1">{registerErrors}</p>
-          )}
         </div>
 
         {/* Form */}
@@ -92,9 +91,12 @@ export function SignUpPage() {
           {errors.password?.message && (
             <p className="text-error text-sm">{errors.password?.message}</p>
           )}
-
-          <button className="btn btn-primary mt-5">Crear Cuenta</button>
-
+          {/* Register Errors */}
+          {registerErrors && (
+            <p className="text-error text-sm mb-1">{registerErrors}</p>
+          )}
+          {/* Submit */}
+          <button className="btn btn-primary mt-5">Regristrarse</button>
           <div className="divider my-0">¿Ya tienes una cuenta?</div>
           {/* Login Redirect */}
           <Link to="/login" className="w-full">

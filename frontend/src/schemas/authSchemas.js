@@ -1,26 +1,26 @@
-import { z } from 'zod';
+import { z } from 'zod'
 
 export const loginSchema = z.object({
   email: z.string().email({
-    message: 'Please enter a valid email address',
+    message: 'Por favor, ingrese una dirección de correo electrónico válida',
   }),
   password: z.string().min(6, {
-    message: 'Password must be at least 6 characters',
+    message: 'La contraseña debe tener al menos 6 caracteres',
   }),
-});
+})
 
 export const registerSchema = z.object({
   name: z
     .string({
-      required_error: 'Full name is required',
+      required_error: 'El nombre completo es obligatorio',
     })
     .min(3, {
-      message: 'Full name must be at least 3 characters',
+      message: 'El nombre completo debe tener al menos 3 caracteres',
     }),
   email: z.string().email({
-    message: 'Please enter a valid email address',
+    message: 'Por favor, ingrese una dirección de correo electrónico válida',
   }),
   password: z.string().min(6, {
-    message: 'Password must be at least 6 characters',
+    message: 'La contraseña debe tener al menos 6 caracteres',
   }),
-});
+})

@@ -74,7 +74,7 @@ export function LoginPage() {
           <p className="text-error text-sm">{errors.password?.message}</p>
           {/* Login Errors */}
           {loginErrors && (
-            <p className="text-error text-sm mb-1">{loginErrors}</p>
+            <p className="text-error text-sm mb-1">{loginErrors.message}</p>
           )}
           {/* Reset Password */}
           <a href="#" className="text-purple-600 text-sm ">
