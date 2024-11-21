@@ -89,7 +89,6 @@ export function ActivityForm({ addActivity }) {
         <input
           type="text"
           className="input input-bordered"
-          placeholder="ej: Matemática 1: Funciones"
           {...register('titulo', { required: 'Obligatorio' })}
         />
         {errors.titulo && (
@@ -108,7 +107,6 @@ export function ActivityForm({ addActivity }) {
           <input
             type="number"
             className="input input-bordered"
-            placeholder="ej: 1, 5, 10"
             min={1}
             {...register('num_preguntas', { required: 'Obligatorio' })}
           />

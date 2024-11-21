@@ -4,6 +4,8 @@ import { useFetch } from '../hooks/useFetch'
 import { FaChalkboardTeacher, FaPlay } from 'react-icons/fa'
 import { HiDotsVertical } from 'react-icons/hi'
 import { MdEdit, MdDelete } from 'react-icons/md'
+import { FaSortAmountDown, FaSortAmountUp } from 'react-icons/fa'
+
 import {
   Modal,
   ActivityForm,
@@ -47,6 +49,8 @@ export function SubjectPage() {
   const [imageLoaded, setImageLoaded] = useState(false)
   const [selectedActivityId, setSelectedActivityId] = useState(null)
   const [localNotes, setLocalNotes] = useState([])
+  const [isSorted, setIsSorted] = useState(false)
+  const [sortOrder, setSortOrder] = useState('asc')
 
   useEffect(() => {
     fetchSubjectData()
@@ -97,13 +101,24 @@ export function SubjectPage() {
     setSubtasksMap((prev) => ({ ...prev, [activityId]: subtasks }))
   }
 
+  const sortActivities = () => {
+    const sortedActivities = [...localActivities].sort((a, b) => {
+      return sortOrder === 'asc'
+        ? new Date(a.fecha_fin) - new Date(b.fecha_fin)
+        : new Date(b.fecha_fin) - new Date(a.fecha_fin)
+    })
+    setLocalActivities(sortedActivities)
+    setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')
+    setIsSorted(!isSorted)
+  }
+
   if (isSubjectLoading || isActivitiesLoading) {
     return (
       <div className="min-h-[calc(100vh-94px)] flex flex-col gap-3">
         <div className="min-h-48 rounded-2xl bg-base-200 animate-pulse"></div>
         <div className="flex-grow flex flex-col md:flex-row gap-3">
           <div className="bg-base-200 md:w-1/3 rounded-2xl h-56 animate-pulse"></div>
-          <div className="md:max-h-[410px] md:w-2/3 rounded-2xl bg-base-200 animate-pulse"></div>
+          <div className="  md:w-2/3 rounded-2xl bg-base-200 animate-pulse"></div>
         </div>
       </div>
     )
@@ -162,17 +177,33 @@ export function SubjectPage() {
             </div>
           </div>
         </div>
-        <div className="flex flex-col md:max-h-[410px] md:w-2/3 rounded-2xl bg-base-200 ">
+        <div className="flex flex-col   md:w-2/3 rounded-2xl bg-base-200 ">
           <div className="text-start text-xl bg-base-200 rounded-2xl p-4 px-5 font-semibold justify-between flex ">
             Tareas
-            <button
-              className="btn btn-sm btn-primary"
-              onClick={() =>
-                document.getElementById('modal-activity').showModal()
-              }
-            >
-              Añadir Tarea
-            </button>
+            <div className="flex gap-2 align-middle">
+              <div className="tooltip" data-tip="Ordenar por feccha de entrega">
+                <button
+                  className="btn btn-sm btn-ghost btn-circle !p-0 !m-0"
+                  id="sort"
+                  onClick={sortActivities}
+                >
+                  {sortOrder === 'asc' ? (
+                    <FaSortAmountDown />
+                  ) : (
+                    <FaSortAmountUp />
+                  )}
+                </button>
+              </div>
+
+              <button
+                className="btn btn-sm btn-primary"
+                onClick={() =>
+                  document.getElementById('modal-activity').showModal()
+                }
+              >
+                Añadir Tarea
+              </button>
+            </div>
           </div>
           <div className="flex flex-col md:overflow-y-auto gap-2 p-2 rounded-2xl h-full">
             {localActivities.length === 0 ? (
@@ -200,7 +231,7 @@ export function SubjectPage() {
                         ></progress>
                       </div>
                       <button
-                        className="btn btn-sm btn-primary btn-circle"
+                        className="btn btn-sm btn-primary btn-circle pl-[3px]"
                         onClick={() => {
                           setSelectedActivityId(activity.id)
                           document.getElementById('timer-modal').showModal()

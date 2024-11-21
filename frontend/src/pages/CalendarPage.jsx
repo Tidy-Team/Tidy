@@ -72,7 +72,7 @@ export const CalendarPage = () => {
 
   return (
     <div
-      className={`transition-opacity duration-300 px-24 ${
+      className={`transition-opacity duration-300 md:px-24 ${
         loading ? 'opacity-0' : 'opacity-100'
       }`}
     >

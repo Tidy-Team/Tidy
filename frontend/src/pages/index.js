@@ -8,6 +8,7 @@ import { CalendarPage } from './CalendarPage'
 import { TimerPage } from './TimerPage'
 import { ProfilePage } from './ProfilePage'
 import { VerificationPage } from './VerificationPage'
+import { FAQPage } from './FAQPage'
 
 export {
   LandingPage,
@@ -20,4 +21,5 @@ export {
   TimerPage,
   ProfilePage,
   VerificationPage,
+  FAQPage,
 }

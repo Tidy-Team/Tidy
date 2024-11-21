@@ -106,7 +106,7 @@ export const TimerPage = () => {
         setIsBreak(false)
         setTimeLeft(studyTime)
         setProgressValue(100)
-        setIsRunning(false)
+        setIsRunning(true) // Start the timer automatically when switching back to study time
       } else {
         setIsBreak(true)
         setTimeLeft(breakTime)
@@ -285,30 +285,28 @@ export const TimerPage = () => {
 
   return (
     <div className="min-h-[calc(100vh-94px)] flex justify-center">
-      <div className="flex flex-col w-fit gap-3 align-middle ">
+      <div className="flex flex-col w-fit gap-3 justify-center ">
         <div
           onClick={handleClick}
-          className={`active:scale-95 cursor-pointer transition-all  ease-in-out duration-500${
+          className={`active:scale-95 cursor-pointer transition-all  ease-in-out h-[400px] w-[400px] duration-500${
             loadingFinished ? 'opacity-100' : 'opacity-0'
           }`}
         >
           <CircularProgressbarWithChildren
             value={progressValue}
-            text={formatTime(timeLeft)}
-            strokeWidth={8}
+            text={formatTime(timeLeft) || '0:00'}
+            strokeWidth={10}
             className={`transition-opacity  ease-in-out ${
               loadingFinished ? ' ' : 'opacity-0'
             }`}
-            background={true}
             styles={{
               path: { strokeLinecap: 'butt', stroke: '#A855F7' },
               trail: { stroke: '#A6ADBB' },
-              text: { fontSize: '1.8rem', fill: '#A855F7' },
-              background: { fill: '#191E24' },
+              text: { fontSize: '1.5rem', fill: '#A855F7' },
             }}
           >
             <button
-              className="text-2xl h-full mt-24 font-mono leading-3"
+              className="text-4xl h-full mt-28 font-mono leading-3"
               onClick={handleClick}
             >
               {buttonText}
@@ -322,7 +320,7 @@ export const TimerPage = () => {
           }`}
         >
           {isBreak ? (
-            'Break Time'
+            'Descanso'
           ) : (
             <div className="flex flex-col items-center justify-center gap-1 text-lg">
               <div className="flex items-end justify-center ">
@@ -339,7 +337,7 @@ export const TimerPage = () => {
         </div>
         {!isBreak && (
           <button
-            className={`btn btn-primary w-fit self-center transition-opacity duration-500 ease-in-out ${
+            className={`btn btn-primary w-28 self-center transition-opacity duration-500 ease-in-out ${
               hasStarted ? 'opacity-100' : 'opacity-0'
             } ${!isRunning ? 'disabled' : ''}`}
             onClick={handleNextSubTask}
@@ -349,7 +347,7 @@ export const TimerPage = () => {
           </button>
         )}
         <button
-          className={`btn btn-error w-fit self-center transition-opacity duration-500 ease-in-out ${
+          className={`btn btn-error w-28 self-center transition-opacity duration-500 ease-in-out ${
             hasStarted ? 'opacity-100' : 'opacity-0'
           }`}
           onClick={() => {

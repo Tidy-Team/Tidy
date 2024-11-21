@@ -65,7 +65,6 @@ export function SubjectForm({ addSubject }) {
         <input
           type="text"
           className="input input-bordered w-full"
-          placeholder="Matemática"
           {...register('subjectName', { required: 'Required' })}
         />
         {errors.subjectName && (
@@ -84,7 +83,6 @@ export function SubjectForm({ addSubject }) {
           type="text"
           name="description"
           className="input input-bordered w-full"
-          placeholder="2ndo cuatrimestre"
           {...register('description', { required: 'Required' })}
         />
         {errors.description && (
@@ -102,7 +100,6 @@ export function SubjectForm({ addSubject }) {
           type="text"
           name="name_teacher"
           className="input input-bordered w-full"
-          placeholder="Johanna"
           {...register('name_teacher', { required: 'Required' })}
         />
         {errors.name_teacher && (
@@ -118,7 +115,7 @@ export function SubjectForm({ addSubject }) {
           document.getElementById('modal').close()
         }}
       >
-        Ok
+        Confirmar
       </button>
     </form>
   )

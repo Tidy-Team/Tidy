@@ -110,7 +110,7 @@ export function SideNav({ children }) {
             className="drawer-overlay"
           ></label>
           <aside
-            className="bg-base-200 h-screen w-72 overflow-y-auto sticky top-0 items-center z-20 py-6 px-4 space-y-3 bg-opacity-90 backdrop-blur flex flex-col "
+            className="bg-base-200 h-screen w-72 overflow-y-auto sticky top-0 items-center z-20 py-6 pb-0 px-4 space-y-3 bg-opacity-90 backdrop-blur flex flex-col "
             id="sidebar"
           >
             <div className="bg-base-200 hidden lg:flex ">
@@ -197,7 +197,7 @@ export function SideNav({ children }) {
                     <IoMdSettings />
                     Ajustes
                   </summary>
-                  <ul className="mt-1">
+                  <ul className="mt-1 space-y-1 ">
                     <li>
                       <Link
                         to="/profile"
@@ -216,7 +216,7 @@ export function SideNav({ children }) {
                         Cambiar tema
                         <ul
                           tabIndex={0}
-                          className="dropdown-content bg-base-200 rounded-box  z-[1]  p-2 shadow-2xl"
+                          className="dropdown-content bg-base-200 rounded-box space-y-1  z-[1]  p-2 shadow-2xl"
                         >
                           <li>
                             <input

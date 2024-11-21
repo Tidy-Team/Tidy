@@ -83,10 +83,7 @@ export function LoginPage() {
           {/* Submit */}
           <button className="btn btn-primary mt-4 " disabled={loading}>
             {loading ? (
-              <>
-                Iniciando Sesión
-                <span className="loading loading-dots loading-md"></span>
-              </>
+              <span className="loading loading-dots loading-md"></span>
             ) : (
               'Iniciar Sesión'
             )}

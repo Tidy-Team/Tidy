@@ -61,12 +61,14 @@ export const NotesList = ({ notes }) => {
             key={note.id} // Ensure each note has a unique key
           >
             <p className="text-left w-full text-wrap"> · {note.description}</p>
-            <button className="btn btn-ghost btn-circle    ">
-              <MdEdit className="text-xl" />
-            </button>
-            <button className="btn btn-ghost btn-circle  ">
-              <MdDelete className="text-xl" />
-            </button>
+            <div className="flex gap-2">
+              <button className="btn btn-ghost btn-circle   btn-sm ">
+                <MdEdit className="text-xl" />
+              </button>
+              <button className="btn btn-ghost btn-circle btn-sm ">
+                <MdDelete className="text-xl" />
+              </button>
+            </div>
           </div>
         )
       })}
