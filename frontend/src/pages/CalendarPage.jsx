@@ -47,7 +47,7 @@ export const CalendarPage = () => {
       day: 'numeric',
     })
     tippy(info.el, {
-      content: `${info.event.title} - ${date}`,
+      content: `${info.event.title} - Fecha de entrega: ${date}`,
       placement: 'top',
     })
   }
@@ -72,7 +72,7 @@ export const CalendarPage = () => {
 
   return (
     <div
-      className={`transition-opacity duration-300 ${
+      className={`transition-opacity duration-300 px-24 ${
         loading ? 'opacity-0' : 'opacity-100'
       }`}
     >

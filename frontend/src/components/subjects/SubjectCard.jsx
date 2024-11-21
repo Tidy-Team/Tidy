@@ -33,7 +33,7 @@ export function SubjectCard({
 
   return (
     <div
-      className="card card-bordered card-compact image-full w-full sm:w-80 bg-base-200 hover:shadow-lg cursor-pointer transition-all"
+      className="card card-bordered card-compact image-full w-full sm:w-80 bg-base-200 hover:shadow-lg cursor-pointer transition-all  "
       onClick={() => navigate(`/subjects/${id}`)}
     >
       <figure className="relative">
@@ -41,7 +41,9 @@ export function SubjectCard({
         <img
           src={randomImageUrl}
           alt={title}
-          className={`w-full ${imageLoaded ? 'block' : 'hidden'}`}
+          className={`w-full ${
+            imageLoaded ? 'block' : 'hidden'
+          } hover:scale-105`}
           onLoad={() => setImageLoaded(true)}
         />
       </figure>

@@ -10,7 +10,8 @@ import Avatar from 'boring-avatars'
 //Icons
 import { TiThMenu } from 'react-icons/ti'
 import { BiSolidBook } from 'react-icons/bi'
-import { FaCalendarAlt } from 'react-icons/fa'
+import { FaCalendarAlt, FaQuestionCircle } from 'react-icons/fa'
+
 import { BsLightningChargeFill } from 'react-icons/bs'
 import { IoMdSettings } from 'react-icons/io'
 import { FaUser } from 'react-icons/fa'
@@ -122,7 +123,7 @@ export function SideNav({ children }) {
             {/* User */}
             {loading ? (
               <>
-                <div className="w-28 h-28 rounded-full animate-pulse bg-neutral"></div>
+                <div className="w-24 h-28 rounded-full animate-pulse bg-neutral"></div>
                 <div className="h-[28px] w-1/2 rounded-full animate-pulse bg-neutral"></div>
                 <div className="h-[20px] w-1/2 rounded-full animate-pulse bg-neutral"></div>
               </>
@@ -139,7 +140,7 @@ export function SideNav({ children }) {
                       '#898b75',
                     ]}
                     variant="beam"
-                    className="w-28 rounded-full "
+                    className="w-24 rounded-full "
                   />
                   <h2 className="font-bold text-lg">{user.name}</h2>
                   <span className="text-sm text-secondary font-semibold">
@@ -177,6 +178,16 @@ export function SideNav({ children }) {
                 >
                   <FaCalendarAlt />
                   Calendario
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/faq"
+                  onClick={closeDrawer}
+                  className={location.pathname === '/faq' ? 'active' : ''}
+                >
+                  <FaQuestionCircle />
+                  FAQ
                 </Link>
               </li>
 

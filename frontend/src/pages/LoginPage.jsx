@@ -20,7 +20,7 @@ export function LoginPage() {
   } = useForm({
     resolver: zodResolver(loginSchema),
   })
-  const { signIn, error: loginErrors, isAuthenticated, clearError } = useAuth() // Provide default value for loginErrors
+  const { signIn, errors: loginErrors, isAuthenticated, loading } = useAuth()
   const navigate = useNavigate()
   const onSubmit = (data) => signIn(data)
 
@@ -73,25 +73,28 @@ export function LoginPage() {
           </label>
           <p className="text-error text-sm">{errors.password?.message}</p>
           {/* Login Errors */}
-          {loginErrors &&
-            loginErrors.map((error, i) => (
-              <p
-                className="text-error-content bg-error py-2 px-3 text-sm rounded-lg mb-1"
-                key={i}
-              >
-                {error.message || error}
-              </p>
-            ))}
+          {loginErrors && (
+            <p className="text-error text-sm mb-1">{loginErrors}</p>
+          )}
           {/* Reset Password */}
           <a href="#" className="text-purple-600 text-sm ">
             Recuperar contraseña
           </a>
           {/* Submit */}
-          <button className="btn btn-primary mt-4">Iniciar Sesión</button>
+          <button className="btn btn-primary mt-4 " disabled={loading}>
+            {loading ? (
+              <>
+                Iniciando Sesión
+                <span className="loading loading-dots loading-md"></span>
+              </>
+            ) : (
+              'Iniciar Sesión'
+            )}
+          </button>
           <div className="divider my-0">¿Todavía no tienes una cuenta?</div>
           {/* Register Redirect */}
           <Link to="/register" className="w-full">
-            <button className="btn btn-secondary w-full">Crear Cuenta</button>
+            <button className="btn btn-secondary w-full">Registrarse</button>
           </Link>
         </form>
       </div>

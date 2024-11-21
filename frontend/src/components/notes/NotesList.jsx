@@ -57,33 +57,16 @@ export const NotesList = ({ notes }) => {
       {localNotes.map((note) => {
         return (
           <div
-            className="flex items-center pb-3 overflow-visible"
+            className="flex items-center pb-3   "
             key={note.id} // Ensure each note has a unique key
           >
-            <p className="text-left w-full text-wrap">- {note.description}</p>
-            <div className="dropdown dropdown-left !z-[80]">
-              <div
-                tabIndex="0"
-                role="button"
-                className="btn btn-ghost btn-circle btn-sm mb-1"
-              >
-                <HiDotsVertical />
-              </div>
-
-              <ul
-                tabIndex="0"
-                className="dropdown-content z-[1] join join-vertical shadow bg-base-100 rounded-box w-28"
-              >
-                <button className="btn btn-ghost flex join-item min-h-fit">
-                  <MdEdit className="text-lg" />
-                  Editar
-                </button>
-                <button className="btn btn-ghost join-item">
-                  <MdDelete />
-                  Eliminar
-                </button>
-              </ul>
-            </div>
+            <p className="text-left w-full text-wrap"> · {note.description}</p>
+            <button className="btn btn-ghost btn-circle    ">
+              <MdEdit className="text-xl" />
+            </button>
+            <button className="btn btn-ghost btn-circle  ">
+              <MdDelete className="text-xl" />
+            </button>
           </div>
         )
       })}

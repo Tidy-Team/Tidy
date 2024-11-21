@@ -15,7 +15,7 @@ import { FaLock, FaUser } from 'react-icons/fa'
 import { Modal } from '../components'
 
 export function SignUpPage() {
-  const { signUp, errors: registerErrors = [], isAuthenticated } = useAuth()
+  const { signUp, errors: registerErrors, isAuthenticated } = useAuth()
   const {
     register,
     handleSubmit,
@@ -40,9 +40,9 @@ export function SignUpPage() {
             Bienvenido a <span className="font-bold text-purple-600">Tidy</span>
           </h1>
           <p className="mb-5">Por favor, rellene el siguiente formulario</p>
-          {registerErrors.map((error, i) => (
-            <Message message={error} key={i} />
-          ))}
+          {registerErrors && (
+            <p className="text-error text-sm mb-1">{registerErrors}</p>
+          )}
         </div>
 
         {/* Form */}
@@ -105,7 +105,7 @@ export function SignUpPage() {
       {/* Email Alert  */}
 
       <Modal>
-        <p className="text-2xl text center">
+        <p className="text-xl text-center">
           Por favor, revise su correo electrónico para la verificación.
         </p>
       </Modal>

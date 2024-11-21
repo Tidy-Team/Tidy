@@ -470,19 +470,19 @@ export const StatsPage = () => {
   const averageActivityTime = calculateAverageTime(activityTimes)
 
   return (
-    <div className="container  min-h-[calc(100vh-94px)]">
+    <div className="min-h-[calc(100vh-94px)] w-full">
       <div className="grid grid-cols-4 grid-rows-2 gap-6  ">
-        <div className="col-span-2 h-72 space-y-5 ">
+        <div className="col-span-4  md:col-span-2  h-72 space-y-5 ">
           {/* Timepo actividad */}
           <div className="stats stats-vertical shadow bg-base-200  w-full  h-full ">
             <div className="stat">
               <div className="stat-figure text-primary">
-                <FaClock className="text-5xl" />
+                <FaClock className="text-4xl lg:text-5xl" />
               </div>
-              <div className="stat-title text-xl">
+              <div className="stat-title text-lg lg:text-xl">
                 Tiempo Promedio de Tareas
               </div>
-              <div className="stat-value text-5xl w-fit">
+              <div className="stat-value text-4xl lg:text-5xl w-fit">
                 {formatTime(averageActivityTime)}
               </div>
               <div className="stat-desc text-base text-secondary">
@@ -491,12 +491,12 @@ export const StatsPage = () => {
             </div>
             <div className="stat">
               <div className="stat-figure text-primary">
-                <FaClock className="text-5xl" />
+                <FaClock className="text-4xl lg:text-5xl" />
               </div>
-              <div className="stat-title text-xl">
+              <div className="stat-title text-lg lg:text-xl">
                 Tiempo Promedio de Consignas
               </div>
-              <div className="stat-value text-5xl">
+              <div className="stat-value text-4xl lg:text-5xl">
                 {formatTime(averageSubTaskTime)}
               </div>
               <div className="stat-desc text-base text-secondary">
@@ -505,19 +505,15 @@ export const StatsPage = () => {
             </div>
           </div>
         </div>
-        <div className="col-span-2 col-start-1 row-start-2 bg-base-200 rounded-xl p-4 shadow h-72">
+        <div className="col-span-4  md:col-span-2 col-start-1 md:row-start-2 bg-base-200 rounded-xl p-4 shadow h-72">
           <MostEfficientDays data={subjects} />
         </div>
 
-        <div className="col-span-2 col-start-3 row-start-1 bg-base-200 p-4  rounded-xl shadow h-72">
+        <div className="col-span-4  md:col-span-2 md:col-start-3 row-start-1 bg-base-200 p-4  rounded-xl shadow h-72">
           <TimeSpentPerSubject data={timeSpentPerSubjectData} />
         </div>
-        <div className="col-start-3 row-start-2 bg-base-200 p-4  rounded-xl shadow h-72">
-          {/* <CompletedVsStartedActivities
-            data={subjects.flatMap((subject) => subject.data.activities)}
-          /> */}
-        </div>
-        <div className="col-start-3 col-span-2 row-start-2 bg-base-200 p-4 rounded-xl shadow h-72">
+
+        <div className="md:col-start-3 col-span-4  md:col-span-2 md:row-start-2 bg-base-200 p-4 rounded-xl shadow h-72">
           <SubjectEfficiencyRadarChart data={subjects} />
         </div>
       </div>

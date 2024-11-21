@@ -12,53 +12,67 @@ const AuthContext = createContext()
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [error, setError] = useState([])
+  const [errors, setErrors] = useState([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (error.length > 0) {
+    if (errors.length > 0) {
       const timer = setTimeout(() => {
-        setError([])
+        setErrors([])
       }, 5000)
       return () => clearTimeout(timer)
     }
-  }, [error])
+  }, [errors])
 
   const signUp = async (user) => {
+    setLoading(true)
+
     try {
       const res = await signUpRequest(user)
       setIsAuthenticated(true)
       setUser(res.data.user)
+      setLoading(false)
     } catch (error) {
       console.log(error.response.data)
-      setError(error.response.data.errors || [error.response.data.error])
+      setErrors(error.response.data.message || [error.response.data.message])
+    } finally {
+      setLoading(false)
     }
   }
 
   const signIn = async (user) => {
+    setLoading(true)
     try {
-      const res = await signInnRequest(user)
+      await signInnRequest(user)
+      const res = await verifySession()
       setIsAuthenticated(true)
       setUser(res.data.user)
+      setLoading(false)
     } catch (error) {
-      console.log(error)
-      setError(error.response.data.errors || [error.response.data.error])
+      console.log(error.response.data)
+      setErrors(error.response.data)
+    } finally {
+      setLoading(false)
     }
   }
 
   const logOut = async () => {
+    setLoading(true)
+
     try {
       await logoutRequest()
       Cookies.remove('authToken')
       setIsAuthenticated(false)
       setUser(null)
     } catch (error) {
-      console.log(error)
+      console.log(error.response.data)
+    } finally {
+      setLoading(false)
     }
   }
 
   const clearError = () => {
-    setError([])
+    setErrors([])
   }
 
   useEffect(() => {
@@ -82,6 +96,7 @@ const AuthProvider = ({ children }) => {
 
         setIsAuthenticated(false)
         setUser(null)
+      } finally {
         setLoading(false)
       }
     }
@@ -94,7 +109,7 @@ const AuthProvider = ({ children }) => {
         signUp,
         user,
         isAuthenticated,
-        error,
+        errors,
         signIn,
         loading,
         logOut,

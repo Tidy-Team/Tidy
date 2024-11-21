@@ -157,7 +157,7 @@ export function SubjectPage() {
                 Añadir Nota
               </button>
             </div>
-            <div className="collapse-content ">
+            <div className="collapse-content z-0">
               <NotesList notes={localNotes} />
             </div>
           </div>
